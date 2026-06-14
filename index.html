@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="site-browser-title">ARIF ONLINE CENTER - Official Portal</title>
-    <!-- Tailwind CSS for modern UI -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -14,24 +13,20 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
-    <!-- HEADER / BRANDING -->
     <header class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white py-6 px-4 shadow-md text-center">
         <h1 id="display-shop-name" class="text-3xl font-black tracking-wider uppercase drop-shadow-md">ARIF ONLINE CENTER</h1>
         <p id="display-shop-address-wrapper" class="text-xs text-yellow-400 font-bold mt-1 tracking-wide">
             <i class="fa-solid fa-location-dot mr-1"></i> <span id="display-shop-address">MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR</span>
         </p>
         
-        <!-- Navigation Buttons -->
         <div class="mt-4 flex justify-center gap-4 text-sm">
             <button onclick="toggleView('user')" id="btn-user" class="bg-yellow-400 text-blue-900 font-bold px-4 py-2 rounded shadow border border-yellow-500 cursor-pointer">📢 Live Board</button>
             <button onclick="toggleView('admin')" id="btn-admin" class="bg-blue-800 text-white font-bold px-4 py-2 rounded shadow hover:bg-blue-900 cursor-pointer"><i class="fa-solid fa-lock mr-1"></i> Admin Dashboard</button>
         </div>
     </header>
 
-    <!-- MAIN CONTENT CONTAINER -->
     <main class="flex-grow container mx-auto p-4 max-w-2xl">
         
-        <!-- USER VIEW: LIVE NOTICES -->
         <section id="user-view" class="block">
             <h2 class="text-xl font-extrabold text-blue-900 mb-4 border-b-2 border-yellow-400 pb-1 flex items-center gap-2">
                 <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span>
@@ -42,16 +37,13 @@
             </div>
         </section>
 
-        <!-- ADMIN VIEW: LOGIN & CONTROL PANEL -->
         <section id="admin-view" class="hidden bg-white p-6 rounded-xl shadow-md border border-gray-200">
             
-            <!-- ADMIN LOGIN FORM -->
             <div id="admin-login-box" class="block text-center max-w-sm mx-auto py-4">
                 <div class="text-blue-900 text-4xl mb-3"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3 class="text-lg font-bold text-gray-700 mb-4">🔑 Admin Database Login</h3>
                 <input type="password" id="admin-pass" placeholder="Enter Security Password" class="w-full p-2.5 border rounded-lg mb-2 text-center tracking-widest focus:outline-blue-900">
                 
-                <!-- Forgot Password Action -->
                 <div class="text-right mb-4">
                     <button onclick="handleForgotPassword()" class="text-xs text-blue-600 hover:underline font-semibold cursor-pointer">Forgot Password?</button>
                 </div>
@@ -60,14 +52,12 @@
                 <p id="login-error" class="text-red-500 text-xs mt-2 font-semibold hidden">⚠️ Incorrect Admin Password!</p>
             </div>
 
-            <!-- ADMIN CONTROL PANEL (Hidden until login) -->
             <div id="admin-panel" class="hidden space-y-6">
                 <div class="flex justify-between items-center border-b pb-3">
                     <h3 class="text-lg font-bold text-red-600 flex items-center gap-1"><i class="fa-solid fa-sliders"></i> Master Control Dashboard</h3>
                     <button onclick="adminLogout()" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-600">Logout</button>
                 </div>
                 
-                <!-- SECTION A: WEBSITE LIKHABAT & TEXT CONFIG -->
                 <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200 space-y-3">
                     <h4 class="text-xs font-black text-amber-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-pen-to-square"></i> 1. Edit Website Info & Likhabat</h4>
                     <div class="grid grid-cols-1 gap-3 text-sm">
@@ -88,7 +78,6 @@
                             <input type="text" id="cfg-shop-slogan" class="w-full p-2 border rounded bg-white text-xs">
                         </div>
                         
-                        <!-- Hide / Show Toggles -->
                         <div class="flex flex-wrap gap-4 pt-1 text-xs font-bold text-gray-600">
                             <label class="flex items-center gap-1.5 cursor-pointer">
                                 <input type="checkbox" id="cfg-show-address" class="rounded text-blue-900"> Show Address on Header
@@ -103,7 +92,6 @@
                     </button>
                 </div>
 
-                <!-- SECTION B: NOTICE PUBLISHER WITH PICTURE UPLOAD -->
                 <div class="bg-blue-50/30 p-4 rounded-xl border border-blue-100 space-y-3">
                     <h4 class="text-xs font-black text-blue-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-bullhorn"></i> 2. Broadcast / Edit Posts</h4>
                     <input type="hidden" id="edit-index" value="-1">
@@ -119,7 +107,6 @@
                             <textarea id="notice-desc" rows="4" placeholder="Write list of documents or notice matter here..." class="w-full p-2 border rounded bg-white text-xs font-mono focus:outline-blue-950"></textarea>
                         </div>
                         
-                        <!-- NEW PICTURE UPLOAD FILE INPUT -->
                         <div>
                             <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5 flex items-center gap-1">
                                 <i class="fa-solid fa-image text-blue-700"></i> Upload Notice Photo / Poster:
@@ -129,7 +116,7 @@
                                 <button type="button" onclick="clearSelectedImage()" id="btn-clear-img" class="hidden text-red-500 hover:text-red-700 text-xs font-bold"><i class="fa-solid fa-circle-xmark"></i> Clear</button>
                             </div>
                             <div id="image-preview-box" class="mt-2 hidden">
-                                <img id="img-preview-tag" src="" class="h-20 w-auto rounded border shadow-sm">
+                                <img id="img-preview-tag" src="" class="h-24 w-auto rounded border shadow-sm mx-auto">
                             </div>
                         </div>
 
@@ -139,7 +126,6 @@
                     </div>
                 </div>
 
-                <!-- SECTION C: MANAGE ACTIVE POSTS -->
                 <div class="border-t pt-4">
                     <h4 class="text-xs font-black text-gray-700 mb-3 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-list-check"></i> 3. Delete or Edit Existing Posts:</h4>
                     <div id="admin-notices-list" class="space-y-2"></div>
@@ -149,12 +135,10 @@
 
     </main>
 
-    <!-- FOOTER SYSTEM -->
     <footer class="bg-gray-900 text-gray-400 py-6 px-4 text-center text-xs mt-auto border-t-4 border-yellow-400">
         <p id="display-shop-slogan" class="font-bold text-white mb-1">⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡</p>
         <p class="mb-3">All digital services, admissions, scholarships & form fills delivered instantly.</p>
         
-        <!-- Live Footer WhatsApp Trigger Wrapper -->
         <div id="display-phone-wrapper" class="block">
             <button onclick="contactWhatsApp()" class="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-4 py-2 rounded-full text-sm shadow hover:bg-[#20ba5a] cursor-pointer transition">
                 <i class="fa-brands fa-whatsapp text-lg"></i> Contact on WhatsApp
@@ -162,7 +146,6 @@
         </div>
     </footer>
 
-    <!-- APP ENGINE SCRIPT -->
     <script>
         const ADMIN_SECRET = "arif123";
 
@@ -184,7 +167,6 @@
             renderNotices();
         });
 
-        // Apply configuration changes everywhere on the fly
         function applyConfigUI() {
             document.getElementById('site-browser-title').innerText = `${config.shopName} - Official Portal`;
             document.getElementById('display-shop-name').innerText = config.shopName;
@@ -200,7 +182,6 @@
             else phoneWrapper.className = "hidden";
         }
 
-        // Setup config form inside admin view
         function setupConfigFormValues() {
             document.getElementById('cfg-shop-name').value = config.shopName;
             document.getElementById('cfg-shop-address').value = config.address;
@@ -210,7 +191,6 @@
             document.getElementById('cfg-show-phone').checked = config.showPhone;
         }
 
-        // Save Custom Text Changes
         function saveWebsiteConfig() {
             config.shopName = document.getElementById('cfg-shop-name').value.trim() || "ARIF ONLINE CENTER";
             config.address = document.getElementById('cfg-shop-address').value.trim();
@@ -225,7 +205,6 @@
             alert("Website Settings & Likhabat Updated Instantly!");
         }
 
-        // Toggle views
         function toggleView(view) {
             const userView = document.getElementById('user-view');
             const adminView = document.getElementById('admin-view');
@@ -245,7 +224,6 @@
             }
         }
 
-        // WhatsApp Custom Core Router
         function contactWhatsApp(customText = `Hello, Mujhe ${config.shopName} se ek service online karwani hai.`) {
             if(!config.phone) {
                 alert("WhatsApp contact number is currently disabled!");
@@ -254,17 +232,17 @@
             window.open(`https://api.whatsapp.com/send?phone=91${config.phone}&text=${encodeURIComponent(customText)}`, '_blank');
         }
 
-        // FORGOT PASSWORD MECHANISM
+        // PASSWORD RECOVERY TRIGGER
         function handleForgotPassword() {
-            const recoveryMessage = `Hello Arif Bhai, main password bhool gaya hoon. Mera security keyword verify karke naya password check kariye. Default code password is: ${ADMIN_SECRET}`;
+            const msg = `Hello Arif Bhai, main Admin Dashboard ka password bhool gaya hoon. Kripya verification ke baad password recovery code check karein. Default system password is: ${ADMIN_SECRET}`;
             if(config.phone) {
-                window.open(`https://api.whatsapp.com/send?phone=91${config.phone}&text=${encodeURIComponent(recoveryMessage)}`, '_blank');
+                window.open(`https://api.whatsapp.com/send?phone=91${config.phone}&text=${encodeURIComponent(msg)}`, '_blank');
             } else {
-                alert(`Password is stored inside secure source index code. Default password is: ${ADMIN_SECRET}`);
+                alert(`System Database Security Key: ${ADMIN_SECRET}`);
             }
         }
 
-        // FILE PICTURE PROCESS ENGINE (Converts selected image to browser data string)
+        // IMAGE FILE PROCESSING TO STRING DATA
         function processImageUpload(element) {
             const file = element.files[0];
             if (!file) return;
@@ -274,7 +252,6 @@
                 const base64String = reader.result;
                 document.getElementById('notice-img-base64').value = base64String;
                 
-                // Show preview
                 document.getElementById('img-preview-tag').src = base64String;
                 document.getElementById('image-preview-box').classList.remove('hidden');
                 document.getElementById('btn-clear-img').classList.remove('hidden');
@@ -290,7 +267,6 @@
             document.getElementById('btn-clear-img').classList.add('hidden');
         }
 
-        // Admin Security Lock
         function checkAdminLogin() {
             const typedPass = document.getElementById('admin-pass').value;
             const errorMsg = document.getElementById('login-error');
@@ -313,7 +289,6 @@
             clearSelectedImage();
         }
 
-        // Render posts on dashboard
         function renderNotices() {
             const container = document.getElementById('notices-container');
             container.innerHTML = "";
@@ -386,7 +361,6 @@
 
             const currentDateTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' });
             
-            // if we are editing and no new file uploaded, keep old image
             let finalImage = imgBase64;
             if(editIndex > -1 && !imgBase64 && notices[editIndex].image) {
                 finalImage = notices[editIndex].image;
