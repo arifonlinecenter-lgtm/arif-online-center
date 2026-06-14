@@ -3,161 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="site-browser-title">ARIF ONLINE CENTER - Official Portal</title>
-    <!-- Tailwind CSS for modern UI -->
+    <title>Welcome - Official Notice Board</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .notice-card { transition: all 0.3s ease; }
-        .notice-card:hover { transform: translateY(-3px); }
-    </style>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="bg-slate-50 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
 
-    <!-- HEADER / BRANDING -->
-    <header class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white py-6 px-4 shadow-md text-center">
-        <h1 id="display-shop-name" class="text-3xl font-black tracking-wider uppercase drop-shadow-md">ARIF ONLINE CENTER</h1>
-        <p id="display-shop-address-wrapper" class="text-xs text-yellow-400 font-bold mt-1 tracking-wide">
-            <i class="fa-solid fa-location-dot mr-1"></i> <span id="display-shop-address">MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR</span>
-        </p>
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white shadow-xl border-b-4 border-amber-500 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-5 text-center">
+            <h1 id="site-title" class="text-2xl md:text-4xl font-black tracking-wide drop-shadow-md uppercase">
+                Loading...
+            </h1>
+            <p id="site-address" class="text-xs md:text-sm font-semibold text-blue-200 mt-1 tracking-wider flex items-center justify-center gap-1.5">
+                </p>
+        </div>
     </header>
 
-    <!-- MAIN CONTENT CONTAINER -->
-    <main class="flex-grow container mx-auto p-4 max-w-2xl">
+    <main class="max-w-3xl w-full mx-auto px-4 py-8 flex-grow">
         
-        <!-- USER VIEW: LIVE NOTICES (ALWAYS PUBLIC) -->
-        <section id="user-view" class="block">
-            <h2 class="text-xl font-extrabold text-blue-900 mb-4 border-b-2 border-yellow-400 pb-1 flex items-center gap-2">
-                <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span>
-                Latest Server Notices
-            </h2>
-            <div id="notices-container" class="space-y-4">
-                <!-- Notices will load here automatically -->
-            </div>
-        </section>
+        <div class="flex items-center gap-2 mb-6 bg-blue-50 border border-blue-200 p-3 rounded-xl shadow-xs">
+            <span class="flex h-2.5 w-2.5 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
+            </span>
+            <p class="text-xs font-bold text-slate-700 uppercase tracking-wider">Latest Updates & Public Bulletins</p>
+        </div>
 
+        <div id="public-notices-container" class="space-y-6">
+            <div class="text-center py-12 text-slate-400 font-medium text-sm">
+                <i class="fa-solid fa-circle-notch animate-spin text-2xl text-blue-900 mb-2"></i>
+                <p>Connecting to live servers...</p>
+            </div>
+        </div>
     </main>
 
-    <!-- FOOTER SYSTEM -->
-    <footer class="bg-gray-900 text-gray-400 py-6 px-4 text-center text-xs mt-auto border-t-4 border-yellow-400">
-        <p id="display-shop-slogan" class="font-bold text-white mb-1">⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡</p>
-        <p class="mb-3">All digital services, admissions, scholarships & form fills delivered instantly.</p>
-        
-        <!-- Live Footer WhatsApp Trigger -->
-        <div id="display-phone-wrapper" class="block">
-            <button onclick="contactWhatsApp()" class="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-4 py-2 rounded-full text-sm shadow hover:bg-[#20ba5a] cursor-pointer transition">
-                <i class="fa-brands fa-whatsapp text-lg"></i> Contact on WhatsApp
-            </button>
+    <a id="floating-whatsapp" href="#" target="_blank" class="hidden fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 items-center justify-center z-50 group">
+        <i class="fa-brands fa-whatsapp text-3xl animate-pulse"></i>
+        <span class="absolute right-14 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-md">Chat with Us</span>
+    </a>
+
+    <footer class="bg-slate-900 text-slate-400 text-center py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-4xl mx-auto px-4 space-y-2">
+            <p id="site-slogan" class="text-amber-400 font-bold text-sm tracking-wide">
+                </p>
+            <p class="text-xs font-medium text-slate-500">&copy; 2026 All Rights Reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Load Configurations
-        let config = JSON.parse(localStorage.getItem('arif_config')) || {
-            shopName: "ARIF ONLINE CENTER",
-            address: "MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR",
-            phone: "9504291254",
-            slogan: "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡",
-            showAddress: true,
-            showPhone: true
+        // Aapke Firebase ka official config details
+        const firebaseConfig = {
+            apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
+            authDomain: "arif-online-3f79e.firebaseapp.com",
+            databaseURL: "https://arif-online-3f79e-default-rtdb.firebaseio.com",
+            projectId: "arif-online-3f79e",
+            storageBucket: "arif-online-3f79e.firebasestorage.app",
+            messagingSenderId: "535907035651",
+            appId: "1:535907035651:web:630f5780842de82d2e7c36"
         };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-        let notices = JSON.parse(localStorage.getItem('arif_notices')) || [];
+        // 1. LIVE WEBSITE TEXT & VISIBILITY SYNC
+        database.ref('config').on('value', (snapshot) => {
+            const config = snapshot.val() || {};
+            
+            // Elements select karna
+            const titleEl = document.getElementById('site-title');
+            const addressEl = document.getElementById('site-address');
+            const sloganEl = document.getElementById('site-slogan');
+            const whatsappBtn = document.getElementById('floating-whatsapp');
 
-        document.addEventListener("DOMContentLoaded", () => {
-            applyConfigUI();
-            renderNotices();
+            // Set Text Values (Ya default lagana)
+            titleEl.innerText = config.shopName || "ARIF ONLINE CENTER";
+            addressEl.innerHTML = `<i class="fa-solid fa-location-dot text-amber-500"></i> ${config.address || 'MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR'}`;
+            sloganEl.innerText = config.slogan || "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡";
+
+            // Check Visibility toggles (Show / Hide)
+            titleEl.style.display = (config.showName !== false) ? 'block' : 'none';
+            addressEl.style.display = (config.showAddress !== false) ? 'flex' : 'none';
+            sloganEl.style.display = (config.showSlogan !== false) ? 'block' : 'none';
+
+            // WhatsApp link handle karna
+            if (config.showPhone !== false && config.phone) {
+                whatsappBtn.href = `https://api.whatsapp.com/send?phone=91${config.phone}&text=Hello! I need some assistance regarding your online services.`;
+                whatsappBtn.classList.replace('hidden', 'flex');
+            } else {
+                whatsappBtn.classList.replace('flex', 'hidden');
+            }
         });
 
-        function applyConfigUI() {
-            document.getElementById('site-browser-title').innerText = `${config.shopName} - Official Portal`;
-            document.getElementById('display-shop-name').innerText = config.shopName;
-            document.getElementById('display-shop-address').innerText = config.address;
-            document.getElementById('display-shop-slogan').innerText = config.slogan;
+        // 2. LIVE POSTS & POSTERS DOWNLOAD SYNC
+        database.ref('notices').on('value', (snapshot) => {
+            const container = document.getElementById('public-notices-container');
+            container.innerHTML = ""; // Purana data saaf karein
 
-            const addrWrapper = document.getElementById('display-shop-address-wrapper');
-            addrWrapper.style.display = config.showAddress ? "block" : "none";
-
-            const phoneWrapper = document.getElementById('display-phone-wrapper');
-            phoneWrapper.className = config.showPhone ? "block" : "hidden";
-        }
-
-        function contactWhatsApp(customText = `Hello, Mujhe ${config.shopName} se ek service online karwani hai.`) {
-            if(!config.phone) {
-                alert("WhatsApp contact number is currently disabled!");
-                return;
-            }
-            window.open(`https://api.whatsapp.com/send?phone=91${config.phone}&text=${encodeURIComponent(customText)}`, '_blank');
-        }
-
-        // POST SHARE FUNCTION
-        function shareNotice(title, desc) {
-            const shareText = `*${title}*\n\n${desc}\n\nShared via ${config.shopName}`;
-            const shareUrl = window.location.href;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: shareText,
-                    url: shareUrl
-                }).catch(err => console.log("Error sharing:", err));
-            } else {
-                // Fallback: Copy to Clipboard if Web Share is not supported
-                const fullCopyText = `${shareText}\nLink: ${shareUrl}`;
-                navigator.clipboard.writeText(fullCopyText).then(() => {
-                    alert("Notice details and link copied to clipboard!");
-                }).catch(err => {
-                    alert("Unable to copy link automatically.");
-                });
-            }
-        }
-
-        function renderNotices() {
-            const container = document.getElementById('notices-container');
-            container.innerHTML = "";
+            const data = snapshot.val();
             
-            if(notices.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-500 my-8 py-4 bg-white rounded shadow border border-dashed text-xs">No active announcements at the moment.</p>`;
+            if (!data) {
+                container.innerHTML = `
+                    <div class="bg-white p-8 rounded-2xl border text-center text-slate-500 shadow-xs">
+                        <div class="text-slate-300 text-5xl mb-3"><i class="fa-solid fa-folder-open"></i></div>
+                        <p class="font-bold text-base">No Active Notices Right Now</p>
+                        <p class="text-xs text-slate-400 mt-1">Please check back later for new announcements.</p>
+                    </div>`;
                 return;
             }
 
-            notices.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = "notice-card bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-3 relative overflow-hidden";
-                let imgHtml = item.image ? `<img src="${item.image}" alt="Notice Photo" class="w-full rounded-lg max-h-96 object-contain border bg-gray-50 my-1">` : '';
-                
-                let actionBtnHtml = config.showPhone ? `
-                    <button onclick="contactWhatsApp('Mujhe is post ke bare me janna hai: ${encodeURIComponent(item.title)}')" class="w-full bg-[#25D366] text-white text-xs font-bold py-2 rounded-lg hover:bg-[#20ba5a] transition flex items-center justify-center gap-1.5 cursor-pointer">
-                        <i class="fa-brands fa-whatsapp text-sm"></i> Order Service / Contact Center
-                    </button>
-                ` : '';
+            // Object ko Array me badal kar reverse (Newest First) karna
+            const noticesList = [];
+            Object.keys(data).forEach(key => {
+                noticesList.push(data[key]);
+            });
+            noticesList.reverse();
 
-                // Safe strings for inline onclick arguments
-                const safeTitle = item.title.replace(/'/g, "\\'");
-                const safeDesc = item.desc.replace(/'/g, "\\'").replace(/\n/g, " ");
+            // Har ek notice ko HTML me convert karke screen par render karna
+            noticesList.forEach((item) => {
+                const noticeCard = document.createElement('article');
+                noticeCard.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-md transition duration-200 flex flex-col";
 
-                card.innerHTML = `
-                    <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-900"></div>
-                    <div class="flex justify-between items-start gap-4">
-                        <h3 class="text-base font-extrabold text-gray-900 leading-snug flex-grow">${item.title}</h3>
-                        <div class="flex flex-col items-end gap-1.5 shrink-0">
-                            <span class="text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded font-mono">${item.date}</span>
-                            <!-- Share Button -->
-                            <button onclick="shareNotice('${safeTitle}', '${safeDesc}')" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded text-xs font-bold flex items-center gap-1 cursor-pointer transition">
-                                <i class="fa-solid fa-share-nodes"></i> Share
-                            </button>
+                // Agar image module available ho toh rendering
+                let imgHTML = "";
+                if (item.image) {
+                    imgHTML = `
+                        <div class="bg-slate-100 border-b border-slate-100 max-h-[450px] overflow-hidden flex justify-center items-center">
+                            <img src="${item.image}" alt="Notice Visual" class="w-full h-auto object-contain max-h-[450px] hover:scale-[1.01] transition duration-300" loading="lazy">
+                        </div>`;
+                }
+
+                // Card Structure Assembly
+                noticeCard.innerHTML = `
+                    ${imgHTML}
+                    <div class="p-5 md:p-6 space-y-3">
+                        <div class="flex items-center justify-between gap-4">
+                            <h2 class="text-base md:text-xl font-bold text-slate-900 tracking-tight leading-snug select-text">${item.title}</h2>
                         </div>
-                    </div>
-                    <p class="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">${item.desc}</p>
-                    ${imgHtml}
-                    <div class="mt-2">
-                        ${actionBtnHtml}
+                        <p class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-regular fa-clock"></i> ${item.date}</p>
+                        <hr class="border-slate-100">
+                        <p class="text-xs md:text-sm text-slate-700 whitespace-pre-wrap font-medium leading-relaxed font-sans select-text">${item.desc}</p>
                     </div>
                 `;
-                container.appendChild(card);
+                container.appendChild(noticeCard);
             });
-        }
+        });
     </script>
 </body>
 </html>
-
