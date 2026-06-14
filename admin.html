@@ -3,140 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Control Dashboard - Admin Panel</title>
+    <title>Control Panel - Admin Only</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase Libraries v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen p-4 flex flex-col items-center justify-center">
+<body class="bg-slate-100 font-sans min-h-screen pb-12">
 
-    <div class="w-full max-w-2xl">
-        <div id="admin-login-box" class="bg-white p-8 rounded-xl shadow-md border text-center max-w-sm mx-auto block">
-            <div class="text-blue-900 text-4xl mb-3"><i class="fa-solid fa-shield-halved"></i></div>
-            <h3 class="text-lg font-bold text-gray-700 mb-4">🔑 Admin Database Login</h3>
-            <input type="password" id="admin-pass" placeholder="Enter Security Password" class="w-full p-2.5 border rounded-lg mb-2 text-center tracking-widest focus:outline-blue-900">
-            
-            <div class="text-right mb-4">
-                <button onclick="handleForgotPassword()" class="text-xs text-blue-600 hover:underline font-semibold cursor-pointer">Forgot Password?</button>
+    <!-- TOP HEADER -->
+    <header class="bg-slate-900 text-white shadow-md py-4 px-6 mb-8 border-b-2 border-amber-500">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-black tracking-wider uppercase flex items-center gap-2">
+                <i class="fa-solid fa-gauge text-amber-500"></i> Arif Online - Live Control
+            </h1>
+            <span class="text-xs bg-green-500/20 text-green-400 font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span> Firebase Connected
+            </span>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- ⚙️ LEFT SIDE: WEBSITE CONTROLS & LOGO OPTIONS -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <i class="fa-solid fa-sliders text-blue-600"></i> Header & Logo Settings
+                </h2>
+                
+                <form id="config-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Shop / Website Name</label>
+                        <input type="text" id="cfg-name" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-name" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show on site</span></label>
+                    </div>
+
+                    <!-- 🔴 LEFT LOGO INPUT -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Left Logo Image URL</label>
+                        <input type="url" id="cfg-logo-left" placeholder="https://example.com/logo1.png" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-left" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Left Logo</span></label>
+                    </div>
+
+                    <!-- 🔴 RIGHT LOGO INPUT -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Right Logo Image URL</label>
+                        <input type="url" id="cfg-logo-right" placeholder="https://example.com/logo2.png" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-right" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Right Logo</span></label>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Address Text</label>
+                        <input type="text" id="cfg-address" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-address" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Address</span></label>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">WhatsApp Phone Number</label>
+                        <input type="text" id="cfg-phone" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-phone" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Enable Chat Button</span></label>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Slogan / Footer Text</label>
+                        <input type="text" id="cfg-slogan" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-slogan" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Slogan</span></label>
+                    </div>
+                    <button type="button" onclick="saveConfig()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Header Settings
+                    </button>
+                </form>
             </div>
-
-            <button onclick="checkAdminLogin()" class="w-full bg-blue-900 text-white font-bold py-2.5 rounded-lg shadow hover:bg-blue-800 cursor-pointer">Secure Login</button>
-            <p id="login-error" class="text-red-500 text-xs mt-2 font-semibold hidden">⚠️ Incorrect Admin Password!</p>
         </div>
 
-        <div id="admin-panel" class="hidden bg-white p-6 rounded-xl shadow-lg border border-gray-200 space-y-6">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-bold text-red-600 flex items-center gap-1"><i class="fa-solid fa-sliders"></i> Master Control Dashboard</h3>
-                <button onclick="adminLogout()" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-600 cursor-pointer">Logout</button>
-            </div>
-            
-            <div class="flex gap-2 border-b pb-2">
-                <button id="tab-btn-config" onclick="switchTab('config')" class="flex-1 py-2 text-center text-xs font-bold border-b-2 border-blue-900 text-blue-900 cursor-pointer transition">
-                    <i class="fa-solid fa-pen-to-square mr-1"></i> Website Info & Likhabat
-                </button>
-                <button id="tab-btn-posts" onclick="switchTab('posts')" class="flex-1 py-2 text-center text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-blue-900 cursor-pointer transition">
-                    <i class="fa-solid fa-bullhorn mr-1"></i> Broadcast / Edit Posts
-                </button>
-            </div>
-            
-            <div id="section-config" class="block bg-amber-50/50 p-4 rounded-xl border border-amber-200 space-y-4">
-                <h4 class="text-xs font-black text-amber-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-gears"></i> 1. Edit Website Info & Likhabat</h4>
-                <div class="grid grid-cols-1 gap-4 text-sm">
-                    <div class="bg-white p-3 border rounded-lg shadow-xs">
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="block text-[11px] font-bold text-gray-600">Shop / Website Name:</label>
-                            <label class="flex items-center gap-1 text-[11px] font-bold text-blue-900 cursor-pointer select-none">
-                                <input type="checkbox" id="cfg-show-name" class="rounded text-blue-900"> Show on Site
-                            </label>
-                        </div>
-                        <input type="text" id="cfg-shop-name" class="w-full p-2 border rounded bg-gray-50/50 text-xs focus:bg-white focus:outline-amber-600">
+        <!-- 📝 RIGHT SIDE: ADD NEW POSTS & LIST -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Form to Create Post -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <i class="fa-solid fa-bullhorn text-emerald-600"></i> Create New Post / Notice
+                </h2>
+                <form id="notice-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Notice / Post Title</label>
+                        <input type="text" id="post-title" required placeholder="e.g., Bihar Board 11th Admission 2026 Started" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
                     </div>
-
-                    <div class="bg-white p-3 border rounded-lg shadow-xs">
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="block text-[11px] font-bold text-gray-600">Shop Address Text:</label>
-                            <label class="flex items-center gap-1 text-[11px] font-bold text-blue-900 cursor-pointer select-none">
-                                <input type="checkbox" id="cfg-show-address" class="rounded text-blue-900"> Show on Site
-                            </label>
-                        </div>
-                        <input type="text" id="cfg-shop-address" class="w-full p-2 border rounded bg-gray-50/50 text-xs focus:bg-white focus:outline-amber-600">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Poster Image Link (Optional)</label>
+                        <input type="url" id="post-image" placeholder="https://example.com/poster.jpg" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
                     </div>
-
-                    <div class="bg-white p-3 border rounded-lg shadow-xs">
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="block text-[11px] font-bold text-gray-600">WhatsApp Number:</label>
-                            <label class="flex items-center gap-1 text-[11px] font-bold text-blue-900 cursor-pointer select-none">
-                                <input type="checkbox" id="cfg-show-phone" class="rounded text-blue-900"> Show on Site
-                            </label>
-                        </div>
-                        <input type="text" id="cfg-shop-phone" class="w-full p-2 border rounded bg-gray-50/50 text-xs focus:bg-white focus:outline-amber-600">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Full Description / Scheme Details</label>
+                        <textarea id="post-desc" rows="4" required placeholder="Write details, criteria, required documents here..." class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600"></textarea>
                     </div>
-
-                    <div class="bg-white p-3 border rounded-lg shadow-xs">
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="block text-[11px] font-bold text-gray-600">Slogan / Footer Likhabat:</label>
-                            <label class="flex items-center gap-1 text-[11px] font-bold text-blue-900 cursor-pointer select-none">
-                                <input type="checkbox" id="cfg-show-slogan" class="rounded text-blue-900"> Show on Site
-                            </label>
-                        </div>
-                        <input type="text" id="cfg-shop-slogan" class="w-full p-2 border rounded bg-gray-50/50 text-xs focus:bg-white focus:outline-amber-600">
-                    </div>
-                </div>
-                <button onclick="saveWebsiteConfig()" class="w-full bg-amber-600 text-white font-bold py-2.5 rounded-lg text-xs shadow hover:bg-amber-700 cursor-pointer transition">
-                    <i class="fa-solid fa-floppy-disk mr-1"></i> Save Website Text & Visibility
-                </button>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition">
+                        <i class="fa-solid fa-paper-plane"></i> Publish Live Notice
+                    </button>
+                </form>
             </div>
 
-            <div id="section-posts" class="hidden space-y-6">
-                <div class="bg-blue-50/30 p-4 rounded-xl border border-blue-100 space-y-3">
-                    <h4 class="text-xs font-black text-blue-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-bullhorn"></i> 2. Broadcast / Edit Posts</h4>
-                    <input type="hidden" id="edit-id" value="">
-                    <input type="hidden" id="notice-img-base64" value="">
-                    
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5">Post Title:</label>
-                            <input type="text" id="notice-title" placeholder="e.g., Bihar Inter Admission Online" class="w-full p-2 border rounded bg-white text-xs focus:outline-blue-950">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5">Post Details / Likhabat:</label>
-                            <textarea id="notice-desc" rows="5" placeholder="Write notice matter here..." class="w-full p-2 border rounded bg-white text-xs font-mono focus:outline-blue-950"></textarea>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5 flex items-center gap-1">
-                                <i class="fa-solid fa-image text-blue-700"></i> Upload Notice Photo / Poster:
-                            </label>
-                            <div class="flex items-center gap-3 bg-white p-2 border rounded">
-                                <input type="file" id="notice-file-input" accept="image/*" onchange="processImageUpload(this)" class="text-xs text-gray-500 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-bold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer w-full">
-                                <button type="button" onclick="clearSelectedImage()" id="btn-clear-img" class="hidden text-red-500 hover:text-red-700 text-xs font-bold"><i class="fa-solid fa-circle-xmark"></i> Clear</button>
-                            </div>
-                            <div id="image-preview-box" class="mt-2 hidden text-center">
-                                <img id="img-preview-tag" src="" class="h-32 w-auto rounded border shadow-sm mx-auto">
-                            </div>
-                        </div>
-
-                        <button onclick="broadcastNotice()" id="submit-btn" class="w-full bg-blue-900 text-white font-bold py-2 rounded shadow hover:bg-blue-800 cursor-pointer text-xs flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-cloud-arrow-up"></i> <span id="btn-text">Publish Post Live</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="border-t pt-4">
-                    <h4 class="text-xs font-black text-gray-700 mb-3 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-list-check"></i> 3. Delete or Edit Existing Posts:</h4>
-                    <div id="admin-notices-list" class="space-y-2"></div>
+            <!-- Published Posts Manager -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <i class="fa-solid fa-list-check text-indigo-600"></i> Manage Published Notices
+                </h2>
+                <div id="admin-notices-list" class="space-y-3">
+                    <p class="text-xs text-slate-400 text-center py-6">Loading active notices...</p>
                 </div>
             </div>
-
         </div>
-    </div>
+
+    </main>
 
     <script>
-        const ADMIN_SECRET = "786786";
-
-        // ✅ Aapka Firebase Config details yahan laga diya gaya hai
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
             authDomain: "arif-online-3f79e.firebaseapp.com",
@@ -147,229 +128,104 @@
             appId: "1:535907035651:web:630f5780842de82d2e7c36"
         };
         
-        // Firebase Initialize
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let config = {};
-        let noticesArray = [];
+        // Load Configuration Form Details
+        database.ref('config').once('value', (snapshot) => {
+            const config = snapshot.val() || {};
+            document.getElementById('cfg-name').value = config.shopName || "ARIF ONLINE CENTER";
+            document.getElementById('cfg-logo-left').value = config.logoLeft || "";
+            document.getElementById('cfg-logo-right').value = config.logoRight || "";
+            document.getElementById('cfg-address').value = config.address || "MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR";
+            document.getElementById('cfg-phone').value = config.phone || "9504291254";
+            document.getElementById('cfg-slogan').value = config.slogan || "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡";
 
-        // Database se settings lena
-        database.ref('config').on('value', (snapshot) => {
-            config = snapshot.val() || {
-                shopName: "ARIF ONLINE CENTER",
-                address: "MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR",
-                phone: "9504291254",
-                slogan: "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡",
-                showName: true,
-                showAddress: true,
-                showPhone: true,
-                showSlogan: true
-            };
+            document.getElementById('chk-name').checked = config.showName !== false;
+            document.getElementById('chk-logo-left').checked = config.showLogoLeft !== false;
+            document.getElementById('chk-logo-right').checked = config.showLogoRight !== false;
+            document.getElementById('chk-address').checked = config.showAddress !== false;
+            document.getElementById('chk-phone').checked = config.showPhone !== false;
+            document.getElementById('chk-slogan').checked = config.showSlogan !== false;
         });
 
-        // Database se Posts download aur render karna
+        // Save Header Config
+        function saveConfig() {
+            const data = {
+                shopName: document.getElementById('cfg-name').value,
+                logoLeft: document.getElementById('cfg-logo-left').value,
+                logoRight: document.getElementById('cfg-logo-right').value,
+                address: document.getElementById('cfg-address').value,
+                phone: document.getElementById('cfg-phone').value,
+                slogan: document.getElementById('cfg-slogan').value,
+                showName: document.getElementById('chk-name').checked,
+                showLogoLeft: document.getElementById('chk-logo-left').checked,
+                showLogoRight: document.getElementById('chk-logo-right').checked,
+                showAddress: document.getElementById('chk-address').checked,
+                showPhone: document.getElementById('chk-phone').checked,
+                showSlogan: document.getElementById('chk-slogan').checked
+            };
+
+            database.ref('config').set(data)
+                .then(() => alert("✅ Website Settings Updated Successfully!"))
+                .catch(err => alert("Error: " + err.message));
+        }
+
+        // Create Notice Submission
+        document.getElementById('notice-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('post-title').value;
+            const image = document.getElementById('post-image').value;
+            const desc = document.getElementById('post-desc').value;
+            const dateStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+            const newNoticeRef = database.ref('notices').push();
+            newNoticeRef.set({
+                id: newNoticeRef.key,
+                title: title,
+                image: image,
+                desc: desc,
+                date: dateStr
+            }).then(() => {
+                alert("📢 Notice Published Live!");
+                document.getElementById('notice-form').reset();
+            }).catch(err => alert("Error: " + err.message));
+        });
+
+        // Realtime Render List inside Admin Panel
         database.ref('notices').on('value', (snapshot) => {
+            const listDiv = document.getElementById('admin-notices-list');
+            listDiv.innerHTML = "";
             const data = snapshot.val();
-            noticesArray = [];
-            if(data) {
-                Object.keys(data).forEach(key => {
-                    noticesArray.push({ id: key, ...data[key] });
-                });
-                noticesArray.reverse(); 
-            }
-            if(document.getElementById('admin-panel').classList.contains('block')) {
-                renderAdminNoticesList();
-            }
-        });
 
-        function checkAdminLogin() {
-            const typedPass = document.getElementById('admin-pass').value;
-            if(typedPass === ADMIN_SECRET) {
-                document.getElementById('login-error').classList.add('hidden');
-                document.getElementById('admin-login-box').classList.replace('block', 'hidden');
-                document.getElementById('admin-panel').classList.replace('hidden', 'block');
-                setupConfigFormValues();
-                renderAdminNoticesList();
-            } else {
-                document.getElementById('login-error').classList.remove('hidden');
-            }
-        }
-
-        function switchTab(tabName) {
-            const configSection = document.getElementById('section-config');
-            const postsSection = document.getElementById('section-posts');
-            const configBtn = document.getElementById('tab-btn-config');
-            const postsBtn = document.getElementById('tab-btn-posts');
-
-            if(tabName === 'config') {
-                configSection.classList.replace('hidden', 'block');
-                postsSection.classList.replace('block', 'hidden');
-                configBtn.className = "flex-1 py-2 text-center text-xs font-bold border-b-2 border-blue-900 text-blue-900 cursor-pointer transition";
-                postsBtn.className = "flex-1 py-2 text-center text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-blue-900 cursor-pointer transition";
-            } else {
-                postsSection.classList.replace('hidden', 'block');
-                configSection.classList.replace('block', 'hidden');
-                postsBtn.className = "flex-1 py-2 text-center text-xs font-bold border-b-2 border-blue-900 text-blue-900 cursor-pointer transition";
-                configBtn.className = "flex-1 py-2 text-center text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-blue-900 cursor-pointer transition";
-            }
-        }
-
-        function handleForgotPassword() {
-            const msg = `Hello Arif Bhai, main Dashboard password bhool gaya hoon. Default password is: ${ADMIN_SECRET}`;
-            window.open(`https://api.whatsapp.com/send?phone=91${config.phone || '9504291254'}&text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        function setupConfigFormValues() {
-            document.getElementById('cfg-shop-name').value = config.shopName || "";
-            document.getElementById('cfg-shop-address').value = config.address || "";
-            document.getElementById('cfg-shop-phone').value = config.phone || "";
-            document.getElementById('cfg-shop-slogan').value = config.slogan || "";
-            
-            document.getElementById('cfg-show-name').checked = config.showName !== false;
-            document.getElementById('cfg-show-address').checked = config.showAddress !== false;
-            document.getElementById('cfg-show-phone').checked = config.showPhone !== false;
-            document.getElementById('cfg-show-slogan').checked = config.showSlogan !== false;
-        }
-
-        function saveWebsiteConfig() {
-            const updatedConfig = {
-                shopName: document.getElementById('cfg-shop-name').value.trim(),
-                address: document.getElementById('cfg-shop-address').value.trim(),
-                phone: document.getElementById('cfg-shop-phone').value.trim(),
-                slogan: document.getElementById('cfg-shop-slogan').value.trim(),
-                showName: document.getElementById('cfg-show-name').checked,
-                showAddress: document.getElementById('cfg-show-address').checked,
-                showPhone: document.getElementById('cfg-show-phone').checked,
-                showSlogan: document.getElementById('cfg-show-slogan').checked
-            };
-
-            database.ref('config').set(updatedConfig, (error) => {
-                if(error) alert("Error saving configurations!");
-                else alert("Settings Saved Globally on Database!");
-            });
-        }
-
-        function processImageUpload(element) {
-            const file = element.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                document.getElementById('notice-img-base64').value = reader.result;
-                document.getElementById('img-preview-tag').src = reader.result;
-                document.getElementById('image-preview-box').classList.remove('hidden');
-                document.getElementById('btn-clear-img').classList.remove('hidden');
-            }
-            reader.readAsDataURL(file);
-        }
-
-        function clearSelectedImage() {
-            document.getElementById('notice-file-input').value = "";
-            document.getElementById('notice-img-base64').value = "";
-            document.getElementById('image-preview-box').classList.add('hidden');
-            document.getElementById('btn-clear-img').classList.add('hidden');
-        }
-
-        function broadcastNotice() {
-            const titleInput = document.getElementById('notice-title');
-            const descInput = document.getElementById('notice-desc');
-            const imgBase64 = document.getElementById('notice-img-base64').value;
-            const editId = document.getElementById('edit-id').value;
-
-            if(!titleInput.value.trim() || !descInput.value.trim()) {
-                alert("Please fill Title and Details!");
+            if(!data) {
+                listDiv.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No active posts available.</p>`;
                 return;
             }
 
-            const currentDateTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' });
-            
-            const postData = {
-                title: titleInput.value.trim(),
-                desc: descInput.value.trim(),
-                image: imgBase64 || "",
-                date: currentDateTime
-            };
-
-            if(editId) {
-                if(!imgBase64) {
-                    const oldPost = noticesArray.find(n => n.id === editId);
-                    if(oldPost && oldPost.image) postData.image = oldPost.image;
-                }
-                database.ref('notices/' + editId).update(postData, (error) => {
-                    if(!error) {
-                        alert("Post updated live!");
-                        resetPostForm();
-                    }
-                });
-            } else {
-                database.ref('notices').push().set(postData, (error) => {
-                    if(!error) {
-                        alert("Post Broadcasted Live to Public!");
-                        resetPostForm();
-                    }
-                });
-            }
-        }
-
-        function resetPostForm() {
-            document.getElementById('edit-id').value = "";
-            document.getElementById('notice-title').value = "";
-            document.getElementById('notice-desc').value = "";
-            clearSelectedImage();
-            document.getElementById('btn-text').innerText = "Publish Post Live";
-        }
-
-        function renderAdminNoticesList() {
-            const listContainer = document.getElementById('admin-notices-list');
-            listContainer.innerHTML = "";
-            if(noticesArray.length === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-gray-400 italic">No active posts.</p>`;
-                return;
-            }
-            noticesArray.forEach((item) => {
-                const row = document.createElement('div');
-                row.className = "flex justify-between items-center bg-gray-50 p-2 rounded border text-xs";
-                row.innerHTML = `
-                    <div class="truncate max-w-[60%]"><strong>${item.title}</strong></div>
-                    <div class="flex gap-1">
-                        <button onclick="loadNoticeForEdit('${item.id}')" class="bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold cursor-pointer">Edit</button>
-                        <button onclick="deleteNotice('${item.id}')" class="bg-red-100 text-red-700 px-2 py-1 rounded font-bold cursor-pointer">Delete</button>
+            Object.keys(data).reverse().forEach((key) => {
+                const item = data[key];
+                const card = document.createElement('div');
+                card.className = "p-3 border rounded-xl flex items-center justify-between text-xs bg-slate-50 border-slate-200";
+                card.innerHTML = `
+                    <div class="space-y-0.5 max-w-[80%]">
+                        <p class="font-bold text-slate-800 truncate">${item.title}</p>
+                        <p class="text-[10px] font-medium text-slate-400">${item.date}</p>
                     </div>
+                    <button onclick="deleteNotice('${item.id}')" class="bg-red-50 text-red-600 hover:bg-red-100 p-2 rounded-lg cursor-pointer transition">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
                 `;
-                listContainer.appendChild(row);
+                listDiv.appendChild(card);
             });
-        }
-
-        function loadNoticeForEdit(id) {
-            const target = noticesArray.find(n => n.id === id);
-            if(!target) return;
-            switchTab('posts');
-
-            document.getElementById('notice-title').value = target.title;
-            document.getElementById('notice-desc').value = target.desc;
-            document.getElementById('edit-id').value = target.id;
-            
-            if(target.image) {
-                document.getElementById('notice-img-base64').value = target.image;
-                document.getElementById('img-preview-tag').src = target.image;
-                document.getElementById('image-preview-box').classList.remove('hidden');
-                document.getElementById('btn-clear-img').classList.remove('hidden');
-            } else {
-                clearSelectedImage();
-            }
-            document.getElementById('btn-text').innerText = "Save Changes";
-        }
+        });
 
         function deleteNotice(id) {
-            if(confirm("Delete this post permanently from database?")) {
+            if(confirm("Are you sure you want to delete this notice permanently from public view?")) {
                 database.ref('notices/' + id).remove()
-                .then(() => alert("Deleted Live!"))
-                .catch(() => alert("Delete failed!"));
+                    .then(() => alert("🗑️ Notice Deleted!"))
+                    .catch(err => alert("Error: " + err.message));
             }
-        }
-
-        function adminLogout() {
-            location.reload();
         }
     </script>
 </body>
