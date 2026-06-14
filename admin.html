@@ -7,24 +7,30 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase Libraries v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body class="bg-slate-100 font-sans min-h-screen pb-12">
 
-    <header class="bg-slate-900 text-white shadow-md py-4 px-6 mb-8 border-b-2 border-amber-500">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-black tracking-wider uppercase flex items-center gap-2">
-                <i class="fa-solid fa-gauge text-amber-500"></i> Arif Online - Live Control
+    <!-- TOP HEADER (SHANDAAR & BOLD LOGO STYLE) -->
+    <header class="bg-slate-900 text-white shadow-xl py-5 px-6 mb-8 border-b-4 border-amber-500 relative overflow-hidden">
+        <div class="absolute inset-0 bg-radial from-amber-500/10 to-transparent pointer-events-none"></div>
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
+            <h1 class="text-2xl sm:text-3xl font-black uppercase tracking-widest flex items-center gap-3 drop-shadow-[0_2px_8px_rgba(245,158,11,0.3)]">
+                <i class="fa-solid fa-gauge text-amber-500 animate-[spin_4s_linear_infinite]"></i> 
+                <span class="text-white">Arif</span> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 font-extrabold drop-shadow-xs">Online Center</span>
             </h1>
-            <span class="text-xs bg-green-500/20 text-green-400 font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span> Firebase Connected
+            <span class="text-xs bg-green-500/20 text-green-400 font-bold px-4 py-1.5 rounded-full border border-green-500/30 flex items-center gap-2 shadow-inner">
+                <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span> Firebase Live Connected
             </span>
         </div>
     </header>
 
     <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
+        <!-- ⚙️ LEFT SIDE: WEBSITE CONTROLS & LOGO OPTIONS -->
         <div class="lg:col-span-1 space-y-6">
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                 <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
@@ -38,6 +44,7 @@
                         <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-name" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show on site</span></label>
                     </div>
 
+                    <!-- 📁 LEFT LOGO FILE UPLOAD -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Left Logo Picture</label>
                         <input type="file" id="cfg-logo-left-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
@@ -45,6 +52,7 @@
                         <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-left" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Left Logo</span></label>
                     </div>
 
+                    <!-- 📁 RIGHT LOGO FILE UPLOAD -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Right Logo Picture</label>
                         <input type="file" id="cfg-logo-right-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
@@ -74,9 +82,12 @@
             </div>
         </div>
 
+        <!-- 📝 RIGHT SIDE: ADD/EDIT NEW POSTS & LIST -->
         <div class="lg:col-span-2 space-y-6">
+            <!-- Form to Create/Edit Post -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs relative">
                 
+                <!-- Mode Indicator Badge -->
                 <div id="form-mode-badge" class="absolute top-4 right-5 text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-800">
                     New Post Mode
                 </div>
@@ -86,6 +97,7 @@
                 </h2>
                 
                 <form id="notice-form" class="space-y-4">
+                    <!-- Hidden input to track current edit notice ID -->
                     <input type="hidden" id="edit-notice-id" value="">
 
                     <div>
@@ -93,6 +105,7 @@
                         <input type="text" id="post-title" required placeholder="e.g., Bihar Board 11th Admission 2026 Started" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
                     </div>
                     
+                    <!-- 📁 POSTER IMAGE FILE UPLOAD -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Poster Picture (Optional)</label>
                         <input type="file" id="post-image-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
@@ -116,6 +129,7 @@
                 </form>
             </div>
 
+            <!-- Published Posts Manager -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                 <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
                     <i class="fa-solid fa-list-check text-indigo-600"></i> Manage Published Notices
@@ -143,7 +157,6 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Object memory cache to keep tracking loaded data for editing images
         let activeNoticesCache = {};
 
         // 🖼️ HELPER FUNCTION: PHOTO COMPRESS & BASE64 CONVERTER
@@ -239,8 +252,6 @@
             const dateStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
             if (editId) {
-                // 🔄 UPDATE EXISTED POST MODE
-                // Agar user ne naya file select nahi kiya, toh purana hi rehne do cache se
                 if (!imageBase64 && activeNoticesCache[editId] && activeNoticesCache[editId].image) {
                     imageBase64 = activeNoticesCache[editId].image;
                 }
@@ -256,7 +267,6 @@
                 }).catch(err => alert("Update Error: " + err.message));
 
             } else {
-                // 📢 CREATE NEW POST MODE
                 const newNoticeRef = database.ref('notices').push();
                 newNoticeRef.set({
                     id: newNoticeRef.key,
@@ -271,20 +281,18 @@
             }
         });
 
-        // ✏️ TRIGGER EDIT MODE FUNCTION
+        // TRIGGER EDIT MODE FUNCTION
         function triggerEditMode(id) {
             const item = activeNoticesCache[id];
             if (!item) return;
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // Form me Values Load karna
             document.getElementById('edit-notice-id').value = item.id;
             document.getElementById('post-title').value = item.title;
             document.getElementById('post-desc').value = item.desc;
-            document.getElementById('post-image-base64').value = ""; // Clear file preview state till new file added
+            document.getElementById('post-image-base64').value = ""; 
             
-            // Visual indicators change karna form ke
             document.getElementById('form-title-text').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-600"></i> Edit Active Notice`;
             document.getElementById('form-mode-badge').innerText = "Edit Mode Active";
             document.getElementById('form-mode-badge').className = "absolute top-4 right-5 text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wider bg-amber-100 text-amber-800";
@@ -299,13 +307,12 @@
             }
         }
 
-        // 🔄 RESET FORM TO NEW POST MODE
+        // RESET FORM TO NEW POST MODE
         function resetPostForm() {
             document.getElementById('notice-form').reset();
             document.getElementById('edit-notice-id').value = "";
             document.getElementById('post-image-base64').value = "";
             
-            // Revert back form styles
             document.getElementById('form-title-text').innerHTML = `<i class="fa-solid fa-bullhorn text-emerald-600"></i> Create New Post / Notice`;
             document.getElementById('form-mode-badge').innerText = "New Post Mode";
             document.getElementById('form-mode-badge').className = "absolute top-4 right-5 text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-800";
@@ -327,7 +334,6 @@
                 return;
             }
 
-            // Sync database structure to local memory cache for easy fast editing
             activeNoticesCache = data;
 
             Object.keys(data).reverse().forEach((key) => {
