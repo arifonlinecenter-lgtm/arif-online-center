@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="site-browser-title">ARIF ONLINE CENTER - Official Portal</title>
+    <!-- Tailwind CSS for modern UI -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -13,132 +14,36 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
+    <!-- HEADER / BRANDING -->
     <header class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white py-6 px-4 shadow-md text-center">
         <h1 id="display-shop-name" class="text-3xl font-black tracking-wider uppercase drop-shadow-md">ARIF ONLINE CENTER</h1>
         <p id="display-shop-address-wrapper" class="text-xs text-yellow-400 font-bold mt-1 tracking-wide">
             <i class="fa-solid fa-location-dot mr-1"></i> <span id="display-shop-address">MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR</span>
         </p>
-        
-        <div class="mt-4 flex justify-center gap-4 text-sm">
-            <button onclick="toggleView('user')" id="btn-user" class="bg-yellow-400 text-blue-900 font-bold px-4 py-2 rounded shadow border border-yellow-500 cursor-pointer">📢 Live Board</button>
-            <button onclick="toggleView('admin')" id="btn-admin" class="bg-blue-800 text-white font-bold px-4 py-2 rounded shadow hover:bg-blue-900 cursor-pointer"><i class="fa-solid fa-lock mr-1"></i> Admin Dashboard</button>
-        </div>
     </header>
 
+    <!-- MAIN CONTENT CONTAINER -->
     <main class="flex-grow container mx-auto p-4 max-w-2xl">
         
+        <!-- USER VIEW: LIVE NOTICES (ALWAYS PUBLIC) -->
         <section id="user-view" class="block">
             <h2 class="text-xl font-extrabold text-blue-900 mb-4 border-b-2 border-yellow-400 pb-1 flex items-center gap-2">
                 <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span>
                 Latest Server Notices
             </h2>
             <div id="notices-container" class="space-y-4">
-                <p id="no-notices" class="text-center text-gray-500 my-8 py-4 bg-white rounded shadow border border-dashed text-xs">No active announcements at the moment.</p>
-            </div>
-        </section>
-
-        <section id="admin-view" class="hidden bg-white p-6 rounded-xl shadow-md border border-gray-200">
-            
-            <div id="admin-login-box" class="block text-center max-w-sm mx-auto py-4">
-                <div class="text-blue-900 text-4xl mb-3"><i class="fa-solid fa-shield-halved"></i></div>
-                <h3 class="text-lg font-bold text-gray-700 mb-4">🔑 Admin Database Login</h3>
-                <input type="password" id="admin-pass" placeholder="Enter Security Password" class="w-full p-2.5 border rounded-lg mb-2 text-center tracking-widest focus:outline-blue-900">
-                
-                <div class="text-right mb-4">
-                    <button onclick="handleForgotPassword()" class="text-xs text-blue-600 hover:underline font-semibold cursor-pointer">Forgot Password?</button>
-                </div>
-
-                <button onclick="checkAdminLogin()" class="w-full bg-blue-900 text-white font-bold py-2.5 rounded-lg shadow hover:bg-blue-800 cursor-pointer">Secure Login</button>
-                <p id="login-error" class="text-red-500 text-xs mt-2 font-semibold hidden">⚠️ Incorrect Admin Password!</p>
-            </div>
-
-            <div id="admin-panel" class="hidden space-y-6">
-                <div class="flex justify-between items-center border-b pb-3">
-                    <h3 class="text-lg font-bold text-red-600 flex items-center gap-1"><i class="fa-solid fa-sliders"></i> Master Control Dashboard</h3>
-                    <button onclick="adminLogout()" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-600">Logout</button>
-                </div>
-                
-                <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200 space-y-3">
-                    <h4 class="text-xs font-black text-amber-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-pen-to-square"></i> 1. Edit Website Info & Likhabat</h4>
-                    <div class="grid grid-cols-1 gap-3 text-sm">
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 mb-0.5">Shop / Website Name:</label>
-                            <input type="text" id="cfg-shop-name" class="w-full p-2 border rounded bg-white text-xs">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 mb-0.5">Shop Address Text:</label>
-                            <input type="text" id="cfg-shop-address" class="w-full p-2 border rounded bg-white text-xs">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 mb-0.5">WhatsApp Number (e.g., 9504291254):</label>
-                            <input type="text" id="cfg-shop-phone" class="w-full p-2 border rounded bg-white text-xs">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 mb-0.5">Slogan / Footer Likhabat:</label>
-                            <input type="text" id="cfg-shop-slogan" class="w-full p-2 border rounded bg-white text-xs">
-                        </div>
-                        
-                        <div class="flex flex-wrap gap-4 pt-1 text-xs font-bold text-gray-600">
-                            <label class="flex items-center gap-1.5 cursor-pointer">
-                                <input type="checkbox" id="cfg-show-address" class="rounded text-blue-900"> Show Address on Header
-                            </label>
-                            <label class="flex items-center gap-1.5 cursor-pointer">
-                                <input type="checkbox" id="cfg-show-phone" class="rounded text-blue-900"> Show WhatsApp Chat Button
-                            </label>
-                        </div>
-                    </div>
-                    <button onclick="saveWebsiteConfig()" class="w-full bg-amber-600 text-white font-bold py-2 rounded text-xs shadow hover:bg-amber-700 cursor-pointer transition">
-                        <i class="fa-solid fa-floppy-disk mr-1"></i> Save Website Text & Visibility
-                    </button>
-                </div>
-
-                <div class="bg-blue-50/30 p-4 rounded-xl border border-blue-100 space-y-3">
-                    <h4 class="text-xs font-black text-blue-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-bullhorn"></i> 2. Broadcast / Edit Posts</h4>
-                    <input type="hidden" id="edit-index" value="-1">
-                    <input type="hidden" id="notice-img-base64" value="">
-                    
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5">Post Title:</label>
-                            <input type="text" id="notice-title" placeholder="e.g., Bihar Inter Admission Online" class="w-full p-2 border rounded bg-white text-xs focus:outline-blue-950">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5">Post Details / Likhabat:</label>
-                            <textarea id="notice-desc" rows="4" placeholder="Write list of documents or notice matter here..." class="w-full p-2 border rounded bg-white text-xs font-mono focus:outline-blue-950"></textarea>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5 flex items-center gap-1">
-                                <i class="fa-solid fa-image text-blue-700"></i> Upload Notice Photo / Poster:
-                            </label>
-                            <div class="flex items-center gap-3 bg-white p-2 border rounded">
-                                <input type="file" id="notice-file-input" accept="image/*" onchange="processImageUpload(this)" class="text-xs text-gray-500 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-bold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer w-full">
-                                <button type="button" onclick="clearSelectedImage()" id="btn-clear-img" class="hidden text-red-500 hover:text-red-700 text-xs font-bold"><i class="fa-solid fa-circle-xmark"></i> Clear</button>
-                            </div>
-                            <div id="image-preview-box" class="mt-2 hidden">
-                                <img id="img-preview-tag" src="" class="h-24 w-auto rounded border shadow-sm mx-auto">
-                            </div>
-                        </div>
-
-                        <button onclick="broadcastNotice()" id="submit-btn" class="w-full bg-blue-900 text-white font-bold py-2 rounded shadow hover:bg-blue-800 cursor-pointer text-xs flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-cloud-arrow-up"></i> <span id="btn-text">Publish Post Live</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="border-t pt-4">
-                    <h4 class="text-xs font-black text-gray-700 mb-3 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-list-check"></i> 3. Delete or Edit Existing Posts:</h4>
-                    <div id="admin-notices-list" class="space-y-2"></div>
-                </div>
+                <!-- Notices will load here automatically -->
             </div>
         </section>
 
     </main>
 
+    <!-- FOOTER SYSTEM -->
     <footer class="bg-gray-900 text-gray-400 py-6 px-4 text-center text-xs mt-auto border-t-4 border-yellow-400">
         <p id="display-shop-slogan" class="font-bold text-white mb-1">⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡</p>
         <p class="mb-3">All digital services, admissions, scholarships & form fills delivered instantly.</p>
         
+        <!-- Live Footer WhatsApp Trigger -->
         <div id="display-phone-wrapper" class="block">
             <button onclick="contactWhatsApp()" class="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-4 py-2 rounded-full text-sm shadow hover:bg-[#20ba5a] cursor-pointer transition">
                 <i class="fa-brands fa-whatsapp text-lg"></i> Contact on WhatsApp
@@ -147,9 +52,7 @@
     </footer>
 
     <script>
-        const ADMIN_SECRET = "arif123";
-
-        // Master App Configurations
+        // Load Configurations
         let config = JSON.parse(localStorage.getItem('arif_config')) || {
             shopName: "ARIF ONLINE CENTER",
             address: "MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR",
@@ -161,7 +64,6 @@
 
         let notices = JSON.parse(localStorage.getItem('arif_notices')) || [];
 
-        // Engine Boot up
         document.addEventListener("DOMContentLoaded", () => {
             applyConfigUI();
             renderNotices();
@@ -174,54 +76,10 @@
             document.getElementById('display-shop-slogan').innerText = config.slogan;
 
             const addrWrapper = document.getElementById('display-shop-address-wrapper');
-            if(config.showAddress) addrWrapper.style.display = "block";
-            else addrWrapper.style.display = "none";
+            addrWrapper.style.display = config.showAddress ? "block" : "none";
 
             const phoneWrapper = document.getElementById('display-phone-wrapper');
-            if(config.showPhone) phoneWrapper.className = "block";
-            else phoneWrapper.className = "hidden";
-        }
-
-        function setupConfigFormValues() {
-            document.getElementById('cfg-shop-name').value = config.shopName;
-            document.getElementById('cfg-shop-address').value = config.address;
-            document.getElementById('cfg-shop-phone').value = config.phone;
-            document.getElementById('cfg-shop-slogan').value = config.slogan;
-            document.getElementById('cfg-show-address').checked = config.showAddress;
-            document.getElementById('cfg-show-phone').checked = config.showPhone;
-        }
-
-        function saveWebsiteConfig() {
-            config.shopName = document.getElementById('cfg-shop-name').value.trim() || "ARIF ONLINE CENTER";
-            config.address = document.getElementById('cfg-shop-address').value.trim();
-            config.phone = document.getElementById('cfg-shop-phone').value.trim();
-            config.slogan = document.getElementById('cfg-shop-slogan').value.trim();
-            config.showAddress = document.getElementById('cfg-show-address').checked;
-            config.showPhone = document.getElementById('cfg-show-phone').checked;
-
-            localStorage.setItem('arif_config', JSON.stringify(config));
-            applyConfigUI();
-            renderNotices(); 
-            alert("Website Settings & Likhabat Updated Instantly!");
-        }
-
-        function toggleView(view) {
-            const userView = document.getElementById('user-view');
-            const adminView = document.getElementById('admin-view');
-            const btnUser = document.getElementById('btn-user');
-            const btnAdmin = document.getElementById('btn-admin');
-
-            if(view === 'admin') {
-                userView.classList.replace('block', 'hidden');
-                adminView.classList.replace('hidden', 'block');
-                btnAdmin.className = "bg-yellow-400 text-blue-900 font-bold px-4 py-2 rounded shadow border border-yellow-500 cursor-pointer";
-                btnUser.className = "bg-blue-800 text-white font-bold px-4 py-2 rounded shadow hover:bg-blue-900 cursor-pointer";
-            } else {
-                adminView.classList.replace('block', 'hidden');
-                userView.classList.replace('hidden', 'block');
-                btnUser.className = "bg-yellow-400 text-blue-900 font-bold px-4 py-2 rounded shadow border border-yellow-500 cursor-pointer";
-                btnAdmin.className = "bg-blue-800 text-white font-bold px-4 py-2 rounded shadow hover:bg-blue-900 cursor-pointer";
-            }
+            phoneWrapper.className = config.showPhone ? "block" : "hidden";
         }
 
         function contactWhatsApp(customText = `Hello, Mujhe ${config.shopName} se ek service online karwani hai.`) {
@@ -230,63 +88,6 @@
                 return;
             }
             window.open(`https://api.whatsapp.com/send?phone=91${config.phone}&text=${encodeURIComponent(customText)}`, '_blank');
-        }
-
-        // PASSWORD RECOVERY TRIGGER
-        function handleForgotPassword() {
-            const msg = `Hello Arif Bhai, main Admin Dashboard ka password bhool gaya hoon. Kripya verification ke baad password recovery code check karein. Default system password is: ${ADMIN_SECRET}`;
-            if(config.phone) {
-                window.open(`https://api.whatsapp.com/send?phone=91${config.phone}&text=${encodeURIComponent(msg)}`, '_blank');
-            } else {
-                alert(`System Database Security Key: ${ADMIN_SECRET}`);
-            }
-        }
-
-        // IMAGE FILE PROCESSING TO STRING DATA
-        function processImageUpload(element) {
-            const file = element.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                const base64String = reader.result;
-                document.getElementById('notice-img-base64').value = base64String;
-                
-                document.getElementById('img-preview-tag').src = base64String;
-                document.getElementById('image-preview-box').classList.remove('hidden');
-                document.getElementById('btn-clear-img').classList.remove('hidden');
-            }
-            reader.readAsDataURL(file);
-        }
-
-        function clearSelectedImage() {
-            document.getElementById('notice-file-input').value = "";
-            document.getElementById('notice-img-base64').value = "";
-            document.getElementById('image-preview-box').classList.add('hidden');
-            document.getElementById('img-preview-tag').src = "";
-            document.getElementById('btn-clear-img').classList.add('hidden');
-        }
-
-        function checkAdminLogin() {
-            const typedPass = document.getElementById('admin-pass').value;
-            const errorMsg = document.getElementById('login-error');
-            
-            if(typedPass === ADMIN_SECRET) {
-                errorMsg.classList.add('hidden');
-                document.getElementById('admin-login-box').classList.replace('block', 'hidden');
-                document.getElementById('admin-panel').classList.replace('hidden', 'block');
-                setupConfigFormValues();
-                renderAdminNoticesList();
-            } else {
-                errorMsg.classList.remove('hidden');
-            }
-        }
-
-        function adminLogout() {
-            document.getElementById('admin-pass').value = "";
-            document.getElementById('admin-panel').classList.replace('block', 'hidden');
-            document.getElementById('admin-login-box').classList.replace('hidden', 'block');
-            clearSelectedImage();
         }
 
         function renderNotices() {
@@ -298,10 +99,10 @@
                 return;
             }
 
-            notices.forEach((item, index) => {
+            notices.forEach((item) => {
                 const card = document.createElement('div');
                 card.className = "notice-card bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-3 relative overflow-hidden";
-                let imgHtml = item.image ? `<img src="${item.image}" alt="Notice Photo" class="w-full rounded-lg max-h-80 object-contain border bg-gray-50 my-1">` : '';
+                let imgHtml = item.image ? `<img src="${item.image}" alt="Notice Photo" class="w-full rounded-lg max-h-96 object-contain border bg-gray-50 my-1">` : '';
                 
                 let actionBtnHtml = config.showPhone ? `
                     <button onclick="contactWhatsApp('Mujhe is post ke bare me janna hai: ${encodeURIComponent(item.title)}')" class="mt-2 w-full bg-[#25D366] text-white text-xs font-bold py-2 rounded-lg hover:bg-[#20ba5a] transition flex items-center justify-center gap-1.5 cursor-pointer">
@@ -321,100 +122,6 @@
                 `;
                 container.appendChild(card);
             });
-        }
-
-        function renderAdminNoticesList() {
-            const listContainer = document.getElementById('admin-notices-list');
-            listContainer.innerHTML = "";
-
-            if(notices.length === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-gray-400 italic">No active posts to manage.</p>`;
-                return;
-            }
-
-            notices.forEach((item, index) => {
-                const row = document.createElement('div');
-                row.className = "flex justify-between items-center bg-gray-50 p-2 rounded border text-xs";
-                row.innerHTML = `
-                    <div class="truncate max-w-[55%]">
-                        <strong class="text-gray-700">${item.title}</strong>
-                    </div>
-                    <div class="flex gap-1.5">
-                        <button onclick="loadNoticeForEdit(${index})" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded font-bold cursor-pointer text-[11px]"><i class="fa-solid fa-pen"></i> Edit</button>
-                        <button onclick="deleteNotice(${index})" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded font-bold cursor-pointer text-[11px]"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>
-                `;
-                listContainer.appendChild(row);
-            });
-        }
-
-        function broadcastNotice() {
-            const titleInput = document.getElementById('notice-title');
-            const descInput = document.getElementById('notice-desc');
-            const imgBase64 = document.getElementById('notice-img-base64').value;
-            const editIndex = parseInt(document.getElementById('edit-index').value);
-
-            if(!titleInput.value.trim() || !descInput.value.trim()) {
-                alert("Please fill Title and Post Details!");
-                return;
-            }
-
-            const currentDateTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' });
-            
-            let finalImage = imgBase64;
-            if(editIndex > -1 && !imgBase64 && notices[editIndex].image) {
-                finalImage = notices[editIndex].image;
-            }
-
-            const data = {
-                title: titleInput.value.trim(),
-                desc: descInput.value.trim(),
-                image: finalImage,
-                date: currentDateTime
-            };
-
-            if(editIndex > -1) {
-                notices[editIndex] = data;
-                document.getElementById('edit-index').value = "-1";
-                document.getElementById('btn-text').innerText = "Publish Post Live";
-            } else {
-                notices.unshift(data);
-            }
-
-            localStorage.setItem('arif_notices', JSON.stringify(notices));
-            titleInput.value = ""; descInput.value = ""; 
-            clearSelectedImage();
-            renderNotices();
-            renderAdminNoticesList();
-            alert("Post Synchronized Successfully with Photo!");
-        }
-
-        function loadNoticeForEdit(index) {
-            const target = notices[index];
-            document.getElementById('notice-title').value = target.title;
-            document.getElementById('notice-desc').value = target.desc;
-            document.getElementById('edit-index').value = index;
-            
-            if(target.image) {
-                document.getElementById('notice-img-base64').value = target.image;
-                document.getElementById('img-preview-tag').src = target.image;
-                document.getElementById('image-preview-box').classList.remove('hidden');
-                document.getElementById('btn-clear-img').classList.remove('hidden');
-            } else {
-                clearSelectedImage();
-            }
-
-            document.getElementById('btn-text').innerText = "Save Post Changes";
-            document.getElementById('notice-title').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function deleteNotice(index) {
-            if(confirm("Permanently delete this post?")) {
-                notices.splice(index, 1);
-                localStorage.setItem('arif_notices', JSON.stringify(notices));
-                renderNotices();
-                renderAdminNoticesList();
-            }
         }
     </script>
 </body>
