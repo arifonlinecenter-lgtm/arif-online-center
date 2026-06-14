@@ -16,22 +16,13 @@
             background-image: radial-gradient(#1e293b 1px, transparent 1px);
             background-size: 20px 20px;
         }
-        /* Custom scrollbar for horizontal tab view on smaller screens */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
     </style>
 </head>
 <body class="admin-bg text-slate-100 font-sans min-h-screen py-6 md:py-12 px-4 selection:bg-amber-500 selection:text-slate-950">
 
     <div class="max-w-3xl mx-auto bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-3xl shadow-2xl p-6 md:p-10">
         
-        <!-- Header Section -->
-        <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-800 pb-6 mb-6 gap-4">
+        <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-800 pb-6 mb-8 gap-4">
             <div class="text-center md:text-left">
                 <h1 class="text-2xl md:text-3xl font-black tracking-wider uppercase">
                     <span class="text-amber-500"><i class="fa-solid fa-sliders-h mr-2"></i>Control</span> Portal
@@ -45,24 +36,9 @@
             </div>
         </div>
 
-        <!-- NEW: LIVE PREMIUM TAB NAVIGATION CONTROLS -->
-        <div class="flex flex-row gap-2 border-b border-slate-800/80 pb-4 mb-6 overflow-x-auto no-scrollbar">
-            <button type="button" onclick="switchTab('tab-identity')" id="btn-tab-identity" class="px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-amber-500 text-slate-950 shadow-md shadow-amber-500/10">
-                <i class="fa-solid fa-shop mr-1"></i> Identity & Header
-            </button>
-            <button type="button" onclick="switchTab('tab-logos')" id="btn-tab-logos" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-slate-800 text-slate-400 hover:bg-slate-700/60 hover:text-slate-200">
-                <i class="fa-solid fa-image mr-1"></i> Logo Setup
-            </button>
-            <button type="button" onclick="switchTab('tab-socials')" id="btn-tab-socials" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-slate-800 text-slate-400 hover:bg-slate-700/60 hover:text-slate-200">
-                <i class="fa-solid fa-share-nodes mr-1"></i> Social Channels
-            </button>
-        </div>
-
-        <!-- Form Interface Wrap -->
-        <form id="config-form" class="space-y-6">
+        <form id="config-form" class="space-y-8">
             
-            <!-- SECTION 1: HEADER & SHOP IDENTITY -->
-            <div id="tab-identity" class="tab-content bg-slate-950/40 border border-slate-800/60 p-5 md:p-6 rounded-2xl space-y-4">
+            <div class="bg-slate-950/40 border border-slate-800/60 p-5 md:p-6 rounded-2xl space-y-4">
                 <h2 class="text-sm font-black uppercase tracking-widest text-amber-500 flex items-center gap-2 border-b border-slate-800 pb-2">
                     <i class="fa-solid fa-shop"></i> 1. Shop Identity & Header Config
                 </h2>
@@ -97,8 +73,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: LOGO CONFIGURATION -->
-            <div id="tab-logos" class="tab-content hidden bg-slate-950/40 border border-slate-800/60 p-5 md:p-6 rounded-2xl space-y-4">
+            <div class="bg-slate-950/40 border border-slate-800/60 p-5 md:p-6 rounded-2xl space-y-4">
                 <h2 class="text-sm font-black uppercase tracking-widest text-amber-500 flex items-center gap-2 border-b border-slate-800 pb-2">
                     <i class="fa-solid fa-image"></i> 2. Logo Configuration (Image Links)
                 </h2>
@@ -125,8 +100,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 3: SLOGAN & SOCIAL MEDIA CHANNELS -->
-            <div id="tab-socials" class="tab-content hidden bg-slate-950/40 border border-slate-800/60 p-5 md:p-6 rounded-2xl space-y-4">
+            <div class="bg-slate-950/40 border border-slate-800/60 p-5 md:p-6 rounded-2xl space-y-4">
                 <h2 class="text-sm font-black uppercase tracking-widest text-amber-500 flex items-center gap-2 border-b border-slate-800 pb-2">
                     <i class="fa-solid fa-share-nodes"></i> 3. Slogan & Social Channels Bar
                 </h2>
@@ -163,7 +137,6 @@
                 </div>
             </div>
 
-            <!-- ACTION BUTTON (Always stays visible outside the tabs) -->
             <div class="pt-2">
                 <button type="button" onclick="saveConfiguration()" class="w-full bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 text-sm font-black uppercase tracking-widest py-4 px-6 rounded-2xl shadow-lg transition duration-200 transform active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2">
                     <i class="fa-solid fa-cloud-arrow-up text-lg"></i> Update Live Changes
@@ -174,30 +147,6 @@
     </div>
 
     <script>
-        // Tab Engine Logic
-        function switchTab(tabId) {
-            // Hide all tab content boxes
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
-            });
-            
-            // Show only the requested tab content box
-            document.getElementById(tabId).classList.remove('hidden');
-
-            // Reset all buttons style to inactive state
-            const btnIdentity = document.getElementById('btn-tab-identity');
-            const btnLogos = document.getElementById('btn-tab-logos');
-            const btnSocials = document.getElementById('btn-tab-socials');
-
-            [btnIdentity, btnLogos, btnSocials].forEach(btn => {
-                btn.className = "px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-slate-800 text-slate-400 hover:bg-slate-700/60 hover:text-slate-200";
-            });
-
-            // Set clicked button to premium active state
-            const targetBtn = document.getElementById('btn-' + tabId);
-            targetBtn.className = "px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-amber-500 text-slate-950 shadow-md shadow-amber-500/10";
-        }
-
         // Same Database Config as index.html
         const firebaseConfig = {
             apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
