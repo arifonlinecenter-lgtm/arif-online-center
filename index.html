@@ -245,17 +245,13 @@
                 const safeTitle = (item.title || "").replace(/'/g, "\\'");
                 const safeImage = (item.image || "").replace(/'/g, "\\'");
 
-                // Updated Layout: Title under-line and clean line-by-line description
                 noticeCard.innerHTML = `
                     ${imgHTML}
                     <div class="${contentWidthClass} p-5 md:p-6 flex flex-col justify-between space-y-4">
                         <div class="space-y-3">
-                            <!-- Underlined Title Structure -->
                             <div class="border-b-2 border-slate-100 pb-2 group-hover:border-amber-500/30 transition duration-300">
                                 <h2 class="text-lg md:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug group-hover:text-amber-600 transition duration-150">${item.title}</h2>
                             </div>
-                            
-                            <!-- Full Description Details (Simple & Line by Line) -->
                             <p class="text-xs md:text-sm text-slate-600 whitespace-pre-wrap font-normal leading-relaxed tracking-wide font-sans">${item.desc}</p>
                         </div>
                         
@@ -273,31 +269,38 @@
             });
         });
 
-        // ADVANCED SHARING INTERFACE
+        // UPDATED: HIGH-PERFORMANCE NATIVE IMAGE + TEXT SHARING INTERFACE
         async function sharePost(title, imageUrl) {
             const currentUrl = window.location.href;
             const fullShareText = `📢 *${title}*\n\nNeeche diye gaye link par click karke poori jankari dekhein:\n🔗 ${currentUrl}`;
             
+            // Checking if browser supports file/image sharing natively
             if (navigator.share && imageUrl && imageUrl.trim() !== "") {
                 try {
+                    // Fetching image from real-time url securely
                     const response = await fetch(imageUrl);
                     const blob = await response.blob();
-                    const file = new File([blob], 'notice-poster.jpg', { type: blob.type });
+                    
+                    // Deriving explicit extension from mime-type dynamically
+                    const mimeType = blob.type || 'image/jpeg';
+                    const extension = mimeType.split('/')[1] || 'jpg';
+                    const file = new File([blob], `notice-poster.${extension}`, { type: mimeType });
 
+                    // Executing dynamic verification if OS accepts the payload structure
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         await navigator.share({
                             title: title,
                             text: fullShareText,
-                            files: [file],
-                            url: currentUrl
+                            files: [file]
                         });
-                        return;
+                        return; // Successfully shared file natively, halting standard flow
                     }
                 } catch (error) {
-                    console.log("Image share dynamic bypass:", error);
+                    console.log("Image conversion or sharing engine fallback triggered:", error);
                 }
             }
 
+            // Universal fallback if browser does not support image transfer protocols
             if (navigator.share) {
                 navigator.share({
                     title: title,
