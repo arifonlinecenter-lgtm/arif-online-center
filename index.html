@@ -38,7 +38,7 @@
                 Latest Server Notices
             </h2>
             <div id="notices-container" class="space-y-4">
-                <p id="no-notices" class="text-center text-gray-500 my-8 py-4 bg-white rounded shadow border border-dashed">No active announcements at the moment.</p>
+                <p id="no-notices" class="text-center text-gray-500 my-8 py-4 bg-white rounded shadow border border-dashed text-xs">No active announcements at the moment.</p>
             </div>
         </section>
 
@@ -61,7 +61,7 @@
                     <button onclick="adminLogout()" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-600">Logout</button>
                 </div>
                 
-                <!-- SECTION A: WEBSITE LIKHABAT & TEXT CONFIG (NEW) -->
+                <!-- SECTION A: WEBSITE LIKHABAT & TEXT CONFIG -->
                 <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200 space-y-3">
                     <h4 class="text-xs font-black text-amber-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-pen-to-square"></i> 1. Edit Website Info & Likhabat</h4>
                     <div class="grid grid-cols-1 gap-3 text-sm">
@@ -147,7 +147,7 @@
     <script>
         const ADMIN_SECRET = "arif123";
 
-        // Master App Configurations (Loaded dynamically from browser database storage)
+        // Master App Configurations (Loaded dynamically from browser storage)
         let config = JSON.parse(localStorage.getItem('arif_config')) || {
             shopName: "ARIF ONLINE CENTER",
             address: "MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR",
