@@ -82,6 +82,18 @@
         .section-title { text-align: center; font-size: 32px; color: #1e3c72; margin-bottom: 40px; position: relative; }
         .section-title::after { content: ''; display: block; width: 60px; height: 3px; background-color: #ffcc00; margin: 10px auto 0 auto; }
 
+        /* Admin Login Modal Box */
+        .login-box {
+            background: #fff;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 1px solid #1e3c72;
+            display: none;
+        }
+
         /* Admin Dashboard Layout */
         #admin-panel {
             background: #fff;
@@ -141,30 +153,30 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // ⚠️ ARIF BHAI: Apne Firebase Project ki Settings se "FirebaseConfig" copy karke yahan niche badal dijiye:
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
+            authDomain: "arif-online-3f79e.firebaseapp.com",
+            projectId: "arif-online-3f79e",
+            storageBucket: "arif-online-3f79e.firebasestorage.app",
+            messagingSenderId: "535907035651",
+            appId: "1:535907035651:web:630f5780842de82d2e7c36",
+            measurementId: "G-MR3EFE0RQ5"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
-        // Global state variables
         window.isAdminLoggedIn = false;
         let tempPostImage = "";
         let tempServiceImage = "";
         let servicesData = [];
         const arifMobile = "9504291254";
+        const adminEmail = "UTIPANARIF@GMAIL.COM"; // Aapki official Gmail id
 
-        // Auto Website Link Detector
         function getWebsiteLink() {
             let currentUrl = window.location.href;
             if (currentUrl.startsWith("file:///")) {
@@ -173,9 +185,70 @@
             return `\n🌐 Website Link: ${currentUrl}`;
         }
 
-        // ================= ONLINE LIVE DATA FETCH (FIRESTORE REALTIME) =================
-        
-        // Listen Services Live Data
+        // Open Login Form
+        window.toggleAdminForm = function() {
+            let loginBox = document.getElementById("login-panel");
+            if(window.isAdminLoggedIn) {
+                // Logout if already logged in
+                window.isAdminLoggedIn = false;
+                document.getElementById("admin-panel").style.display = "none";
+                document.querySelectorAll(".service-actions").forEach(el => el.style.display = "none");
+                document.querySelectorAll(".delete-btn").forEach(el => el.style.display = "none");
+                alert("Logged Out Securely.");
+            } else {
+                loginBox.style.display = loginBox.style.display === "block" ? "none" : "block";
+            }
+        };
+
+        // Firebase Auth Login Function
+        window.loginAdmin = async function() {
+            let password = document.getElementById("admin-pass-input").value;
+            if(!password) { alert("Password daalein!"); return; }
+
+            try {
+                // Try logging in with your secure server credentials
+                await signInWithEmailAndPassword(auth, adminEmail, password);
+                activateAdminView();
+            } catch (e) {
+                // Agar aap pehli baar chalayein aur server pe user na ho, toh default arif123 backup check
+                if(password === "arif123") {
+                    try {
+                        // Create user account on your firebase cloud server automatically for first time setup
+                        await createUserWithEmailAndPassword(auth, adminEmail, "arif123");
+                        activateAdminView();
+                    } catch(err) {
+                        // If already exists but password was wrong
+                        alert("Galat Password! Kripya sahi password dalein ya Gmail Reset use karein.");
+                    }
+                } else {
+                    alert("Galti: " + e.message);
+                }
+            }
+        };
+
+        function activateAdminView() {
+            window.isAdminLoggedIn = true;
+            document.getElementById("login-panel").style.display = "none";
+            document.getElementById("admin-panel").style.display = "block";
+            document.querySelectorAll(".service-actions").forEach(el => el.style.display = "block");
+            document.querySelectorAll(".delete-btn").forEach(el => el.style.display = "block");
+            document.getElementById("admin-pass-input").value = "";
+            alert("🔐 Connected to Cloud Security Database Server!");
+        }
+
+        // ================= FORGOT PASSWORD LINK TO GMAIL SYSTEM =================
+        window.forgotPassword = async function() {
+            if(confirm(`Kya aap password bhool gaye hain? Reset link aapki Gmail (${adminEmail}) par bheja jaye?`)) {
+                try {
+                    await sendPasswordResetEmail(auth, adminEmail);
+                    alert("🚀 Link Bhej Diya Gaya Hai! Apni Gmail kholiye aur naya password banakar wapas aaiye.");
+                } catch(e) {
+                    alert("Error: " + e.message);
+                }
+            }
+        };
+
+        // ================= ONLINE LIVE DATA FETCH =================
         onSnapshot(collection(db, "services"), (snapshot) => {
             servicesData = [];
             let listHTML = "";
@@ -188,12 +261,12 @@
             });
 
             if(servicesData.length === 0) {
-                document.getElementById("services-list").innerHTML = "<p>No Online Services Setup Yet. Form Admin Panel, Add Data.</p>";
+                document.getElementById("services-list").innerHTML = "<p>No Online Services Setup Yet.</p>";
                 return;
             }
 
             servicesData.forEach((service, index) => {
-                let displayImg = service.img.length > 10 ? `<img src="${service.img}" class="service-img">` : `<div style="font-size:32px; margin-bottom:10px; background:#f0f4f8; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center;">${service.img || '💼'}</div>`;
+                let displayImg = service.img && service.img.length > 10 ? `<img src="${service.img}" class="service-img">` : `<div style="font-size:32px; margin-bottom:10px; background:#f0f4f8; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center;">💼</div>`;
                 
                 let orderText = `Hello Arif Bhai, mujhe aapke center se "${service.title}" का काम करवाना है।\n${webLink}`;
                 let orderUrl = `https://api.whatsapp.com/send?phone=91${arifMobile}&text=${encodeURIComponent(orderText)}`;
@@ -220,7 +293,6 @@
             document.getElementById("services-list").innerHTML = listHTML;
         });
 
-        // Listen Notices Live Data Realtime
         onSnapshot(query(collection(db, "notices"), orderBy("timestamp", "desc")), (snapshot) => {
             let listHTML = "";
             let webLink = getWebsiteLink();
@@ -248,24 +320,21 @@
             document.getElementById("posts-list").innerHTML = listHTML;
         });
 
-        // ================= WRITE OPERATIONS TO CLOUD DATABASE =================
+        // ================= WRITE OPERATIONS =================
         window.saveService = async function() {
             let title = document.getElementById("service-title").value;
             let desc = document.getElementById("service-desc").value;
             let docId = document.getElementById("edit-service-index").value;
 
             if (title.trim() === "") { alert("Enter Service Name!"); return; }
-
             let finalImg = tempServiceImage !== "" ? tempServiceImage : "💼";
 
             try {
                 if (docId !== "") {
-                    // Update existing on cloud
                     let updateData = { title: title, desc: desc };
                     if(tempServiceImage !== "") updateData.img = tempServiceImage;
                     await updateDoc(doc(db, "services", docId), updateData);
                 } else {
-                    // Save new to cloud
                     await addDoc(collection(db, "services"), { title: title, desc: desc, img: finalImg });
                 }
                 resetServiceForm();
@@ -327,7 +396,7 @@
                     <li><a href="#updates">Updates</a></li>
                     <li><a href="#services">Our Services</a></li>
                     <li><a href="#contact">Contact</a></li>
-                    <li><button class="admin-btn" onclick="toggleAdmin()">Admin Dashboard</button></li>
+                    <li><button class="admin-btn" onclick="toggleAdminForm()">Admin Dashboard</button></li>
                 </ul>
             </nav>
         </div>
@@ -339,6 +408,18 @@
     </section>
 
     <div class="container">
+        
+        <!-- LOGIN PANEL WITH FORGOT PASSWORD OPTION -->
+        <div id="login-panel" class="login-box">
+            <h4 style="margin-bottom: 15px; color: #1e3c72;">🔐 Admin Database Login</h4>
+            <div class="form-group">
+                <input type="password" id="admin-pass-input" placeholder="Admin Password Daalein">
+            </div>
+            <button class="submit-btn" style="width: 100%; margin-bottom: 10px;" onclick="loginAdmin()">Secure Login</button>
+            <div style="text-align: right;">
+                <button onclick="forgotPassword()" style="background: none; border: none; color: #ef4444; font-size: 13px; cursor: pointer; text-decoration: underline;">🔑 Forgot Password? Link to Gmail</button>
+            </div>
+        </div>
         
         <section id="admin-panel">
             <h3 style="color:#1e3c72; margin-bottom:20px; border-bottom:3px solid #ffcc00; padding-bottom:5px;">🛠️ Arif Bhai Cloud Admin Dashboard</h3>
@@ -391,25 +472,6 @@
     <footer><p>&copy; 2026 <span>Arif Online Centre</span>. All Rights Reserved.</p></footer>
 
     <script>
-        // Non-module helpers
-        function toggleAdmin() {
-            if(!window.isAdminLoggedIn) {
-                let password = prompt("Admin Password daalein (arif123):");
-                if(password === "arif123") {
-                    window.isAdminLoggedIn = true;
-                    document.getElementById("admin-panel").style.display = "block";
-                    document.querySelectorAll(".service-actions").forEach(el => el.style.display = "block");
-                    document.querySelectorAll(".delete-btn").forEach(el => el.style.display = "block");
-                    alert("Logged into Cloud Database Server!");
-                } else { alert("Galat Password!"); }
-            } else {
-                window.isAdminLoggedIn = false;
-                document.getElementById("admin-panel").style.display = "none";
-                document.querySelectorAll(".service-actions").forEach(el => el.style.display = "none");
-                document.querySelectorAll(".delete-btn").forEach(el => el.style.display = "none");
-            }
-        }
-
         function handleFileSelect(event, type) {
             let file = event.target.files[0];
             if (file) {
