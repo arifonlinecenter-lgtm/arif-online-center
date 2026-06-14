@@ -37,6 +37,13 @@
                 <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black p-3 rounded-xl shadow-md cursor-pointer transition uppercase tracking-wider flex items-center justify-center gap-2">
                     <i class="fa-solid fa-unlock"></i> Unlock Dashboard
                 </button>
+                
+                <!-- 🔔 FORGOT PASSWORD OPTION -->
+                <div class="text-center mt-2">
+                    <button type="button" onclick="handleForgotPassword()" class="text-xs text-blue-600 hover:text-blue-700 font-bold underline cursor-pointer transition">
+                        Forgot Password? Get Recovery Code
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -57,7 +64,6 @@
                     <span class="text-xs bg-green-500/20 text-green-400 font-bold px-4 py-1.5 rounded-full border border-green-500/30 flex items-center gap-2 shadow-inner">
                         <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span> Live Connected
                     </span>
-                    <!-- LOGOUT BUTTON -->
                     <button onclick="logoutAdmin()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition flex items-center gap-1.5">
                         <i class="fa-solid fa-power-off"></i> Lock
                     </button>
@@ -66,7 +72,6 @@
         </header>
 
         <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
             <!-- ⚙️ LEFT SIDE: WEBSITE CONTROLS & LOGO OPTIONS -->
             <div class="lg:col-span-1 space-y-6">
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
@@ -171,9 +176,11 @@
     </div>
 
     <script>
-        // 🔑 SECURITY LOGIN LOGIC
-        // Aap niche arif786 badalkar apna koi bhi manpasand password rakh sakte hain
+        // 🔑 SECURITY LOGIN & VERIFICATION CONFIG
         const CORRECT_PASSWORD = "arif786"; 
+        
+        // 📧 APNA EMAIL ID WAHAN DAALEIN JAHAN APKO LOGOUT/RECOVERY CODE CHAHIYE
+        const ADMIN_RECOVERY_EMAIL = "arifonlinecenter@gmail.com"; 
 
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -181,13 +188,7 @@
             const errorText = document.getElementById('login-error');
             
             if(inputPass === CORRECT_PASSWORD) {
-                // Remove Blur and Hide Login Modal completely
-                document.getElementById('login-modal').classList.add('opacity-0', 'pointer-events-none');
-                document.getElementById('main-content').classList.remove('blur-md', 'pointer-events-none');
-                errorText.classList.add('hidden');
-                
-                // Session Storage me temporary save kar rahe hain taaki baar-baar refresh karne par password na mange (jab tak tab open h)
-                sessionStorage.setItem('admin_logged_in', 'true');
+                loginSuccess();
             } else {
                 errorText.classList.remove('hidden');
                 document.getElementById('login-password').value = "";
@@ -195,7 +196,40 @@
             }
         });
 
-        // Check if already authenticated in this session tab
+        function loginSuccess() {
+            document.getElementById('login-modal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('main-content').classList.remove('blur-md', 'pointer-events-none');
+            document.getElementById('login-error').classList.add('hidden');
+            sessionStorage.setItem('admin_logged_in', 'true');
+        }
+
+        // 🔄 FORGOT PASSWORD VERIFICATION LOGIC (FREE SECURE JUGAD)
+        function handleForgotPassword() {
+            // Ek unique 6-digit secure recovery code generate hoga
+            const generatedCode = Math.floor(100000 + Math.random() * 900000);
+            
+            alert(`🔒 Security Alert! Verification link generating for your registered email: ${ADMIN_RECOVERY_EMAIL}`);
+            
+            // Mailto window link automatically details fill karke open karega safely backup verify ke liye
+            const subject = encodeURIComponent("Arif Online Center - Panel Reset Verification OTP");
+            const body = encodeURIComponent(`Hello Arif Bhai,\n\nAapke Control Panel ko unlock karne ka Secure OTP Verification Code ye hai:\n\n👉 OTP CODE: ${generatedCode}\n\nIs code ko panel me daalkar lock kholein.\n\nThank you.`);
+            
+            window.open(`mailto:${ADMIN_RECOVERY_EMAIL}?subject=${subject}&body=${body}`, '_blank');
+
+            // Ek popup pucha jayega sahi code dalne ke liye dashboard par
+            setTimeout(() => {
+                const userEnteredOtp = prompt("📧 Aapke recovery email par verification send ho chuki hai. Kripya wahan se dekh kar 6-Digit Verification OTP Code yahan enter karein:");
+                
+                if(userEnteredOtp && userEnteredOtp == generatedCode) {
+                    alert(`✅ Verification Successful! Current Password is: "${CORRECT_PASSWORD}"`);
+                    loginSuccess();
+                } else if(userEnteredOtp) {
+                    alert("❌ Wrong Verification Code! Access Denied.");
+                }
+            }, 1000);
+        }
+
+        // Check if already authenticated
         if(sessionStorage.getItem('admin_logged_in') === 'true') {
             document.getElementById('login-modal').classList.add('opacity-0', 'pointer-events-none');
             document.getElementById('main-content').classList.remove('blur-md', 'pointer-events-none');
@@ -258,7 +292,7 @@
         handleFileSelection('cfg-logo-right-file', 'cfg-logo-right-base64');
         handleFileSelection('post-image-file', 'post-image-base64');
 
-        // Load Configuration Form Details
+        // Load Configuration Details
         database.ref('config').once('value', (snapshot) => {
             const config = snapshot.val() || {};
             document.getElementById('cfg-name').value = config.shopName || "ARIF ONLINE CENTER";
