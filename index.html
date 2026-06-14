@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arif Online Centre - Common Services Center (CSC)</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Top Bar for CSC ID */
+        .top-bar {
+            background-color: #111;
+            color: #ffcc00;
+            text-align: center;
+            padding: 5px 0;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            width: 90%;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .logo span { color: #ffcc00; }
+        .sub-logo { font-size: 14px; font-weight: normal; color: #ddd; display: block; }
+        nav ul { display: flex; list-style: none; align-items: center; }
+        nav ul li { margin-left: 20px; }
+        nav ul li a { color: white; text-decoration: none; font-weight: 500; }
+        nav ul li a:hover { color: #ffcc00; }
+        .admin-btn {
+            background-color: transparent;
+            border: 1px dashed #ffcc00;
+            color: #ffcc00;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(30, 60, 114, 0.9), rgba(42, 82, 152, 0.9)), url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .hero h1 { font-size: 38px; margin-bottom: 10px; }
+        .hero p { font-size: 18px; color: #ffcc00; margin-bottom: 20px; }
+
+        /* Main Container */
+        .container { width: 90%; margin: auto; padding: 30px 0; }
+        .section-title { text-align: center; font-size: 32px; color: #1e3c72; margin-bottom: 40px; position: relative; }
+        .section-title::after { content: ''; display: block; width: 60px; height: 3px; background-color: #ffcc00; margin: 10px auto 0 auto; }
+
+        /* Admin Dashboard Layout */
+        #admin-panel {
+            background: #fff;
+            border: 2px solid #1e3c72;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .admin-grid { display: flex; flex-wrap: wrap; gap: 20px; }
+        .admin-box { flex: 1; min-width: 300px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .admin-box h4 { color: #1e3c72; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; }
+
+        /* Updates / Blog Post Section */
+        .posts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .post-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #fff; position: relative; display: flex; flex-direction: column; }
+        .post-img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; }
+        .whatsapp-share-btn { background-color: #25D366; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; font-size: 14px; text-align: center; margin-top: auto; cursor: pointer; border: none;}
+        .delete-btn { background: #ff4d4d; color: white; border: none; padding: 3px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; }
+
+        /* Dynamic Services Grid */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .service-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; position: relative; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; }
+        .service-img { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 15px; border: 2px solid #2a5298; padding: 3px; background: #fff; }
+        .service-card h3 { color: #1e3c72; font-size: 18px; margin-bottom: 10px; }
+        .service-card p { color: #666; font-size: 14px; margin-bottom: 15px; flex-grow: 1; }
+        
+        /* Service WhatsApp Buttons Styling */
+        .service-buttons { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+        .chat-owner-btn { background-color: #075E54; color: white; text-decoration: none; padding: 8px 10px; border-radius: 5px; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; border: none; }
+        .share-service-btn { background-color: #34B7F1; color: white; text-decoration: none; padding: 6px 10px; border-radius: 5px; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; border: none; }
+        
+        /* Inline Edit Actions for Services */
+        .service-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 5px; }
+        .edit-btn { background: #3182ce; color: white; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 11px; }
+
+        /* Highlight Info Box */
+        .highlight-box { background: linear-gradient(135deg, #ffcc00, #ff9900); color: #1e3c72; padding: 15px; border-radius: 8px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 40px; }
+
+        /* Form Inputs Styling */
+        .form-group { margin-bottom: 12px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; outline: none; font-size: 14px; }
+        .submit-btn { background-color: #1e3c72; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .file-input-label { display: inline-block; background: #64748b; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer; margin-top: 5px; }
+
+        /* Contact Section */
+        .contact-section { background-color: white; padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 40px; }
+        .contact-info, .contact-form { flex: 1; min-width: 280px; }
+        .contact-info h3, .contact-form h3 { color: #1e3c72; margin-bottom: 20px; }
+        .info-item { margin-bottom: 15px; font-size: 16px; }
+        .info-item strong { color: #2a5298; }
+
+        footer { background-color: #111; color: #888; text-align: center; padding: 20px 0; font-size: 14px; margin-top: 40px; }
+        footer p span { color: white; }
+    </style>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ⚠️ ARIF BHAI: Apne Firebase Project ki Settings se "FirebaseConfig" copy karke yahan niche badal dijiye:
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Global state variables
+        window.isAdminLoggedIn = false;
+        let tempPostImage = "";
+        let tempServiceImage = "";
+        let servicesData = [];
+        const arifMobile = "9504291254";
+
+        // Auto Website Link Detector
+        function getWebsiteLink() {
+            let currentUrl = window.location.href;
+            if (currentUrl.startsWith("file:///")) {
+                return "\n🌐 Website: [Arif Online Centre Portal]";
+            }
+            return `\n🌐 Website Link: ${currentUrl}`;
+        }
+
+        // ================= ONLINE LIVE DATA FETCH (FIRESTORE REALTIME) =================
+        
+        // Listen Services Live Data
+        onSnapshot(collection(db, "services"), (snapshot) => {
+            servicesData = [];
+            let listHTML = "";
+            let webLink = getWebsiteLink();
+            
+            snapshot.forEach((doc) => {
+                let service = doc.data();
+                service.id = doc.id;
+                servicesData.push(service);
+            });
+
+            if(servicesData.length === 0) {
+                document.getElementById("services-list").innerHTML = "<p>No Online Services Setup Yet. Form Admin Panel, Add Data.</p>";
+                return;
+            }
+
+            servicesData.forEach((service, index) => {
+                let displayImg = service.img.length > 10 ? `<img src="${service.img}" class="service-img">` : `<div style="font-size:32px; margin-bottom:10px; background:#f0f4f8; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center;">${service.img || '💼'}</div>`;
+                
+                let orderText = `Hello Arif Bhai, mujhe aapke center se "${service.title}" का काम करवाना है।\n${webLink}`;
+                let orderUrl = `https://api.whatsapp.com/send?phone=91${arifMobile}&text=${encodeURIComponent(orderText)}`;
+                
+                let shareText = `*${service.title}*\n${service.desc}\n\n👉 संपर्क करें:\n*आरिफ ऑनलाइन सेंटर*\n📍 भागलपुर\n📞 मो: ${arifMobile}\n${webLink}`;
+                let shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+
+                listHTML += `
+                    <div class="service-card">
+                        <div class="service-actions" style="display:${window.isAdminLoggedIn ? 'block' : 'none'}">
+                            <button class="edit-btn" onclick="editService('${service.id}', ${index})">Edit</button>
+                            <button class="edit-btn" style="background:#ef4444;" onclick="deleteService('${service.id}')">X</button>
+                        </div>
+                        ${displayImg}
+                        <h3>${service.title}</h3>
+                        <p>${service.desc}</p>
+                        <div class="service-buttons">
+                            <a href="${orderUrl}" target="_blank" class="chat-owner-btn">💬 Order on WhatsApp</a>
+                            <a href="${shareUrl}" target="_blank" class="share-service-btn">🚀 Share This Service</a>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById("services-list").innerHTML = listHTML;
+        });
+
+        // Listen Notices Live Data Realtime
+        onSnapshot(query(collection(db, "notices"), orderBy("timestamp", "desc")), (snapshot) => {
+            let listHTML = "";
+            let webLink = getWebsiteLink();
+            
+            snapshot.forEach((docSnap) => {
+                let notice = docSnap.data();
+                let noticeId = docSnap.id;
+                let imgHTML = notice.img ? `<img src="${notice.img}" class="post-img">` : "";
+                let whatsappText = `*${notice.title}*\n${notice.content}\n\n*Arif Online Centre*\n${webLink}`;
+                let whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappText)}`;
+                
+                listHTML += `
+                    <div class="post-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <h4>${notice.title}</h4>
+                            <button class="delete-btn" style="display:${window.isAdminLoggedIn ? 'block' : 'none'}" onclick="deleteNotice('${noticeId}')">Delete</button>
+                        </div>
+                        <p>${notice.content}</p>
+                        ${imgHTML}
+                        <span style="font-size:12px; color:#999; margin: 10px 0;">Posted Live</span>
+                        <a href="${whatsappUrl}" target="_blank" class="whatsapp-share-btn">🟢 Share on WhatsApp</a>
+                    </div>
+                `;
+            });
+            document.getElementById("posts-list").innerHTML = listHTML;
+        });
+
+        // ================= WRITE OPERATIONS TO CLOUD DATABASE =================
+        window.saveService = async function() {
+            let title = document.getElementById("service-title").value;
+            let desc = document.getElementById("service-desc").value;
+            let docId = document.getElementById("edit-service-index").value;
+
+            if (title.trim() === "") { alert("Enter Service Name!"); return; }
+
+            let finalImg = tempServiceImage !== "" ? tempServiceImage : "💼";
+
+            try {
+                if (docId !== "") {
+                    // Update existing on cloud
+                    let updateData = { title: title, desc: desc };
+                    if(tempServiceImage !== "") updateData.img = tempServiceImage;
+                    await updateDoc(doc(db, "services", docId), updateData);
+                } else {
+                    // Save new to cloud
+                    await addDoc(collection(db, "services"), { title: title, desc: desc, img: finalImg });
+                }
+                resetServiceForm();
+            } catch (e) { alert("Error database save: " + e.message); }
+        };
+
+        window.deleteService = async function(id) {
+            if(confirm("Permanently Cloud Se Delete Karein?")) {
+                await deleteDoc(doc(db, "services", id));
+            }
+        };
+
+        window.addNewPost = async function() {
+            let title = document.getElementById("post-title").value;
+            let content = document.getElementById("post-content").value;
+            if (title.trim() === "" || content.trim() === "") { alert("Fill Notice fields!"); return; }
+
+            try {
+                await addDoc(collection(db, "notices"), {
+                    title: title,
+                    content: content,
+                    img: tempPostImage,
+                    timestamp: new Date().getTime()
+                });
+                document.getElementById("post-title").value = "";
+                document.getElementById("post-content").value = "";
+                tempPostImage = "";
+            } catch(e) { alert(e.message); }
+        };
+
+        window.deleteNotice = async function(id) {
+            if(confirm("Delete this notice from server?")) {
+                await deleteDoc(doc(db, "notices", id));
+            }
+        };
+
+        window.editService = function(id, index) {
+            let service = servicesData[index];
+            document.getElementById("service-title").value = service.title;
+            document.getElementById("service-desc").value = service.desc;
+            document.getElementById("edit-service-index").value = id;
+            
+            document.getElementById("service-submit-btn").innerText = "Update Service Cloud";
+            document.getElementById("service-cancel-btn").style.display = "inline-block";
+            window.scrollTo({ top: document.getElementById("admin-panel").offsetTop, behavior: 'smooth' });
+        };
+    </script>
+</head>
+<body>
+
+    <div class="top-bar">🌐 CSC ID: 544474310010 (E-GOVERNANCE SERVICES INDIA LIMITED)</div>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">ARIF <span>ONLINE CENTRE</span><span class="sub-logo">(Common Services Center)</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#updates">Updates</a></li>
+                    <li><a href="#services">Our Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><button class="admin-btn" onclick="toggleAdmin()">Admin Dashboard</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>Welcome to Arif Online Centre</h1>
+        <p>सच्ची और पक्की लाइव ऑनलाइन सेवाएँ - सीधे आपके मोबाइल पर।</p>
+    </section>
+
+    <div class="container">
+        
+        <section id="admin-panel">
+            <h3 style="color:#1e3c72; margin-bottom:20px; border-bottom:3px solid #ffcc00; padding-bottom:5px;">🛠️ Arif Bhai Cloud Admin Dashboard</h3>
+            <div class="admin-grid">
+                
+                <div class="admin-box">
+                    <h4>📢 Live Notice Server Publisher</h4>
+                    <div class="form-group"><input type="text" id="post-title" placeholder="Notice Title"></div>
+                    <div class="form-group"><textarea id="post-content" rows="3" placeholder="Notice Details..."></textarea></div>
+                    <div class="form-group">
+                        <label for="post-image" class="file-input-label">🖼️ Choose Notice Photo</label>
+                        <input type="file" id="post-image" accept="image/*" style="display:none;" onchange="handleFileSelect(event, 'post')">
+                    </div>
+                    <button class="submit-btn" onclick="addNewPost()">Cloud Broadcast</button>
+                </div>
+
+                <div class="admin-box">
+                    <h4>➕ Live Cloud Service Controller</h4>
+                    <input type="hidden" id="edit-service-index" value="">
+                    <div class="form-group"><input type="text" id="service-title" placeholder="Service Name"></div>
+                    <div class="form-group"><textarea id="service-desc" rows="3" placeholder="Service Description..."></textarea></div>
+                    <div class="form-group">
+                        <label for="service-image" class="file-input-label">📸 Choose Card Image</label>
+                        <input type="file" id="service-image" accept="image/*" style="display:none;" onchange="handleFileSelect(event, 'service')">
+                    </div>
+                    <button class="submit-btn" id="service-submit-btn" onclick="saveService()">Save To Cloud</button>
+                    <button class="submit-btn" id="service-cancel-btn" style="background:#64748b; display:none;" onclick="resetServiceForm()">Cancel</button>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="updates"><h2 class="section-title">Latest Live Updates & Notices</h2><div class="posts-container" id="posts-list"></div></section>
+        <div class="highlight-box">💰 EKYC द्वारा पैसे निकाले और जमा किए जा सकते हैं... आदि...</div>
+        <section id="services"><h2 class="section-title">हमारी सभी सेवाएँ (Live From Database)</h2><div class="services-grid" id="services-list"></div></section>
+    </div>
+
+    <section class="container" id="contact">
+        <h2 class="section-title">Contact Us</h2>
+        <div class="contact-section">
+            <div class="contact-info">
+                <h3>Hamara Pata Aur Detail</h3>
+                <p class="info-item"><strong>📍 Address:</strong> MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR (BIHAR) 812004</p>
+                <p class="info-item"><strong>📞 Mobile Number:</strong> +91 9504291254</p>
+                <p class="info-item"><strong>✉️ Email:</strong> UTIPANARIF@GMAIL.COM</p>
+            </div>
+        </div>
+    </section>
+
+    <footer><p>&copy; 2026 <span>Arif Online Centre</span>. All Rights Reserved.</p></footer>
+
+    <script>
+        // Non-module helpers
+        function toggleAdmin() {
+            if(!window.isAdminLoggedIn) {
+                let password = prompt("Admin Password daalein (arif123):");
+                if(password === "arif123") {
+                    window.isAdminLoggedIn = true;
+                    document.getElementById("admin-panel").style.display = "block";
+                    document.querySelectorAll(".service-actions").forEach(el => el.style.display = "block");
+                    document.querySelectorAll(".delete-btn").forEach(el => el.style.display = "block");
+                    alert("Logged into Cloud Database Server!");
+                } else { alert("Galat Password!"); }
+            } else {
+                window.isAdminLoggedIn = false;
+                document.getElementById("admin-panel").style.display = "none";
+                document.querySelectorAll(".service-actions").forEach(el => el.style.display = "none");
+                document.querySelectorAll(".delete-btn").forEach(el => el.style.display = "none");
+            }
+        }
+
+        function handleFileSelect(event, type) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    if (type === 'post') window.tempPostImage = e.target.result;
+                    if (type === 'service') window.tempServiceImage = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetServiceForm() {
+            document.getElementById("service-title").value = "";
+            document.getElementById("service-desc").value = "";
+            document.getElementById("edit-service-index").value = "";
+            document.getElementById("service-image").value = "";
+            document.getElementById("service-submit-btn").innerText = "Save To Cloud";
+            document.getElementById("service-cancel-btn").style.display = "none";
+            window.tempServiceImage = "";
+        }
+    </script>
+</body>
+</html>
