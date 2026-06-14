@@ -7,13 +7,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase Libraries v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body class="bg-slate-100 font-sans min-h-screen pb-12 relative">
 
-    <!-- 🔒 LOGIN OVERLAY MODAL -->
     <div id="login-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-500">
         <div class="bg-white w-full max-w-md p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xl text-center space-y-6">
             <div class="h-16 w-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto text-2xl border border-amber-500/20 shadow-inner">
@@ -38,7 +36,6 @@
                     <i class="fa-solid fa-unlock"></i> Unlock Dashboard
                 </button>
                 
-                <!-- 🔔 FORGOT PASSWORD OPTION -->
                 <div class="text-center mt-2">
                     <button type="button" onclick="handleForgotPassword()" class="text-xs text-blue-600 hover:text-blue-700 font-bold underline cursor-pointer transition">
                         Forgot Password? Get Recovery Code
@@ -48,11 +45,9 @@
         </div>
     </div>
 
-    <!-- MAIN APP CONTENT CONTAINER (BLURRED BY DEFAULT TILL LOGIN) -->
     <div id="main-content" class="blur-md pointer-events-none transition-all duration-700">
         
-        <!-- TOP HEADER -->
-        <header class="bg-slate-900 text-white shadow-xl py-5 px-6 mb-8 border-b-4 border-amber-500 relative overflow-hidden">
+        <header class="bg-slate-900 text-white shadow-xl py-5 px-6 mb-6 border-b-4 border-amber-500 relative overflow-hidden">
             <div class="absolute inset-0 bg-radial from-amber-500/10 to-transparent pointer-events-none"></div>
             <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
                 <h1 class="text-2xl sm:text-3xl font-black uppercase tracking-widest flex items-center gap-3 drop-shadow-[0_2px_8px_rgba(245,158,11,0.3)]">
@@ -71,35 +66,103 @@
             </div>
         </header>
 
-        <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- ⚙️ LEFT SIDE: WEBSITE CONTROLS & LOGO OPTIONS -->
-            <div class="lg:col-span-1 space-y-6">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+        <div class="max-w-5xl mx-auto px-4 mb-6">
+            <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-xs flex flex-wrap gap-2">
+                <button onclick="switchTab('tab-notices')" id="btn-tab-notices" class="flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-blue-600 text-white shadow-sm">
+                    <i class="fa-solid fa-bullhorn"></i> Notice Manager
+                </button>
+                <button onclick="switchTab('tab-settings')" id="btn-tab-settings" class="flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-slate-50 text-slate-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-sliders"></i> Website Settings
+                </button>
+                <button onclick="switchTab('tab-password')" id="btn-tab-password" class="flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-slate-50 text-slate-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-key"></i> Change Password
+                </button>
+                <button onclick="switchTab('tab-developer')" id="btn-tab-developer" class="flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-slate-50 text-slate-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-code"></i> Developer Info
+                </button>
+            </div>
+        </div>
+
+        <main class="max-w-5xl mx-auto px-4">
+            
+            <div id="tab-notices" class="tab-panel space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-1 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs relative h-fit">
+                        <div id="form-mode-badge" class="absolute top-4 right-5 text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-800">
+                            New Post Mode
+                        </div>
+                        <h2 id="form-title-text" class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                            <i class="fa-solid fa-bullhorn text-emerald-600"></i> Create New Notice
+                        </h2>
+                        <form id="notice-form" class="space-y-4">
+                            <input type="hidden" id="edit-notice-id" value="">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Notice / Post Title</label>
+                                <input type="text" id="post-title" required placeholder="e.g., Bihar Board 11th Admission" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Poster Picture</label>
+                                <input type="file" id="post-image-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                                <input type="hidden" id="post-image-base64">
+                                <p id="image-status-text" class="text-[10px] text-slate-400 mt-1 italic">No file selected</p>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Full Description Details</label>
+                                <textarea id="post-desc" rows="5" required placeholder="Write details, criteria, required documents here..." class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600"></textarea>
+                            </div>
+                            <div class="flex gap-3">
+                                <button type="submit" id="submit-btn" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition">
+                                    <i class="fa-solid fa-paper-plane"></i> Publish Live Notice
+                                </button>
+                                <button type="button" id="cancel-edit-btn" onclick="resetPostForm()" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold p-3 rounded-xl cursor-pointer transition">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="lg:col-span-2 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                        <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                            <i class="fa-solid fa-list-check text-indigo-600"></i> Manage Published Notices
+                        </h2>
+                        <div id="admin-notices-list" class="space-y-3">
+                            <p class="text-xs text-slate-400 text-center py-6">Loading active notices...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-settings" class="tab-panel space-y-6 hidden">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs max-w-2xl mx-auto">
                     <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
-                        <i class="fa-solid fa-sliders text-blue-600"></i> Header & Logo Settings
+                        <i class="fa-solid fa-sliders text-blue-600"></i> Header & Logo Config
                     </h2>
-                    
                     <form id="config-form" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Shop / Website Name</label>
-                            <input type="text" id="cfg-name" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
-                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-name" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show on site</span></label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Shop / Website Name</label>
+                                <input type="text" id="cfg-name" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                                <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-name" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show on site</span></label>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">WhatsApp Phone Number</label>
+                                <input type="text" id="cfg-phone" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                                <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-phone" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Enable Chat Button</span></label>
+                            </div>
                         </div>
 
-                        <!-- 📁 LEFT LOGO FILE UPLOAD -->
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Left Logo Picture</label>
-                            <input type="file" id="cfg-logo-left-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                            <input type="hidden" id="cfg-logo-left-base64">
-                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-left" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Left Logo</span></label>
-                        </div>
-
-                        <!-- 📁 RIGHT LOGO FILE UPLOAD -->
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Right Logo Picture</label>
-                            <input type="file" id="cfg-logo-right-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                            <input type="hidden" id="cfg-logo-right-base64">
-                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-right" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Right Logo</span></label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-b border-slate-100 py-3 my-2">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Left Logo Picture</label>
+                                <input type="file" id="cfg-logo-left-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-3 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
+                                <input type="hidden" id="cfg-logo-left-base64">
+                                <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-left" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Left Logo</span></label>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Right Logo Picture</label>
+                                <input type="file" id="cfg-logo-right-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-3 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
+                                <input type="hidden" id="cfg-logo-right-base64">
+                                <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-right" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Right Logo</span></label>
+                            </div>
                         </div>
 
                         <div>
@@ -108,80 +171,118 @@
                             <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-address" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Address</span></label>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">WhatsApp Phone Number</label>
-                            <input type="text" id="cfg-phone" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
-                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-phone" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Enable Chat Button</span></label>
-                        </div>
-                        <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Slogan / Footer Text</label>
                             <input type="text" id="cfg-slogan" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
                             <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-slogan" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Slogan</span></label>
                         </div>
-                        <button type="button" onclick="saveConfig()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition">
-                            <i class="fa-solid fa-floppy-disk"></i> Save Header Settings
+                        <button type="button" onclick="saveConfig()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition uppercase tracking-wider">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Changes Live
                         </button>
                     </form>
                 </div>
             </div>
 
-            <!-- 📝 RIGHT SIDE: ADD/EDIT NEW POSTS & LIST -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Form to Create/Edit Post -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs relative">
-                    <div id="form-mode-badge" class="absolute top-4 right-5 text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-800">
-                        New Post Mode
-                    </div>
-                    <h2 id="form-title-text" class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
-                        <i class="fa-solid fa-bullhorn text-emerald-600"></i> Create New Post / Notice
+            <div id="tab-password" class="tab-panel space-y-6 hidden">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs max-w-md mx-auto">
+                    <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-key text-amber-500"></i> Change Panel Password
                     </h2>
-                    
-                    <form id="notice-form" class="space-y-4">
-                        <input type="hidden" id="edit-notice-id" value="">
+                    <form id="password-change-form" class="space-y-4" onsubmit="changeAdminPassword(event)">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Notice / Post Title</label>
-                            <input type="text" id="post-title" required placeholder="e.g., Bihar Board 11th Admission 2026 Started" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Current Password</label>
+                            <input type="password" id="pwd-current" required placeholder="••••••••" class="w-full text-sm p-2.5 border rounded-xl focus:outline-amber-500 font-mono tracking-widest">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Poster Picture (Optional)</label>
-                            <input type="file" id="post-image-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                            <input type="hidden" id="post-image-base64">
-                            <p id="image-status-text" class="text-[10px] text-slate-400 mt-1 italic">No file selected (will keep existing image if editing without choosing a new file)</p>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">New Secure Password</label>
+                            <input type="password" id="pwd-new" required placeholder="••••••••" class="w-full text-sm p-2.5 border rounded-xl focus:outline-amber-500 font-mono tracking-widest">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Full Description / Scheme Details</label>
-                            <textarea id="post-desc" rows="4" required placeholder="Write details, criteria, required documents here..." class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600"></textarea>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Confirm New Password</label>
+                            <input type="password" id="pwd-confirm" required placeholder="••••••••" class="w-full text-sm p-2.5 border rounded-xl focus:outline-amber-500 font-mono tracking-widest">
                         </div>
-                        <div class="flex gap-3">
-                            <button type="submit" id="submit-btn" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition">
-                                <i class="fa-solid fa-paper-plane"></i> Publish Live Notice
-                            </button>
-                            <button type="button" id="cancel-edit-btn" onclick="resetPostForm()" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold p-3 rounded-xl cursor-pointer transition">
-                                Cancel
-                            </button>
-                        </div>
+                        <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black p-3 rounded-xl shadow-md cursor-pointer transition uppercase tracking-wider">
+                            <i class="fa-solid fa-shield-halved"></i> Update Password Now
+                        </button>
                     </form>
                 </div>
+            </div>
 
-                <!-- Published Posts Manager -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-                    <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
-                        <i class="fa-solid fa-list-check text-indigo-600"></i> Manage Published Notices
-                    </h2>
-                    <div id="admin-notices-list" class="space-y-3">
-                        <p class="text-xs text-slate-400 text-center py-6">Loading active notices...</p>
+            <div id="tab-developer" class="tab-panel space-y-6 hidden">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs max-w-md mx-auto text-center space-y-4">
+                    <div class="h-14 w-14 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto text-xl border border-indigo-100">
+                        <i class="fa-solid fa-code"></i>
                     </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800 uppercase">System Status</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Arif Online Center Management Script</p>
+                    </div>
+                    <div class="text-left text-xs bg-slate-50 p-4 rounded-xl border border-slate-100 font-mono space-y-2 text-slate-600">
+                        <p><strong>Database:</strong> Firebase Realtime RTDB</p>
+                        <p><strong>Framework:</strong> Tailwind CSS v4.0</p>
+                        <p><strong>Recovery:</strong> arifonlinecenter@gmail.com</p>
+                        <p><strong>Status:</strong> Active & Live Secured</p>
+                    </div>
+                    <p class="text-[11px] text-slate-400 italic">Do not share your dashboard credentials or Firebase config strings with anyone.</p>
                 </div>
             </div>
+
         </main>
     </div>
 
     <script>
-        // 🔑 SECURITY LOGIN & VERIFICATION CONFIG
-        const CORRECT_PASSWORD = "arif786"; 
-        
-        // 📧 APNA EMAIL ID WAHAN DAALEIN JAHAN APKO LOGOUT/RECOVERY CODE CHAHIYE
+        // 🔑 SECURITY LOGIN & VERIFICATION CONFIG (FALLBACK PASSWORD)
+        let CORRECT_PASSWORD = "arif786"; 
         const ADMIN_RECOVERY_EMAIL = "arifonlinecenter@gmail.com"; 
 
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
+            authDomain: "arif-online-3f79e.firebaseapp.com",
+            databaseURL: "https://arif-online-3f79e-default-rtdb.firebaseio.com",
+            projectId: "arif-online-3f79e",
+            storageBucket: "arif-online-3f79e.firebasestorage.app",
+            messagingSenderId: "535907035651",
+            appId: "1:535907035651:web:630f5780842de82d2e7c36"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let activeNoticesCache = {};
+
+        // Fetch Live Saved Password from DB
+        database.ref('config/adminPassword').on('value', (snapshot) => {
+            if(snapshot.exists() && snapshot.val().trim() !== "") {
+                CORRECT_PASSWORD = snapshot.val();
+            }
+        });
+
+        // 🔄 TAB SWITCHER LOGIC
+        function switchTab(tabId) {
+            // Hide all panels
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+            // Remove active classes from all buttons
+            document.querySelectorAll('[id^="btn-tab-"]').forEach(btn => {
+                btn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-slate-50 text-slate-600 hover:bg-slate-100";
+            });
+
+            // Show current panel
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Highlight current button based on context colors
+            const activeBtn = document.getElementById('btn-tab-' + tabId.replace('tab-', ''));
+            if(tabId === 'tab-notices') {
+                activeBtn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-blue-600 text-white shadow-sm";
+            } else if(tabId === 'tab-settings') {
+                activeBtn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-indigo-600 text-white shadow-sm";
+            } else if(tabId === 'tab-password') {
+                activeBtn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-amber-500 text-slate-950 shadow-sm";
+            } else {
+                activeBtn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-slate-800 text-white shadow-sm";
+            }
+        }
+
+        // Login Submit Handler
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const inputPass = document.getElementById('login-password').value;
@@ -203,23 +304,18 @@
             sessionStorage.setItem('admin_logged_in', 'true');
         }
 
-        // 🔄 FORGOT PASSWORD VERIFICATION LOGIC (FREE SECURE JUGAD)
+        // Forgot Password Utility
         function handleForgotPassword() {
-            // Ek unique 6-digit secure recovery code generate hoga
             const generatedCode = Math.floor(100000 + Math.random() * 900000);
-            
             alert(`🔒 Security Alert! Verification link generating for your registered email: ${ADMIN_RECOVERY_EMAIL}`);
             
-            // Mailto window link automatically details fill karke open karega safely backup verify ke liye
             const subject = encodeURIComponent("Arif Online Center - Panel Reset Verification OTP");
             const body = encodeURIComponent(`Hello Arif Bhai,\n\nAapke Control Panel ko unlock karne ka Secure OTP Verification Code ye hai:\n\n👉 OTP CODE: ${generatedCode}\n\nIs code ko panel me daalkar lock kholein.\n\nThank you.`);
             
             window.open(`mailto:${ADMIN_RECOVERY_EMAIL}?subject=${subject}&body=${body}`, '_blank');
 
-            // Ek popup pucha jayega sahi code dalne ke liye dashboard par
             setTimeout(() => {
-                const userEnteredOtp = prompt("📧 Aapke recovery email par verification send ho chuki hai. Kripya wahan se dekh kar 6-Digit Verification OTP Code yahan enter karein:");
-                
+                const userEnteredOtp = prompt("📧 Verification OTP enter karein:");
                 if(userEnteredOtp && userEnteredOtp == generatedCode) {
                     alert(`✅ Verification Successful! Current Password is: "${CORRECT_PASSWORD}"`);
                     loginSuccess();
@@ -229,7 +325,6 @@
             }, 1000);
         }
 
-        // Check if already authenticated
         if(sessionStorage.getItem('admin_logged_in') === 'true') {
             document.getElementById('login-modal').classList.add('opacity-0', 'pointer-events-none');
             document.getElementById('main-content').classList.remove('blur-md', 'pointer-events-none');
@@ -240,21 +335,34 @@
             window.location.reload();
         }
 
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
-            authDomain: "arif-online-3f79e.firebaseapp.com",
-            databaseURL: "https://arif-online-3f79e-default-rtdb.firebaseio.com",
-            projectId: "arif-online-3f79e",
-            storageBucket: "arif-online-3f79e.firebasestorage.app",
-            messagingSenderId: "535907035651",
-            appId: "1:535907035651:web:630f5780842de82d2e7c36"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        // 🔐 UPDATE PASSWORD LOGIC
+        function changeAdminPassword(e) {
+            e.preventDefault();
+            const current = document.getElementById('pwd-current').value;
+            const newPwd = document.getElementById('pwd-new').value;
+            const confirmPwd = document.getElementById('pwd-confirm').value;
 
-        let activeNoticesCache = {};
+            if(current !== CORRECT_PASSWORD) {
+                alert("❌ Galat Current Password! Purana password sahi enter karein.");
+                return;
+            }
+            if(newPwd !== confirmPwd) {
+                alert("❌ Password Mismatch! New password aur Confirm password match nahi ho rahe.");
+                return;
+            }
+            if(newPwd.length < 4) {
+                alert("❌ Password bahut chota hai! Kam se kam 4 characters ka use karein.");
+                return;
+            }
+
+            database.ref('config/adminPassword').set(newPwd)
+                .then(() => {
+                    alert("✅ Password Changed Successfully! Ab naye password se login karein.");
+                    document.getElementById('password-change-form').reset();
+                    logoutAdmin();
+                })
+                .catch(err => alert("Error saving password: " + err.message));
+        }
 
         // PHOTO COMPRESS & BASE64 CONVERTER
         function handleFileSelection(fileInputId, hiddenInputId) {
@@ -279,7 +387,7 @@
                         document.getElementById(hiddenInputId).value = dataUrl;
                         
                         if(fileInputId === 'post-image-file') {
-                            document.getElementById('image-status-text').innerText = "✅ New photo compressed and ready!";
+                            document.getElementById('image-status-text').innerText = "✅ Photo compressed & ready!";
                         }
                     }
                     img.src = event.target.result;
@@ -324,12 +432,13 @@
                 showLogoRight: document.getElementById('chk-logo-right').checked,
                 showAddress: document.getElementById('chk-address').checked,
                 showPhone: document.getElementById('chk-phone').checked,
-                showSlogan: document.getElementById('chk-slogan').checked
+                showSlogan: document.getElementById('chk-slogan').checked,
+                adminPassword: CORRECT_PASSWORD // retains current password structure
             };
 
-            database.ref('config').set(data)
+            database.ref('config').update(data)
                 .then(() => {
-                    alert("✅ Website Settings & Logos Updated Successfully!");
+                    alert("✅ Website Settings Updated Live!");
                     document.getElementById('cfg-logo-left-file').value = "";
                     document.getElementById('cfg-logo-right-file').value = "";
                 })
@@ -377,7 +486,6 @@
             }
         });
 
-        // TRIGGER EDIT MODE FUNCTION
         function triggerEditMode(id) {
             const item = activeNoticesCache[id];
             if (!item) return;
@@ -397,28 +505,27 @@
             document.getElementById('cancel-edit-btn').classList.remove('hidden');
             
             if(item.image) {
-                document.getElementById('image-status-text').innerText = "🖼️ Has an existing picture. Upload a new one only if you want to replace it.";
+                document.getElementById('image-status-text').innerText = "🖼️ Has image. Upload to replace.";
             } else {
-                document.getElementById('image-status-text').innerText = "No image attached previously. You can upload a file now if you want.";
+                document.getElementById('image-status-text').innerText = "No image attached previously.";
             }
         }
 
-        // RESET FORM TO NEW POST MODE
         function resetPostForm() {
             document.getElementById('notice-form').reset();
             document.getElementById('edit-notice-id').value = "";
             document.getElementById('post-image-base64').value = "";
             
-            document.getElementById('form-title-text').innerHTML = `<i class="fa-solid fa-bullhorn text-emerald-600"></i> Create New Post / Notice`;
+            document.getElementById('form-title-text').innerHTML = `<i class="fa-solid fa-bullhorn text-emerald-600"></i> Create New Notice`;
             document.getElementById('form-mode-badge').innerText = "New Post Mode";
             document.getElementById('form-mode-badge').className = "absolute top-4 right-5 text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-800";
             document.getElementById('submit-btn').innerHTML = `<i class="fa-solid fa-paper-plane"></i> Publish Live Notice`;
             document.getElementById('submit-btn').className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition";
             document.getElementById('cancel-edit-btn').classList.add('hidden');
-            document.getElementById('image-status-text').innerText = "No file selected (will keep existing image if editing without choosing a new file)";
+            document.getElementById('image-status-text').innerText = "No file selected";
         }
 
-        // Realtime Render List inside Admin Panel
+        // Realtime Notice Renderer
         database.ref('notices').on('value', (snapshot) => {
             const listDiv = document.getElementById('admin-notices-list');
             listDiv.innerHTML = "";
@@ -442,10 +549,10 @@
                         <p class="text-[10px] font-medium text-slate-400">${item.date}</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="triggerEditMode('${item.id}')" class="bg-amber-50 text-amber-600 hover:bg-amber-100 p-2 rounded-lg cursor-pointer transition" title="Edit Post">
+                        <button onclick="triggerEditMode('${item.id}')" class="bg-amber-50 text-amber-600 hover:bg-amber-100 p-2 rounded-lg cursor-pointer transition">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-                        <button onclick="deleteNotice('${item.id}')" class="bg-red-50 text-red-600 hover:bg-red-100 p-2 rounded-lg cursor-pointer transition" title="Delete Post">
+                        <button onclick="deleteNotice('${item.id}')" class="bg-red-50 text-red-600 hover:bg-red-100 p-2 rounded-lg cursor-pointer transition">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </div>
@@ -455,7 +562,7 @@
         });
 
         function deleteNotice(id) {
-            if(confirm("Are you sure you want to delete this notice permanently from public view?")) {
+            if(confirm("Permanently delete this notice from public view?")) {
                 database.ref('notices/' + id).remove()
                     .then(() => {
                         alert("🗑️ Notice Deleted!");
