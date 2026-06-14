@@ -7,13 +7,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase Libraries v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body class="bg-slate-100 font-sans min-h-screen pb-12">
 
-    <!-- TOP HEADER -->
     <header class="bg-slate-900 text-white shadow-md py-4 px-6 mb-8 border-b-2 border-amber-500">
         <div class="max-w-5xl mx-auto flex justify-between items-center">
             <h1 class="text-xl font-black tracking-wider uppercase flex items-center gap-2">
@@ -27,7 +25,6 @@
 
     <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <!-- ⚙️ LEFT SIDE: WEBSITE CONTROLS & LOGO OPTIONS -->
         <div class="lg:col-span-1 space-y-6">
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                 <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
@@ -41,17 +38,17 @@
                         <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-name" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show on site</span></label>
                     </div>
 
-                    <!-- 🔴 LEFT LOGO INPUT -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Left Logo Image URL</label>
-                        <input type="url" id="cfg-logo-left" placeholder="https://example.com/logo1.png" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Left Logo Picture</label>
+                        <input type="file" id="cfg-logo-left-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        <input type="hidden" id="cfg-logo-left-base64">
                         <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-left" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Left Logo</span></label>
                     </div>
 
-                    <!-- 🔴 RIGHT LOGO INPUT -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Right Logo Image URL</label>
-                        <input type="url" id="cfg-logo-right" placeholder="https://example.com/logo2.png" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Right Logo Picture</label>
+                        <input type="file" id="cfg-logo-right-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        <input type="hidden" id="cfg-logo-right-base64">
                         <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-right" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Right Logo</span></label>
                     </div>
 
@@ -77,9 +74,7 @@
             </div>
         </div>
 
-        <!-- 📝 RIGHT SIDE: ADD NEW POSTS & LIST -->
         <div class="lg:col-span-2 space-y-6">
-            <!-- Form to Create Post -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                 <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
                     <i class="fa-solid fa-bullhorn text-emerald-600"></i> Create New Post / Notice
@@ -89,10 +84,13 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Notice / Post Title</label>
                         <input type="text" id="post-title" required placeholder="e.g., Bihar Board 11th Admission 2026 Started" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
                     </div>
+                    
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Poster Image Link (Optional)</label>
-                        <input type="url" id="post-image" placeholder="https://example.com/poster.jpg" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Poster Picture (Optional)</label>
+                        <input type="file" id="post-image-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                        <input type="hidden" id="post-image-base64">
                     </div>
+
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Full Description / Scheme Details</label>
                         <textarea id="post-desc" rows="4" required placeholder="Write details, criteria, required documents here..." class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600"></textarea>
@@ -103,7 +101,6 @@
                 </form>
             </div>
 
-            <!-- Published Posts Manager -->
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
                 <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
                     <i class="fa-solid fa-list-check text-indigo-600"></i> Manage Published Notices
@@ -131,12 +128,48 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        // 🖼️ HELPER FUNCTION: PHOTO COMPRESS & BASE64 CONVERTER
+        function handleFileSelection(fileInputId, hiddenInputId) {
+            document.getElementById(fileInputId).addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        // Firebase Database ke size ko manage karne ke liye photo ko auto-compress karna
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 600; // Resizing for optimal loading speed
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                        // Compress quality set to 70%
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        document.getElementById(hiddenInputId).value = dataUrl;
+                    }
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Event listeners attach karna teeno files picker pe
+        handleFileSelection('cfg-logo-left-file', 'cfg-logo-left-base64');
+        handleFileSelection('cfg-logo-right-file', 'cfg-logo-right-base64');
+        handleFileSelection('post-image-file', 'post-image-base64');
+
+
         // Load Configuration Form Details
         database.ref('config').once('value', (snapshot) => {
             const config = snapshot.val() || {};
             document.getElementById('cfg-name').value = config.shopName || "ARIF ONLINE CENTER";
-            document.getElementById('cfg-logo-left').value = config.logoLeft || "";
-            document.getElementById('cfg-logo-right').value = config.logoRight || "";
+            document.getElementById('cfg-logo-left-base64').value = config.logoLeft || "";
+            document.getElementById('cfg-logo-right-base64').value = config.logoRight || "";
             document.getElementById('cfg-address').value = config.address || "MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR";
             document.getElementById('cfg-phone').value = config.phone || "9504291254";
             document.getElementById('cfg-slogan').value = config.slogan || "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡";
@@ -153,8 +186,8 @@
         function saveConfig() {
             const data = {
                 shopName: document.getElementById('cfg-name').value,
-                logoLeft: document.getElementById('cfg-logo-left').value,
-                logoRight: document.getElementById('cfg-logo-right').value,
+                logoLeft: document.getElementById('cfg-logo-left-base64').value,
+                logoRight: document.getElementById('cfg-logo-right-base64').value,
                 address: document.getElementById('cfg-address').value,
                 phone: document.getElementById('cfg-phone').value,
                 slogan: document.getElementById('cfg-slogan').value,
@@ -167,7 +200,12 @@
             };
 
             database.ref('config').set(data)
-                .then(() => alert("✅ Website Settings Updated Successfully!"))
+                .then(() => {
+                    alert("✅ Website Settings & Logos Updated Successfully!");
+                    // Inputs reset files
+                    document.getElementById('cfg-logo-left-file').value = "";
+                    document.getElementById('cfg-logo-right-file').value = "";
+                })
                 .catch(err => alert("Error: " + err.message));
         }
 
@@ -175,7 +213,7 @@
         document.getElementById('notice-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const title = document.getElementById('post-title').value;
-            const image = document.getElementById('post-image').value;
+            const image = document.getElementById('post-image-base64').value; // Saved base64 string
             const desc = document.getElementById('post-desc').value;
             const dateStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
@@ -183,12 +221,13 @@
             newNoticeRef.set({
                 id: newNoticeRef.key,
                 title: title,
-                image: image,
+                image: image || "",
                 desc: desc,
                 date: dateStr
             }).then(() => {
-                alert("📢 Notice Published Live!");
+                alert("📢 Notice Published Live with Selected Image!");
                 document.getElementById('notice-form').reset();
+                document.getElementById('post-image-base64').value = "";
             }).catch(err => alert("Error: " + err.message));
         });
 
