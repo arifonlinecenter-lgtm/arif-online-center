@@ -10,6 +10,7 @@
 <body class="bg-gray-100 font-sans min-h-screen p-4 flex flex-col items-center justify-center">
 
     <div class="w-full max-w-2xl">
+        <!-- ADMIN LOGIN FORM -->
         <div id="admin-login-box" class="bg-white p-8 rounded-xl shadow-md border text-center max-w-sm mx-auto block">
             <div class="text-blue-900 text-4xl mb-3"><i class="fa-solid fa-shield-halved"></i></div>
             <h3 class="text-lg font-bold text-gray-700 mb-4">🔑 Admin Database Login</h3>
@@ -23,13 +24,16 @@
             <p id="login-error" class="text-red-500 text-xs mt-2 font-semibold hidden">⚠️ Incorrect Admin Password!</p>
         </div>
 
+        <!-- ADMIN CONTROL PANEL (Hidden until login) -->
         <div id="admin-panel" class="hidden bg-white p-6 rounded-xl shadow-lg border border-gray-200 space-y-6">
             
+            <!-- TOP HEADER WITH LOGOUT -->
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-lg font-bold text-red-600 flex items-center gap-1"><i class="fa-solid fa-sliders"></i> Master Control Dashboard</h3>
                 <button onclick="adminLogout()" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-600 cursor-pointer">Logout</button>
             </div>
             
+            <!-- NAVIGATION TABS -->
             <div class="flex gap-2 border-b pb-2">
                 <button id="tab-btn-config" onclick="switchTab('config')" class="flex-1 py-2 text-center text-xs font-bold border-b-2 border-blue-900 text-blue-900 cursor-pointer transition">
                     <i class="fa-solid fa-pen-to-square mr-1"></i> Website Info & Likhabat
@@ -39,41 +43,64 @@
                 </button>
             </div>
             
-            <div id="section-config" class="block bg-amber-50/50 p-4 rounded-xl border border-amber-200 space-y-3">
+            <!-- SECTION 1: WEBSITE LIKHABAT & TEXT CONFIG (TAB 1) -->
+            <div id="section-config" class="block bg-amber-50/50 p-4 rounded-xl border border-amber-200 space-y-4">
                 <h4 class="text-xs font-black text-amber-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-gears"></i> 1. Edit Website Info & Likhabat</h4>
-                <div class="grid grid-cols-1 gap-3 text-sm">
-                    <div>
-                        <label class="block text-[11px] font-bold text-gray-500 mb-0.5">Shop / Website Name:</label>
-                        <input type="text" id="cfg-shop-name" class="w-full p-2 border rounded bg-white text-xs">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-gray-500 mb-0.5">Shop Address Text:</label>
-                        <input type="text" id="cfg-shop-address" class="w-full p-2 border rounded bg-white text-xs">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-gray-500 mb-0.5">WhatsApp Number:</label>
-                        <input type="text" id="cfg-shop-phone" class="w-full p-2 border rounded bg-white text-xs">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-gray-500 mb-0.5">Slogan / Footer Likhabat:</label>
-                        <input type="text" id="cfg-shop-slogan" class="w-full p-2 border rounded bg-white text-xs">
-                    </div>
+                <div class="grid grid-cols-1 gap-4 text-sm">
                     
-                    <div class="flex flex-wrap gap-4 pt-1 text-xs font-bold text-gray-600">
-                        <label class="flex items-center gap-1.5 cursor-pointer">
-                            <input type="checkbox" id="cfg-show-address" class="rounded text-blue-900"> Show Address on Header
-                        </label>
-                        <label class="flex items-center gap-1.5 cursor-pointer">
-                            <input type="checkbox" id="cfg-show-phone" class="rounded text-blue-900"> Show WhatsApp Chat Button
-                        </label>
+                    <!-- Shop Name Input + Toggle -->
+                    <div class="bg-white p-3 border rounded-lg shadow-xs">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-[11px] font-bold text-gray-600">Shop / Website Name:</label>
+                            <label class="flex items-center gap-1 text-[11px] font-bold text-blue-900 cursor-pointer select-none">
+                                <input type="checkbox" id="cfg-show-name" class="rounded text-blue-900"> Show on Site
+                            </label>
+                        </div>
+                        <input type="text" id="cfg-shop-name" class="w-full p-2 border rounded bg-gray-50/50 text-xs focus:bg-white focus:outline-amber-600">
                     </div>
+
+                    <!-- Address Input + Toggle -->
+                    <div class="bg-white p-3 border rounded-lg shadow-xs">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-[11px] font-bold text-gray-600">Shop Address Text:</label>
+                            <label class="flex items-center gap-1 text-[11px] font-bold text-blue-900 cursor-pointer select-none">
+                                <input type="checkbox" id="cfg-show-address" class="rounded text-blue-900"> Show on Site
+                            </label>
+                        </div>
+                        <input type="text" id="cfg-shop-address" class="w-full p-2 border rounded bg-gray-50/50 text-xs focus:bg-white focus:outline-amber-600">
+                    </div>
+
+                    <!-- Phone Input + Toggle -->
+                    <div class="bg-white p-3 border rounded-lg shadow-xs">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-[11px] font-bold text-gray-600">WhatsApp Number:</label>
+                            <label class="flex items-center gap-1 text-[11px] font-bold text-blue-900 cursor-pointer select-none">
+                                <input type="checkbox" id="cfg-show-phone" class="rounded text-blue-900"> Show on Site
+                            </label>
+                        </div>
+                        <input type="text" id="cfg-shop-phone" class="w-full p-2 border rounded bg-gray-50/50 text-xs focus:bg-white focus:outline-amber-600">
+                    </div>
+
+                    <!-- Slogan Input + Toggle -->
+                    <div class="bg-white p-3 border rounded-lg shadow-xs">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-[11px] font-bold text-gray-600">Slogan / Footer Likhabat:</label>
+                            <label class="flex items-center gap-1 text-[11px] font-bold text-blue-900 cursor-pointer select-none">
+                                <input type="checkbox" id="cfg-show-slogan" class="rounded text-blue-900"> Show on Site
+                            </label>
+                        </div>
+                        <input type="text" id="cfg-shop-slogan" class="w-full p-2 border rounded bg-gray-50/50 text-xs focus:bg-white focus:outline-amber-600">
+                    </div>
+
                 </div>
-                <button onclick="saveWebsiteConfig()" class="w-full bg-amber-600 text-white font-bold py-2 rounded text-xs shadow hover:bg-amber-700 cursor-pointer transition">
+                <button onclick="saveWebsiteConfig()" class="w-full bg-amber-600 text-white font-bold py-2.5 rounded-lg text-xs shadow hover:bg-amber-700 cursor-pointer transition">
                     <i class="fa-solid fa-floppy-disk mr-1"></i> Save Website Text & Visibility
                 </button>
             </div>
 
+            <!-- SECTION 2 & 3: BROADCAST & MANAGE POSTS (TAB 2) -->
             <div id="section-posts" class="hidden space-y-6">
+                <!-- NOTICE PUBLISHER WITH PICTURE UPLOAD -->
                 <div class="bg-blue-50/30 p-4 rounded-xl border border-blue-100 space-y-3">
                     <h4 class="text-xs font-black text-blue-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-bullhorn"></i> 2. Broadcast / Edit Posts</h4>
                     <input type="hidden" id="edit-index" value="-1">
@@ -108,6 +135,7 @@
                     </div>
                 </div>
 
+                <!-- MANAGE ACTIVE POSTS -->
                 <div class="border-t pt-4">
                     <h4 class="text-xs font-black text-gray-700 mb-3 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-list-check"></i> 3. Delete or Edit Existing Posts:</h4>
                     <div id="admin-notices-list" class="space-y-2"></div>
@@ -120,13 +148,16 @@
     <script>
         const ADMIN_SECRET = "786786";
 
+        // LocalStorage me ab sabhi options ke liye alag alag show/hide track hoga
         let config = JSON.parse(localStorage.getItem('arif_config')) || {
             shopName: "ARIF ONLINE CENTER",
             address: "MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR",
             phone: "9504291254",
             slogan: "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡",
+            showName: true,
             showAddress: true,
-            showPhone: true
+            showPhone: true,
+            showSlogan: true
         };
 
         let notices = JSON.parse(localStorage.getItem('arif_notices')) || [];
@@ -144,7 +175,6 @@
             }
         }
 
-        // New Tab Switching Logic (Tabs badalne ke liye function)
         function switchTab(tabName) {
             const configSection = document.getElementById('section-config');
             const postsSection = document.getElementById('section-posts');
@@ -154,13 +184,11 @@
             if(tabName === 'config') {
                 configSection.classList.replace('hidden', 'block');
                 postsSection.classList.replace('block', 'hidden');
-                
                 configBtn.className = "flex-1 py-2 text-center text-xs font-bold border-b-2 border-blue-900 text-blue-900 cursor-pointer transition";
                 postsBtn.className = "flex-1 py-2 text-center text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-blue-900 cursor-pointer transition";
             } else {
                 postsSection.classList.replace('hidden', 'block');
                 configSection.classList.replace('block', 'hidden');
-                
                 postsBtn.className = "flex-1 py-2 text-center text-xs font-bold border-b-2 border-blue-900 text-blue-900 cursor-pointer transition";
                 configBtn.className = "flex-1 py-2 text-center text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-blue-900 cursor-pointer transition";
             }
@@ -176,8 +204,12 @@
             document.getElementById('cfg-shop-address').value = config.address;
             document.getElementById('cfg-shop-phone').value = config.phone;
             document.getElementById('cfg-shop-slogan').value = config.slogan;
-            document.getElementById('cfg-show-address').checked = config.showAddress;
-            document.getElementById('cfg-show-phone').checked = config.showPhone;
+            
+            // Sabhi checkboxes ko unki purani saved value ke hisab se tick/untick karna
+            document.getElementById('cfg-show-name').checked = config.showName !== false; // default true
+            document.getElementById('cfg-show-address').checked = config.showAddress !== false;
+            document.getElementById('cfg-show-phone').checked = config.showPhone !== false;
+            document.getElementById('cfg-show-slogan').checked = config.showSlogan !== false;
         }
 
         function saveWebsiteConfig() {
@@ -185,8 +217,12 @@
             config.address = document.getElementById('cfg-shop-address').value.trim();
             config.phone = document.getElementById('cfg-shop-phone').value.trim();
             config.slogan = document.getElementById('cfg-shop-slogan').value.trim();
+            
+            // Har ek checkbox ka status alag se read karke save karna
+            config.showName = document.getElementById('cfg-show-name').checked;
             config.showAddress = document.getElementById('cfg-show-address').checked;
             config.showPhone = document.getElementById('cfg-show-phone').checked;
+            config.showSlogan = document.getElementById('cfg-show-slogan').checked;
 
             localStorage.setItem('arif_config', JSON.stringify(config));
             alert("Settings Updated! Please refresh Main Website to see changes.");
@@ -269,8 +305,6 @@
 
         function loadNoticeForEdit(index) {
             const target = notices[index];
-            
-            // Edit dabane par automatic Broadcast tab par switch ho jaye
             switchTab('posts');
 
             document.getElementById('notice-title').value = target.title;
