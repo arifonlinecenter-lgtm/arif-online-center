@@ -4,45 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome - Official Notice Board</title>
-    <!-- Tailwind CSS & FontAwesome Icons -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase Libraries v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body class="bg-slate-50 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
 
-    <!-- 🌟 TOP HEADER SECTION WITH LIVE DYNAMIC LOGOS -->
-    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white shadow-xl border-b-4 border-amber-500 sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col items-center justify-center gap-2">
+    <header class="bg-slate-950 text-white shadow-2xl border-b-4 border-amber-500 sticky top-0 z-50 relative overflow-hidden">
+        <div class="absolute inset-0 bg-radial from-indigo-500/10 to-transparent pointer-events-none"></div>
+        
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col items-center justify-center gap-2 relative z-10">
             
-            <!-- Logo + Title Container Row -->
             <div class="w-full flex items-center justify-between md:justify-center gap-4 md:gap-8">
                 
-                <!-- 🖼️ LEFT LOGO -->
                 <img id="logo-left" src="" alt="Logo Left" class="hidden h-12 w-12 md:h-20 md:w-20 object-contain rounded-full bg-white/10 p-1">
                 
-                <!-- 🔠 CENTER MAIN TITLE -->
-                <h1 id="site-title" class="text-xl md:text-4xl font-black tracking-wide drop-shadow-md uppercase text-center flex-grow md:flex-grow-0">
-                    Loading...
+                <h1 id="site-title" class="text-xl md:text-4xl font-black uppercase tracking-widest text-center flex-grow md:flex-grow-0 flex items-center justify-center gap-2 md:gap-3 drop-shadow-[0_2px_10px_rgba(245,158,11,0.25)]">
+                    <i class="fa-solid fa-circle-nodes text-amber-500 animate-[spin_6s_linear_infinite] text-lg md:text-3xl"></i>
+                    <span class="text-white">Arif</span> 
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 font-extrabold">Online Center</span>
                 </h1>
                 
-                <!-- 🖼️ RIGHT LOGO -->
                 <img id="logo-right" src="" alt="Logo Right" class="hidden h-12 w-12 md:h-20 md:w-20 object-contain rounded-full bg-white/10 p-1">
             </div>
 
-            <!-- Subtitle Address Row -->
-            <p id="site-address" class="text-xs md:text-sm font-semibold text-blue-200 mt-1 tracking-wider flex items-center justify-center gap-1.5 text-center">
+            <p id="site-address" class="text-xs md:text-sm font-semibold text-slate-400 mt-1 tracking-wider flex items-center justify-center gap-1.5 text-center">
             </p>
         </div>
     </header>
 
-    <!-- 📢 MAIN CONTENT: NOTICES & POSTS -->
     <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-grow">
         
-        <!-- Live Alert Badge -->
         <div class="flex items-center gap-2 mb-6 bg-blue-50 border border-blue-200 p-3 rounded-xl shadow-xs">
             <span class="flex h-2.5 w-2.5 relative">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -51,22 +45,19 @@
             <p class="text-xs font-bold text-slate-700 uppercase tracking-wider">Latest Updates & Public Bulletins</p>
         </div>
 
-        <!-- Container jahan saare posts automatic load honge -->
         <div id="public-notices-container" class="space-y-6">
             <div class="text-center py-12 text-slate-400 font-medium text-sm">
-                <i class="fa-solid fa-circle-notch animate-spin text-2xl text-blue-900 mb-2"></i>
+                <i class="fa-solid fa-circle-notch animate-spin text-2xl text-slate-800 mb-2"></i>
                 <p>Connecting to live servers...</p>
             </div>
         </div>
     </main>
 
-    <!-- 📞 FLOATING WHATSAPP BUTTON -->
     <a id="floating-whatsapp" href="#" target="_blank" class="hidden fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 items-center justify-center z-50 group">
         <i class="fa-brands fa-whatsapp text-3xl animate-pulse"></i>
         <span class="absolute right-14 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-md">Chat with Us</span>
     </a>
 
-    <!-- 🏢 BOTTOM FOOTER -->
     <footer class="bg-slate-900 text-slate-400 text-center py-6 border-t border-slate-800 mt-12">
         <div class="max-w-5xl mx-auto px-4 space-y-2">
             <p id="site-slogan" class="text-amber-400 font-bold text-sm tracking-wide">
@@ -75,7 +66,6 @@
         </div>
     </footer>
 
-    <!-- 🌐 FIREBASE REALTIME CONNECTION LOGIC -->
     <script>
         // Firebase Config
         const firebaseConfig = {
@@ -106,17 +96,22 @@
             const leftLogoImg = document.getElementById('logo-left');
             const rightLogoImg = document.getElementById('logo-right');
 
-            // Text content setting
-            titleEl.innerText = config.shopName || "ARIF ONLINE CENTER";
+            // Text content setting (Keeping styling premium layout)
+            titleEl.innerHTML = `
+                <i class="fa-solid fa-circle-nodes text-amber-500 animate-[spin_6s_linear_infinite] text-lg md:text-3xl"></i>
+                <span class="text-white">${config.shopName ? config.shopName.split(' ')[0] : 'Arif'}</span> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 font-extrabold">${config.shopName ? config.shopName.split(' ').slice(1).join(' ') : 'Online Center'}</span>
+            `;
+            
             addressEl.innerHTML = `<i class="fa-solid fa-location-dot text-amber-500"></i> ${config.address || 'MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR'}`;
             sloganEl.innerText = config.slogan || "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡";
 
             // Basic Element Toggles
-            titleEl.style.display = (config.showName !== false) ? 'block' : 'none';
+            titleEl.style.display = (config.showName !== false) ? 'flex' : 'none';
             addressEl.style.display = (config.showAddress !== false) ? 'flex' : 'none';
             sloganEl.style.display = (config.showSlogan !== false) ? 'block' : 'none';
 
-            // 🌟 LEFT LOGO RENDER LOGIC
+            // LEFT LOGO RENDER LOGIC
             if(config.showLogoLeft !== false && config.logoLeft) {
                 leftLogoImg.src = config.logoLeft;
                 leftLogoImg.classList.remove('hidden');
@@ -124,7 +119,7 @@
                 leftLogoImg.classList.add('hidden');
             }
 
-            // 🌟 RIGHT LOGO RENDER LOGIC
+            // RIGHT LOGO RENDER LOGIC
             if(config.showLogoRight !== false && config.logoRight) {
                 rightLogoImg.src = config.logoRight;
                 rightLogoImg.classList.remove('hidden');
