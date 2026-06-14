@@ -57,6 +57,30 @@
         </div>
     </header>
 
+    <!-- 🌐 NEW DYNAMIC SOCIAL BAR (HEADER KE NICHE) -->
+    <section id="social-channels-bar" class="bg-slate-900 text-white border-b-4 border-amber-500 py-2.5 px-4 shadow-md sticky top-[69px] md:top-[85px] z-40 hidden">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+            <div class="flex items-center gap-2">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <p id="top-bar-slogan" class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-300">
+                    ⚡ WELCOME TO OUR OFFICIAL PORTAL ⚡
+                </p>
+            </div>
+            
+            <!-- Dynamic Social Action Buttons -->
+            <div class="flex items-center gap-2.5">
+                <!-- YouTube Channel Button -->
+                <a id="lnk-youtube" href="#" target="_blank" class="hidden bg-red-600 hover:bg-red-700 text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xs transition duration-200 flex items-center gap-1.5 uppercase tracking-wider">
+                    <i class="fa-brands fa-youtube text-xs"></i> YouTube
+                </a>
+                <!-- WhatsApp Community Group Button -->
+                <a id="lnk-wagroup" href="#" target="_blank" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xs transition duration-200 flex items-center gap-1.5 uppercase tracking-wider">
+                    <i class="fa-brands fa-whatsapp text-xs"></i> Join Group
+                </a>
+            </div>
+        </div>
+    </section>
+
     <main class="max-w-4xl w-full mx-auto px-4 py-6 md:py-10 flex-grow relative z-10">
         
         <div class="flex items-center gap-3 mb-6 md:mb-8 bg-white border border-slate-200 p-3 rounded-2xl shadow-xs">
@@ -114,6 +138,7 @@
             const titleEl = document.getElementById('site-title');
             const addressEl = document.getElementById('site-address');
             const sloganEl = document.getElementById('site-slogan');
+            const topBarSloganEl = document.getElementById('top-bar-slogan');
             const whatsappBtn = document.getElementById('floating-whatsapp');
             const leftLogoImg = document.getElementById('logo-left');
             const rightLogoImg = document.getElementById('logo-right');
@@ -126,7 +151,11 @@
             `;
             
             addressEl.innerHTML = `<i class="fa-solid fa-location-dot text-amber-500 text-[9px] sm:text-[11px]"></i> ${config.address || 'MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR'}`;
-            sloganEl.innerText = config.slogan || "⚡ ARIF ONLINE CENTER - SERVICE AUTOMATION PORTAL ⚡";
+            
+            // Footer & Top Bar Slogan Setup
+            const officialSlogan = config.slogan || "⚡ ARIF ONLINE CENTER - SERVICE AUTOMATION PORTAL ⚡";
+            sloganEl.innerText = officialSlogan;
+            if(topBarSloganEl) topBarSloganEl.innerText = officialSlogan;
 
             // State Visibility Controls
             document.querySelector('header').style.display = (config.showName !== false || config.showAddress !== false) ? 'block' : 'none';
@@ -155,6 +184,42 @@
                 whatsappBtn.classList.replace('hidden', 'flex');
             } else {
                 whatsappBtn.classList.replace('flex', 'hidden');
+            }
+
+            // 🌟 REALTIME SOCIAL BUTTONS INTEGRATION
+            let showSocialBar = false;
+            
+            // YouTube Handler
+            const ytBtn = document.getElementById('lnk-youtube');
+            if(config.showYoutube !== false && config.youtubeLink && config.youtubeLink.trim() !== "") {
+                ytBtn.href = config.youtubeLink;
+                ytBtn.classList.remove('hidden');
+                showSocialBar = true;
+            } else {
+                ytBtn.classList.add('hidden');
+            }
+
+            // WhatsApp Group Handler
+            const waGroupBtn = document.getElementById('lnk-wagroup');
+            if(config.showWaGroup !== false && config.whatsappGroupLink && config.whatsappGroupLink.trim() !== "") {
+                waGroupBtn.href = config.whatsappGroupLink;
+                waGroupBtn.classList.remove('hidden');
+                showSocialBar = true;
+            } else {
+                waGroupBtn.classList.add('hidden');
+            }
+
+            // Slogan visibility in bar check
+            if(config.showSlogan !== false) {
+                showSocialBar = true;
+            }
+
+            // Master Control for showing/hiding the social bar
+            const socialBarNode = document.getElementById('social-channels-bar');
+            if(showSocialBar) {
+                socialBarNode.classList.remove('hidden');
+            } else {
+                socialBarNode.classList.add('hidden');
             }
         });
 
