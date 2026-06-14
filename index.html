@@ -3,495 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arif Online Centre - Common Services Center (CSC)</title>
+    <title id="site-browser-title">ARIF ONLINE CENTER - Official Portal</title>
+    <!-- Tailwind CSS for modern UI -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Global Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #f4f7f6;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        /* Top Bar for CSC ID */
-        .top-bar {
-            background-color: #111;
-            color: #ffcc00;
-            text-align: center;
-            padding: 5px 0;
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        /* Header & Navigation */
-        header {
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .nav-container {
-            width: 90%;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-        .logo span { color: #ffcc00; }
-        .sub-logo { font-size: 14px; font-weight: normal; color: #ddd; display: block; }
-        nav ul { display: flex; list-style: none; align-items: center; }
-        nav ul li { margin-left: 20px; }
-        nav ul li a { color: white; text-decoration: none; font-weight: 500; }
-        nav ul li a:hover { color: #ffcc00; }
-        .admin-btn {
-            background-color: transparent;
-            border: 1px dashed #ffcc00;
-            color: #ffcc00;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(30, 60, 114, 0.9), rgba(42, 82, 152, 0.9)), url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
-            color: white;
-            padding: 60px 0;
-            text-align: center;
-        }
-        .hero h1 { font-size: 38px; margin-bottom: 10px; }
-        .hero p { font-size: 18px; color: #ffcc00; margin-bottom: 20px; }
-
-        /* Main Container */
-        .container { width: 90%; margin: auto; padding: 30px 0; }
-        .section-title { text-align: center; font-size: 32px; color: #1e3c72; margin-bottom: 40px; position: relative; }
-        .section-title::after { content: ''; display: block; width: 60px; height: 3px; background-color: #ffcc00; margin: 10px auto 0 auto; }
-
-        /* Admin Login Modal Box */
-        .login-box {
-            background: #fff;
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border: 1px solid #1e3c72;
-            display: none;
-        }
-
-        /* Admin Dashboard Layout */
-        #admin-panel {
-            background: #fff;
-            border: 2px solid #1e3c72;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            display: none;
-        }
-        .admin-grid { display: flex; flex-wrap: wrap; gap: 20px; }
-        .admin-box { flex: 1; min-width: 300px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .admin-box h4 { color: #1e3c72; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; }
-
-        /* Updates / Blog Post Section */
-        .posts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 40px; }
-        .post-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #fff; position: relative; display: flex; flex-direction: column; }
-        .post-img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; }
-        .whatsapp-share-btn { background-color: #25D366; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; font-size: 14px; text-align: center; margin-top: auto; cursor: pointer; border: none;}
-        .delete-btn { background: #ff4d4d; color: white; border: none; padding: 3px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; }
-
-        /* Dynamic Services Grid */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .service-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; position: relative; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; }
-        .service-img { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 15px; border: 2px solid #2a5298; padding: 3px; background: #fff; }
-        .service-card h3 { color: #1e3c72; font-size: 18px; margin-bottom: 10px; }
-        .service-card p { color: #666; font-size: 14px; margin-bottom: 15px; flex-grow: 1; }
-        
-        /* Service WhatsApp Buttons Styling */
-        .service-buttons { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
-        .chat-owner-btn { background-color: #075E54; color: white; text-decoration: none; padding: 8px 10px; border-radius: 5px; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; border: none; }
-        .share-service-btn { background-color: #34B7F1; color: white; text-decoration: none; padding: 6px 10px; border-radius: 5px; font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; border: none; }
-        
-        /* Inline Edit Actions for Services */
-        .service-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 5px; }
-        .edit-btn { background: #3182ce; color: white; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 11px; }
-
-        /* Highlight Info Box */
-        .highlight-box { background: linear-gradient(135deg, #ffcc00, #ff9900); color: #1e3c72; padding: 15px; border-radius: 8px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 40px; }
-
-        /* Form Inputs Styling */
-        .form-group { margin-bottom: 12px; }
-        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; outline: none; font-size: 14px; }
-        .submit-btn { background-color: #1e3c72; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .file-input-label { display: inline-block; background: #64748b; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer; margin-top: 5px; }
-
-        /* Contact Section */
-        .contact-section { background-color: white; padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 40px; }
-        .contact-info, .contact-form { flex: 1; min-width: 280px; }
-        .contact-info h3, .contact-form h3 { color: #1e3c72; margin-bottom: 20px; }
-        .info-item { margin-bottom: 15px; font-size: 16px; }
-        .info-item strong { color: #2a5298; }
-
-        footer { background-color: #111; color: #888; text-align: center; padding: 20px 0; font-size: 14px; margin-top: 40px; }
-        footer p span { color: white; }
+        .notice-card { transition: all 0.3s ease; }
+        .notice-card:hover { transform: translateY(-3px); }
     </style>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
-            authDomain: "arif-online-3f79e.firebaseapp.com",
-            projectId: "arif-online-3f79e",
-            storageBucket: "arif-online-3f79e.firebasestorage.app",
-            messagingSenderId: "535907035651",
-            appId: "1:535907035651:web:630f5780842de82d2e7c36",
-            measurementId: "G-MR3EFE0RQ5"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        window.isAdminLoggedIn = false;
-        let tempPostImage = "";
-        let tempServiceImage = "";
-        let servicesData = [];
-        const arifMobile = "9504291254";
-        const adminEmail = "UTIPANARIF@GMAIL.COM"; // Aapki official Gmail id
-
-        function getWebsiteLink() {
-            let currentUrl = window.location.href;
-            if (currentUrl.startsWith("file:///")) {
-                return "\n🌐 Website: [Arif Online Centre Portal]";
-            }
-            return `\n🌐 Website Link: ${currentUrl}`;
-        }
-
-        // Open Login Form
-        window.toggleAdminForm = function() {
-            let loginBox = document.getElementById("login-panel");
-            if(window.isAdminLoggedIn) {
-                // Logout if already logged in
-                window.isAdminLoggedIn = false;
-                document.getElementById("admin-panel").style.display = "none";
-                document.querySelectorAll(".service-actions").forEach(el => el.style.display = "none");
-                document.querySelectorAll(".delete-btn").forEach(el => el.style.display = "none");
-                alert("Logged Out Securely.");
-            } else {
-                loginBox.style.display = loginBox.style.display === "block" ? "none" : "block";
-            }
-        };
-
-        // Firebase Auth Login Function
-        window.loginAdmin = async function() {
-            let password = document.getElementById("admin-pass-input").value;
-            if(!password) { alert("Password daalein!"); return; }
-
-            try {
-                // Try logging in with your secure server credentials
-                await signInWithEmailAndPassword(auth, adminEmail, password);
-                activateAdminView();
-            } catch (e) {
-                // Agar aap pehli baar chalayein aur server pe user na ho, toh default arif123 backup check
-                if(password === "arif123") {
-                    try {
-                        // Create user account on your firebase cloud server automatically for first time setup
-                        await createUserWithEmailAndPassword(auth, adminEmail, "arif123");
-                        activateAdminView();
-                    } catch(err) {
-                        // If already exists but password was wrong
-                        alert("Galat Password! Kripya sahi password dalein ya Gmail Reset use karein.");
-                    }
-                } else {
-                    alert("Galti: " + e.message);
-                }
-            }
-        };
-
-        function activateAdminView() {
-            window.isAdminLoggedIn = true;
-            document.getElementById("login-panel").style.display = "none";
-            document.getElementById("admin-panel").style.display = "block";
-            document.querySelectorAll(".service-actions").forEach(el => el.style.display = "block");
-            document.querySelectorAll(".delete-btn").forEach(el => el.style.display = "block");
-            document.getElementById("admin-pass-input").value = "";
-            alert("🔐 Connected to Cloud Security Database Server!");
-        }
-
-        // ================= FORGOT PASSWORD LINK TO GMAIL SYSTEM =================
-        window.forgotPassword = async function() {
-            if(confirm(`Kya aap password bhool gaye hain? Reset link aapki Gmail (${adminEmail}) par bheja jaye?`)) {
-                try {
-                    await sendPasswordResetEmail(auth, adminEmail);
-                    alert("🚀 Link Bhej Diya Gaya Hai! Apni Gmail kholiye aur naya password banakar wapas aaiye.");
-                } catch(e) {
-                    alert("Error: " + e.message);
-                }
-            }
-        };
-
-        // ================= ONLINE LIVE DATA FETCH =================
-        onSnapshot(collection(db, "services"), (snapshot) => {
-            servicesData = [];
-            let listHTML = "";
-            let webLink = getWebsiteLink();
-            
-            snapshot.forEach((doc) => {
-                let service = doc.data();
-                service.id = doc.id;
-                servicesData.push(service);
-            });
-
-            if(servicesData.length === 0) {
-                document.getElementById("services-list").innerHTML = "<p>No Online Services Setup Yet.</p>";
-                return;
-            }
-
-            servicesData.forEach((service, index) => {
-                let displayImg = service.img && service.img.length > 10 ? `<img src="${service.img}" class="service-img">` : `<div style="font-size:32px; margin-bottom:10px; background:#f0f4f8; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center;">💼</div>`;
-                
-                let orderText = `Hello Arif Bhai, mujhe aapke center se "${service.title}" का काम करवाना है।\n${webLink}`;
-                let orderUrl = `https://api.whatsapp.com/send?phone=91${arifMobile}&text=${encodeURIComponent(orderText)}`;
-                
-                let shareText = `*${service.title}*\n${service.desc}\n\n👉 संपर्क करें:\n*आरिफ ऑनलाइन सेंटर*\n📍 भागलपुर\n📞 मो: ${arifMobile}\n${webLink}`;
-                let shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
-
-                listHTML += `
-                    <div class="service-card">
-                        <div class="service-actions" style="display:${window.isAdminLoggedIn ? 'block' : 'none'}">
-                            <button class="edit-btn" onclick="editService('${service.id}', ${index})">Edit</button>
-                            <button class="edit-btn" style="background:#ef4444;" onclick="deleteService('${service.id}')">X</button>
-                        </div>
-                        ${displayImg}
-                        <h3>${service.title}</h3>
-                        <p>${service.desc}</p>
-                        <div class="service-buttons">
-                            <a href="${orderUrl}" target="_blank" class="chat-owner-btn">💬 Order on WhatsApp</a>
-                            <a href="${shareUrl}" target="_blank" class="share-service-btn">🚀 Share This Service</a>
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById("services-list").innerHTML = listHTML;
-        });
-
-        onSnapshot(query(collection(db, "notices"), orderBy("timestamp", "desc")), (snapshot) => {
-            let listHTML = "";
-            let webLink = getWebsiteLink();
-            
-            snapshot.forEach((docSnap) => {
-                let notice = docSnap.data();
-                let noticeId = docSnap.id;
-                let imgHTML = notice.img ? `<img src="${notice.img}" class="post-img">` : "";
-                let whatsappText = `*${notice.title}*\n${notice.content}\n\n*Arif Online Centre*\n${webLink}`;
-                let whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappText)}`;
-                
-                listHTML += `
-                    <div class="post-card">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                            <h4>${notice.title}</h4>
-                            <button class="delete-btn" style="display:${window.isAdminLoggedIn ? 'block' : 'none'}" onclick="deleteNotice('${noticeId}')">Delete</button>
-                        </div>
-                        <p>${notice.content}</p>
-                        ${imgHTML}
-                        <span style="font-size:12px; color:#999; margin: 10px 0;">Posted Live</span>
-                        <a href="${whatsappUrl}" target="_blank" class="whatsapp-share-btn">🟢 Share on WhatsApp</a>
-                    </div>
-                `;
-            });
-            document.getElementById("posts-list").innerHTML = listHTML;
-        });
-
-        // ================= WRITE OPERATIONS =================
-        window.saveService = async function() {
-            let title = document.getElementById("service-title").value;
-            let desc = document.getElementById("service-desc").value;
-            let docId = document.getElementById("edit-service-index").value;
-
-            if (title.trim() === "") { alert("Enter Service Name!"); return; }
-            let finalImg = tempServiceImage !== "" ? tempServiceImage : "💼";
-
-            try {
-                if (docId !== "") {
-                    let updateData = { title: title, desc: desc };
-                    if(tempServiceImage !== "") updateData.img = tempServiceImage;
-                    await updateDoc(doc(db, "services", docId), updateData);
-                } else {
-                    await addDoc(collection(db, "services"), { title: title, desc: desc, img: finalImg });
-                }
-                resetServiceForm();
-            } catch (e) { alert("Error database save: " + e.message); }
-        };
-
-        window.deleteService = async function(id) {
-            if(confirm("Permanently Cloud Se Delete Karein?")) {
-                await deleteDoc(doc(db, "services", id));
-            }
-        };
-
-        window.addNewPost = async function() {
-            let title = document.getElementById("post-title").value;
-            let content = document.getElementById("post-content").value;
-            if (title.trim() === "" || content.trim() === "") { alert("Fill Notice fields!"); return; }
-
-            try {
-                await addDoc(collection(db, "notices"), {
-                    title: title,
-                    content: content,
-                    img: tempPostImage,
-                    timestamp: new Date().getTime()
-                });
-                document.getElementById("post-title").value = "";
-                document.getElementById("post-content").value = "";
-                tempPostImage = "";
-            } catch(e) { alert(e.message); }
-        };
-
-        window.deleteNotice = async function(id) {
-            if(confirm("Delete this notice from server?")) {
-                await deleteDoc(doc(db, "notices", id));
-            }
-        };
-
-        window.editService = function(id, index) {
-            let service = servicesData[index];
-            document.getElementById("service-title").value = service.title;
-            document.getElementById("service-desc").value = service.desc;
-            document.getElementById("edit-service-index").value = id;
-            
-            document.getElementById("service-submit-btn").innerText = "Update Service Cloud";
-            document.getElementById("service-cancel-btn").style.display = "inline-block";
-            window.scrollTo({ top: document.getElementById("admin-panel").offsetTop, behavior: 'smooth' });
-        };
-    </script>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
-    <div class="top-bar">🌐 CSC ID: 544474310010 (E-GOVERNANCE SERVICES INDIA LIMITED)</div>
-
-    <header>
-        <div class="nav-container">
-            <div class="logo">ARIF <span>ONLINE CENTRE</span><span class="sub-logo">(Common Services Center)</span></div>
-            <nav>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#updates">Updates</a></li>
-                    <li><a href="#services">Our Services</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li><button class="admin-btn" onclick="toggleAdminForm()">Admin Dashboard</button></li>
-                </ul>
-            </nav>
+    <!-- HEADER / BRANDING -->
+    <header class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white py-6 px-4 shadow-md text-center">
+        <h1 id="display-shop-name" class="text-3xl font-black tracking-wider uppercase drop-shadow-md">ARIF ONLINE CENTER</h1>
+        <p id="display-shop-address-wrapper" class="text-xs text-yellow-400 font-bold mt-1 tracking-wide">
+            <i class="fa-solid fa-location-dot mr-1"></i> <span id="display-shop-address">MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR</span>
+        </p>
+        
+        <!-- Navigation Buttons -->
+        <div class="mt-4 flex justify-center gap-4 text-sm">
+            <button onclick="toggleView('user')" id="btn-user" class="bg-yellow-400 text-blue-900 font-bold px-4 py-2 rounded shadow border border-yellow-500 cursor-pointer">📢 Live Board</button>
+            <button onclick="toggleView('admin')" id="btn-admin" class="bg-blue-800 text-white font-bold px-4 py-2 rounded shadow hover:bg-blue-900 cursor-pointer"><i class="fa-solid fa-lock mr-1"></i> Admin Dashboard</button>
         </div>
     </header>
 
-    <section class="hero" id="home">
-        <h1>Welcome to Arif Online Centre</h1>
-        <p>सच्ची और पक्की लाइव ऑनलाइन सेवाएँ - सीधे आपके मोबाइल पर।</p>
-    </section>
-
-    <div class="container">
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow container mx-auto p-4 max-w-2xl">
         
-        <!-- LOGIN PANEL WITH FORGOT PASSWORD OPTION -->
-        <div id="login-panel" class="login-box">
-            <h4 style="margin-bottom: 15px; color: #1e3c72;">🔐 Admin Database Login</h4>
-            <div class="form-group">
-                <input type="password" id="admin-pass-input" placeholder="Admin Password Daalein">
-            </div>
-            <button class="submit-btn" style="width: 100%; margin-bottom: 10px;" onclick="loginAdmin()">Secure Login</button>
-            <div style="text-align: right;">
-                <button onclick="forgotPassword()" style="background: none; border: none; color: #ef4444; font-size: 13px; cursor: pointer; text-decoration: underline;">🔑 Forgot Password? Link to Gmail</button>
-            </div>
-        </div>
-        
-        <section id="admin-panel">
-            <h3 style="color:#1e3c72; margin-bottom:20px; border-bottom:3px solid #ffcc00; padding-bottom:5px;">🛠️ Arif Bhai Cloud Admin Dashboard</h3>
-            <div class="admin-grid">
-                
-                <div class="admin-box">
-                    <h4>📢 Live Notice Server Publisher</h4>
-                    <div class="form-group"><input type="text" id="post-title" placeholder="Notice Title"></div>
-                    <div class="form-group"><textarea id="post-content" rows="3" placeholder="Notice Details..."></textarea></div>
-                    <div class="form-group">
-                        <label for="post-image" class="file-input-label">🖼️ Choose Notice Photo</label>
-                        <input type="file" id="post-image" accept="image/*" style="display:none;" onchange="handleFileSelect(event, 'post')">
-                    </div>
-                    <button class="submit-btn" onclick="addNewPost()">Cloud Broadcast</button>
-                </div>
-
-                <div class="admin-box">
-                    <h4>➕ Live Cloud Service Controller</h4>
-                    <input type="hidden" id="edit-service-index" value="">
-                    <div class="form-group"><input type="text" id="service-title" placeholder="Service Name"></div>
-                    <div class="form-group"><textarea id="service-desc" rows="3" placeholder="Service Description..."></textarea></div>
-                    <div class="form-group">
-                        <label for="service-image" class="file-input-label">📸 Choose Card Image</label>
-                        <input type="file" id="service-image" accept="image/*" style="display:none;" onchange="handleFileSelect(event, 'service')">
-                    </div>
-                    <button class="submit-btn" id="service-submit-btn" onclick="saveService()">Save To Cloud</button>
-                    <button class="submit-btn" id="service-cancel-btn" style="background:#64748b; display:none;" onclick="resetServiceForm()">Cancel</button>
-                </div>
-
+        <!-- USER VIEW: LIVE NOTICES -->
+        <section id="user-view" class="block">
+            <h2 class="text-xl font-extrabold text-blue-900 mb-4 border-b-2 border-yellow-400 pb-1 flex items-center gap-2">
+                <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span>
+                Latest Server Notices
+            </h2>
+            <div id="notices-container" class="space-y-4">
+                <p id="no-notices" class="text-center text-gray-500 my-8 py-4 bg-white rounded shadow border border-dashed">No active announcements at the moment.</p>
             </div>
         </section>
 
-        <section id="updates"><h2 class="section-title">Latest Live Updates & Notices</h2><div class="posts-container" id="posts-list"></div></section>
-        <div class="highlight-box">💰 EKYC द्वारा पैसे निकाले और जमा किए जा सकते हैं... आदि...</div>
-        <section id="services"><h2 class="section-title">हमारी सभी सेवाएँ (Live From Database)</h2><div class="services-grid" id="services-list"></div></section>
-    </div>
-
-    <section class="container" id="contact">
-        <h2 class="section-title">Contact Us</h2>
-        <div class="contact-section">
-            <div class="contact-info">
-                <h3>Hamara Pata Aur Detail</h3>
-                <p class="info-item"><strong>📍 Address:</strong> MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR (BIHAR) 812004</p>
-                <p class="info-item"><strong>📞 Mobile Number:</strong> +91 9504291254</p>
-                <p class="info-item"><strong>✉️ Email:</strong> UTIPANARIF@GMAIL.COM</p>
+        <!-- ADMIN VIEW: LOGIN & CONTROL PANEL -->
+        <section id="admin-view" class="hidden bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            
+            <!-- ADMIN LOGIN FORM -->
+            <div id="admin-login-box" class="block text-center max-w-sm mx-auto py-4">
+                <div class="text-blue-900 text-4xl mb-3"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3 class="text-lg font-bold text-gray-700 mb-4">🔑 Admin Database Login</h3>
+                <input type="password" id="admin-pass" placeholder="Enter Security Password" class="w-full p-2.5 border rounded-lg mb-4 text-center tracking-widest focus:outline-blue-900">
+                <button onclick="checkAdminLogin()" class="w-full bg-blue-900 text-white font-bold py-2.5 rounded-lg shadow hover:bg-blue-800 cursor-pointer">Secure Login</button>
+                <p id="login-error" class="text-red-500 text-xs mt-2 font-semibold hidden">⚠️ Incorrect Admin Password!</p>
             </div>
+
+            <!-- ADMIN CONTROL PANEL (Hidden until login) -->
+            <div id="admin-panel" class="hidden space-y-6">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h3 class="text-lg font-bold text-red-600 flex items-center gap-1"><i class="fa-solid fa-sliders"></i> Master Control Dashboard</h3>
+                    <button onclick="adminLogout()" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-600">Logout</button>
+                </div>
+                
+                <!-- SECTION A: WEBSITE LIKHABAT & TEXT CONFIG (NEW) -->
+                <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200 space-y-3">
+                    <h4 class="text-xs font-black text-amber-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-pen-to-square"></i> 1. Edit Website Info & Likhabat</h4>
+                    <div class="grid grid-cols-1 gap-3 text-sm">
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-500 mb-0.5">Shop / Website Name:</label>
+                            <input type="text" id="cfg-shop-name" class="w-full p-2 border rounded bg-white text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-500 mb-0.5">Shop Address Text:</label>
+                            <input type="text" id="cfg-shop-address" class="w-full p-2 border rounded bg-white text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-500 mb-0.5">WhatsApp Number (e.g., 9504291254):</label>
+                            <input type="text" id="cfg-shop-phone" class="w-full p-2 border rounded bg-white text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-500 mb-0.5">Slogan / Footer Likhabat:</label>
+                            <input type="text" id="cfg-shop-slogan" class="w-full p-2 border rounded bg-white text-xs">
+                        </div>
+                        
+                        <!-- Hide / Show Toggles -->
+                        <div class="flex flex-wrap gap-4 pt-1 text-xs font-bold text-gray-600">
+                            <label class="flex items-center gap-1.5 cursor-pointer">
+                                <input type="checkbox" id="cfg-show-address" class="rounded text-blue-900"> Show Address on Header
+                            </label>
+                            <label class="flex items-center gap-1.5 cursor-pointer">
+                                <input type="checkbox" id="cfg-show-phone" class="rounded text-blue-900"> Show WhatsApp Chat Button
+                            </label>
+                        </div>
+                    </div>
+                    <button onclick="saveWebsiteConfig()" class="w-full bg-amber-600 text-white font-bold py-2 rounded text-xs shadow hover:bg-amber-700 cursor-pointer transition">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> Save Website Text & Visibility
+                    </button>
+                </div>
+
+                <!-- SECTION B: NOTICE PUBLISHER -->
+                <div class="bg-blue-50/30 p-4 rounded-xl border border-blue-100 space-y-3">
+                    <h4 class="text-xs font-black text-blue-800 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-bullhorn"></i> 2. Broadcast / Edit Posts</h4>
+                    <input type="hidden" id="edit-index" value="-1">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5">Post Title:</label>
+                            <input type="text" id="notice-title" placeholder="e.g., Bihar Inter Admission Online" class="w-full p-2 border rounded bg-white text-xs focus:outline-blue-950">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5">Post Details / Likhabat:</label>
+                            <textarea id="notice-desc" rows="4" placeholder="Write list of documents or notice matter here..." class="w-full p-2 border rounded bg-white text-xs font-mono focus:outline-blue-950"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-600 uppercase mb-0.5">Photo Link / Image URL (Optional):</label>
+                            <input type="text" id="notice-img" placeholder="Paste image link if any" class="w-full p-2 border rounded bg-white text-xs focus:outline-blue-950">
+                        </div>
+                        <button onclick="broadcastNotice()" id="submit-btn" class="w-full bg-blue-900 text-white font-bold py-2 rounded shadow hover:bg-blue-800 cursor-pointer text-xs flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> <span id="btn-text">Publish Post Live</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECTION C: MANAGE ACTIVE POSTS -->
+                <div class="border-t pt-4">
+                    <h4 class="text-xs font-black text-gray-700 mb-3 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-list-check"></i> 3. Delete or Edit Existing Posts:</h4>
+                    <div id="admin-notices-list" class="space-y-2"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER SYSTEM -->
+    <footer class="bg-gray-900 text-gray-400 py-6 px-4 text-center text-xs mt-auto border-t-4 border-yellow-400">
+        <p id="display-shop-slogan" class="font-bold text-white mb-1">⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡</p>
+        <p class="mb-3">All digital services, admissions, scholarships & form fills delivered instantly.</p>
+        
+        <!-- Live Footer WhatsApp Trigger Wrapper -->
+        <div id="display-phone-wrapper" class="block">
+            <button onclick="contactWhatsApp()" class="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-4 py-2 rounded-full text-sm shadow hover:bg-[#20ba5a] cursor-pointer transition">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Contact on WhatsApp
+            </button>
         </div>
-    </section>
+    </footer>
 
-    <footer><p>&copy; 2026 <span>Arif Online Centre</span>. All Rights Reserved.</p></footer>
-
+    <!-- APP ENGINE SCRIPT -->
     <script>
-        function handleFileSelect(event, type) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    if (type === 'post') window.tempPostImage = e.target.result;
-                    if (type === 'service') window.tempServiceImage = e.target.result;
-                };
-                reader.readAsDataURL(file);
+        const ADMIN_SECRET = "arif123";
+
+        // Master App Configurations (Loaded dynamically from browser database storage)
+        let config = JSON.parse(localStorage.getItem('arif_config')) || {
+            shopName: "ARIF ONLINE CENTER",
+            address: "MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR",
+            phone: "9504291254",
+            slogan: "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡",
+            showAddress: true,
+            showPhone: true
+        };
+
+        let notices = JSON.parse(localStorage.getItem('arif_notices')) || [];
+
+        // Engine Boot up
+        document.addEventListener("DOMContentLoaded", () => {
+            applyConfigUI();
+            renderNotices();
+        });
+
+        // Apply configuration changes everywhere on the fly
+        function applyConfigUI() {
+            document.getElementById('site-browser-title').innerText = `${config.shopName} - Official Portal`;
+            document.getElementById('display-shop-name').innerText = config.shopName;
+            document.getElementById('display-shop-address').innerText = config.address;
+            document.getElementById('display-shop-slogan').innerText = config.slogan;
+
+            // Address display handling
+            const addrWrapper = document.getElementById('display-shop-address-wrapper');
+            if(config.showAddress) addrWrapper.style.display = "block";
+            else addrWrapper.style.display = "none";
+
+            // WhatsApp visibility handling
+            const phoneWrapper = document.getElementById('display-phone-wrapper');
+            if(config.showPhone) phoneWrapper.className = "block";
+            else phoneWrapper.className = "hidden";
+        }
+
+        // Setup config form inside admin view
+        function setupConfigFormValues() {
+            document.getElementById('cfg-shop-name').value = config.shopName;
+            document.getElementById('cfg-shop-address').value = config.address;
+            document.getElementById('cfg-shop-phone').value = config.phone;
+            document.getElementById('cfg-shop-slogan').value = config.slogan;
+            document.getElementById('cfg-show-address').checked = config.showAddress;
+            document.getElementById('cfg-show-phone').checked = config.showPhone;
+        }
+
+        // Save Custom Text Changes
+        function saveWebsiteConfig() {
+            config.shopName = document.getElementById('cfg-shop-name').value.trim() || "ARIF ONLINE CENTER";
+            config.address = document.getElementById('cfg-shop-address').value.trim();
+            config.phone = document.getElementById('cfg-shop-phone').value.trim();
+            config.slogan = document.getElementById('cfg-shop-slogan').value.trim();
+            config.showAddress = document.getElementById('cfg-show-address').checked;
+            config.showPhone = document.getElementById('cfg-show-phone').checked;
+
+            localStorage.setItem('arif_config', JSON.stringify(config));
+            applyConfigUI();
+            renderNotices(); // refresh button texts too
+            alert("Website Settings & Likhabat Updated Instantly!");
+        }
+
+        // Toggle user and admin views
+        function toggleView(view) {
+            const userView = document.getElementById('user-view');
+            const adminView = document.getElementById('admin-view');
+            const btnUser = document.getElementById('btn-user');
+            const btnAdmin = document.getElementById('btn-admin');
+
+            if(view === 'admin') {
+                userView.classList.replace('block', 'hidden');
+                adminView.classList.replace('hidden', 'block');
+                btnAdmin.className = "bg-yellow-400 text-blue-900 font-bold px-4 py-2 rounded shadow border border-yellow-500 cursor-pointer";
+                btnUser.className = "bg-blue-800 text-white font-bold px-4 py-2 rounded shadow hover:bg-blue-900 cursor-pointer";
+            } else {
+                adminView.classList.replace('block', 'hidden');
+                userView.classList.replace('hidden', 'block');
+                btnUser.className = "bg-yellow-400 text-blue-900 font-bold px-4 py-2 rounded shadow border border-yellow-500 cursor-pointer";
+                btnAdmin.className = "bg-blue-800 text-white font-bold px-4 py-2 rounded shadow hover:bg-blue-900 cursor-pointer";
             }
         }
 
-        function resetServiceForm() {
-            document.getElementById("service-title").value = "";
-            document.getElementById("service-desc").value = "";
-            document.getElementById("edit-service-index").value = "";
-            document.getElementById("service-image").value = "";
-            document.getElementById("service-submit-btn").innerText = "Save To Cloud";
-            document.getElementById("service-cancel-btn").style.display = "none";
-            window.tempServiceImage = "";
+        // WhatsApp Custom Core Router
+        function contactWhatsApp(customText = `Hello, Mujhe ${config.shopName} se ek service online karwani hai.`) {
+            if(!config.phone) {
+                alert("WhatsApp contact number is currently disabled or empty!");
+                return;
+            }
+            window.open(`https://api.whatsapp.com/send?phone=91${config.phone}&text=${encodeURIComponent(customText)}`, '_blank');
+        }
+
+        // Admin Security Lock
+        function checkAdminLogin() {
+            const typedPass = document.getElementById('admin-pass').value;
+            const errorMsg = document.getElementById('login-error');
+            
+            if(typedPass === ADMIN_SECRET) {
+                errorMsg.classList.add('hidden');
+                document.getElementById('admin-login-box').classList.replace('block', 'hidden');
+                document.getElementById('admin-panel').classList.replace('hidden', 'block');
+                setupConfigFormValues();
+                renderAdminNoticesList();
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        function adminLogout() {
+            document.getElementById('admin-pass').value = "";
+            document.getElementById('admin-panel').classList.replace('block', 'hidden');
+            document.getElementById('admin-login-box').classList.replace('hidden', 'block');
+        }
+
+        // Render posts on dashboard
+        function renderNotices() {
+            const container = document.getElementById('notices-container');
+            container.innerHTML = "";
+            
+            if(notices.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-500 my-8 py-4 bg-white rounded shadow border border-dashed text-xs">No active announcements at the moment.</p>`;
+                return;
+            }
+
+            notices.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "notice-card bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-3 relative overflow-hidden";
+                let imgHtml = item.image ? `<img src="${item.image}" alt="Notice Banner" class="w-full rounded-lg max-h-64 object-cover border my-1">` : '';
+                
+                // conditional show chat inside notice cards
+                let actionBtnHtml = config.showPhone ? `
+                    <button onclick="contactWhatsApp('Mujhe is post ke bare me janna hai: ${encodeURIComponent(item.title)}')" class="mt-2 w-full bg-[#25D366] text-white text-xs font-bold py-2 rounded-lg hover:bg-[#20ba5a] transition flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Order Service / Contact Center
+                    </button>
+                ` : '';
+
+                card.innerHTML = `
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-900"></div>
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-base font-extrabold text-gray-900 leading-snug">${item.title}</h3>
+                        <span class="text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded font-mono">${item.date}</span>
+                    </div>
+                    <p class="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">${item.desc}</p>
+                    ${imgHtml}
+                    ${actionBtnHtml}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderAdminNoticesList() {
+            const listContainer = document.getElementById('admin-notices-list');
+            listContainer.innerHTML = "";
+
+            if(notices.length === 0) {
+                listContainer.innerHTML = `<p class="text-xs text-gray-400 italic">No active posts to manage.</p>`;
+                return;
+            }
+
+            notices.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = "flex justify-between items-center bg-gray-50 p-2 rounded border text-xs";
+                row.innerHTML = `
+                    <div class="truncate max-w-[55%]">
+                        <strong class="text-gray-700">${item.title}</strong>
+                    </div>
+                    <div class="flex gap-1.5">
+                        <button onclick="loadNoticeForEdit(${index})" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded font-bold cursor-pointer text-[11px]"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button onclick="deleteNotice(${index})" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded font-bold cursor-pointer text-[11px]"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div>
+                `;
+                listContainer.appendChild(row);
+            });
+        }
+
+        function broadcastNotice() {
+            const titleInput = document.getElementById('notice-title');
+            const descInput = document.getElementById('notice-desc');
+            const imgInput = document.getElementById('notice-img');
+            const editIndex = parseInt(document.getElementById('edit-index').value);
+
+            if(!titleInput.value.trim() || !descInput.value.trim()) {
+                alert("Please fill Title and Post Details!");
+                return;
+            }
+
+            const currentDateTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' });
+            const data = {
+                title: titleInput.value.trim(),
+                desc: descInput.value.trim(),
+                image: imgInput.value.trim(),
+                date: currentDateTime
+            };
+
+            if(editIndex > -1) {
+                notices[editIndex] = data;
+                document.getElementById('edit-index').value = "-1";
+                document.getElementById('btn-text').innerText = "Publish Post Live";
+            } else {
+                notices.unshift(data);
+            }
+
+            localStorage.setItem('arif_notices', JSON.stringify(notices));
+            titleInput.value = ""; descInput.value = ""; imgInput.value = "";
+            renderNotices();
+            renderAdminNoticesList();
+            alert("Post Synchronized Successfully on Live Board!");
+        }
+
+        function loadNoticeForEdit(index) {
+            const target = notices[index];
+            document.getElementById('notice-title').value = target.title;
+            document.getElementById('notice-desc').value = target.desc;
+            document.getElementById('notice-img').value = target.image || "";
+            document.getElementById('edit-index').value = index;
+            document.getElementById('btn-text').innerText = "Save Post Changes";
+            document.getElementById('notice-title').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteNotice(index) {
+            if(confirm("Permanently delete this post?")) {
+                notices.splice(index, 1);
+                localStorage.setItem('arif_notices', JSON.stringify(notices));
+                renderNotices();
+                renderAdminNoticesList();
+            }
         }
     </script>
 </body>
