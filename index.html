@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome - Official Notice Board</title>
+    <!-- Tailwind CSS & FontAwesome Icons -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase Libraries v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body class="bg-slate-50 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
 
+    <!-- 🌟 TOP HEADER SECTION -->
     <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white shadow-xl border-b-4 border-amber-500 sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-5 text-center">
+        <div class="max-w-5xl mx-auto px-4 py-5 text-center">
             <h1 id="site-title" class="text-2xl md:text-4xl font-black tracking-wide drop-shadow-md uppercase">
                 Loading...
             </h1>
@@ -22,8 +25,10 @@
         </div>
     </header>
 
-    <main class="max-w-3xl w-full mx-auto px-4 py-8 flex-grow">
+    <!-- 📢 MAIN CONTENT: NOTICES & POSTS (Max-width increased for wider split screen) -->
+    <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-grow">
         
+        <!-- Live Alert Badge -->
         <div class="flex items-center gap-2 mb-6 bg-blue-50 border border-blue-200 p-3 rounded-xl shadow-xs">
             <span class="flex h-2.5 w-2.5 relative">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -32,6 +37,7 @@
             <p class="text-xs font-bold text-slate-700 uppercase tracking-wider">Latest Updates & Public Bulletins</p>
         </div>
 
+        <!-- Container jahan saare posts automatic load honge -->
         <div id="public-notices-container" class="space-y-6">
             <div class="text-center py-12 text-slate-400 font-medium text-sm">
                 <i class="fa-solid fa-circle-notch animate-spin text-2xl text-blue-900 mb-2"></i>
@@ -40,19 +46,22 @@
         </div>
     </main>
 
+    <!-- 📞 FLOATING WHATSAPP BUTTON -->
     <a id="floating-whatsapp" href="#" target="_blank" class="hidden fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 items-center justify-center z-50 group">
         <i class="fa-brands fa-whatsapp text-3xl animate-pulse"></i>
         <span class="absolute right-14 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-md">Chat with Us</span>
     </a>
 
+    <!-- 🏢 BOTTOM FOOTER -->
     <footer class="bg-slate-900 text-slate-400 text-center py-6 border-t border-slate-800 mt-12">
-        <div class="max-w-4xl mx-auto px-4 space-y-2">
+        <div class="max-w-5xl mx-auto px-4 space-y-2">
             <p id="site-slogan" class="text-amber-400 font-bold text-sm tracking-wide">
             </p>
             <p class="text-xs font-medium text-slate-500">&copy; 2026 All Rights Reserved.</p>
         </div>
     </footer>
 
+    <!-- 🌐 FIREBASE REALTIME CONNECTION LOGIC -->
     <script>
         // Firebase Config
         const firebaseConfig = {
@@ -97,7 +106,7 @@
             }
         });
 
-        // 2. LIVE POSTS, WHATSAPP ORDER & SHARE SYSTEM
+        // 2. LIVE POSTS, SPLIT LAYOUT (LEFT IMAGE - RIGHT DETAILS)
         database.ref('notices').on('value', (snapshot) => {
             const container = document.getElementById('public-notices-container');
             container.innerHTML = ""; 
@@ -121,36 +130,37 @@
 
             noticesList.forEach((item) => {
                 const noticeCard = document.createElement('article');
-                noticeCard.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-md transition duration-200 flex flex-col";
+                
+                // 💻 md:grid-cols-5 use kiya hai jisse Left me 2 part image ko aur Right me 3 part details ko milega (60-40 Split ratio)
+                noticeCard.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-md transition duration-200 grid grid-cols-1 md:grid-cols-5";
 
                 let imgHTML = "";
+                let detailsColSpan = "md:col-span-5"; // Agar image na ho toh poora space text ko mile
+
                 if (item.image) {
+                    detailsColSpan = "md:col-span-3"; // Image hone par details 3 columns legi
                     imgHTML = `
-                        <div class="bg-slate-100 border-b border-slate-100 max-h-[450px] overflow-hidden flex justify-center items-center">
-                            <img src="${item.image}" alt="Notice Visual" class="w-full h-auto object-contain max-h-[450px]" loading="lazy">
+                        <div class="md:col-span-2 bg-slate-50 border-b md:border-b-0 md:border-r border-slate-100 flex justify-center items-center p-2 min-h-[220px]">
+                            <img src="${item.image}" alt="Notice Visual" class="w-full h-full max-h-[320px] object-contain rounded-lg hover:scale-[1.02] transition duration-300" loading="lazy">
                         </div>`;
                 }
 
-                // WhatsApp message encode karna dynamic title ke sath
                 const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske liye online apply karwana hai ya iski details chahiye:\n📌 *${item.title}*`);
                 const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${whatsappText}`;
-
-                // Share function ke liye text pass karna
                 const shareTitle = item.title;
 
                 noticeCard.innerHTML = `
                     ${imgHTML}
-                    <div class="p-5 md:p-6 space-y-4 flex-grow flex flex-col justify-between">
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between gap-4">
-                                <h2 class="text-base md:text-xl font-bold text-slate-900 tracking-tight leading-snug">${item.title}</h2>
-                            </div>
-                            <p class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-regular fa-clock"></i> ${item.date}</p>
+                    <div class="${detailsColSpan} p-5 md:p-6 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2.5">
+                            <h2 class="text-base md:text-xl font-bold text-slate-900 tracking-tight leading-snug select-text">${item.title}</h2>
+                            <p class="text-[11px] font-bold text-slate-400 flex items-center gap-1"><i class="fa-regular fa-clock"></i> ${item.date}</p>
                             <hr class="border-slate-100">
-                            <p class="text-xs md:text-sm text-slate-700 whitespace-pre-wrap font-medium leading-relaxed font-sans">${item.desc}</p>
+                            <p class="text-xs md:text-sm text-slate-600 whitespace-pre-wrap font-medium leading-relaxed font-sans select-text">${item.desc}</p>
                         </div>
                         
-                        <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                        <!-- 🛠️ ACTION BUTTONS -->
+                        <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
                             <a href="${whatsappUrl}" target="_blank" class="flex items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl shadow-xs transition duration-150">
                                 <i class="fa-brands fa-whatsapp text-sm md:text-base"></i> Order on WhatsApp
                             </a>
@@ -170,7 +180,6 @@
             const currentUrl = window.location.href;
             const fullShareText = `📢 *${title}*\n\nNeeche diye gaye link par click karke poori jankari dekhein:\n🔗 ${currentUrl}`;
 
-            // Agar browser share API support karta hai (jaise mobile me)
             if (navigator.share) {
                 navigator.share({
                     title: title,
@@ -178,7 +187,6 @@
                     url: currentUrl
                 }).catch(err => console.log(err));
             } else {
-                // Agar normal browser hai toh clipboard me link copy ho jayega
                 navigator.clipboard.writeText(fullShareText)
                 .then(() => {
                     alert("🚀 Post link and text copied to clipboard! Paste it anywhere to share.");
