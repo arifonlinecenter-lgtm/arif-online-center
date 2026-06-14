@@ -14,18 +14,32 @@
 </head>
 <body class="bg-slate-50 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
 
-    <!-- 🌟 TOP HEADER SECTION -->
+    <!-- 🌟 TOP HEADER SECTION WITH LIVE DYNAMIC LOGOS -->
     <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white shadow-xl border-b-4 border-amber-500 sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-5 text-center">
-            <h1 id="site-title" class="text-2xl md:text-4xl font-black tracking-wide drop-shadow-md uppercase">
-                Loading...
-            </h1>
-            <p id="site-address" class="text-xs md:text-sm font-semibold text-blue-200 mt-1 tracking-wider flex items-center justify-center gap-1.5">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col items-center justify-center gap-2">
+            
+            <!-- Logo + Title Container Row -->
+            <div class="w-full flex items-center justify-between md:justify-center gap-4 md:gap-8">
+                
+                <!-- 🖼️ LEFT LOGO -->
+                <img id="logo-left" src="" alt="Logo Left" class="hidden h-12 w-12 md:h-20 md:w-20 object-contain rounded-full bg-white/10 p-1">
+                
+                <!-- 🔠 CENTER MAIN TITLE -->
+                <h1 id="site-title" class="text-xl md:text-4xl font-black tracking-wide drop-shadow-md uppercase text-center flex-grow md:flex-grow-0">
+                    Loading...
+                </h1>
+                
+                <!-- 🖼️ RIGHT LOGO -->
+                <img id="logo-right" src="" alt="Logo Right" class="hidden h-12 w-12 md:h-20 md:w-20 object-contain rounded-full bg-white/10 p-1">
+            </div>
+
+            <!-- Subtitle Address Row -->
+            <p id="site-address" class="text-xs md:text-sm font-semibold text-blue-200 mt-1 tracking-wider flex items-center justify-center gap-1.5 text-center">
             </p>
         </div>
     </header>
 
-    <!-- 📢 MAIN CONTENT: NOTICES & POSTS (Max-width increased for wider split screen) -->
+    <!-- 📢 MAIN CONTENT: NOTICES & POSTS -->
     <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-grow">
         
         <!-- Live Alert Badge -->
@@ -77,9 +91,9 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let globalPhone = "9504291254"; // Default fallback number
+        let globalPhone = "9504291254"; 
 
-        // 1. LIVE WEBSITE TEXT & VISIBILITY SYNC
+        // 1. LIVE WEBSITE CONFIG & LOGO SYNC
         database.ref('config').on('value', (snapshot) => {
             const config = snapshot.val() || {};
             
@@ -89,14 +103,34 @@
             const addressEl = document.getElementById('site-address');
             const sloganEl = document.getElementById('site-slogan');
             const whatsappBtn = document.getElementById('floating-whatsapp');
+            const leftLogoImg = document.getElementById('logo-left');
+            const rightLogoImg = document.getElementById('logo-right');
 
+            // Text content setting
             titleEl.innerText = config.shopName || "ARIF ONLINE CENTER";
             addressEl.innerHTML = `<i class="fa-solid fa-location-dot text-amber-500"></i> ${config.address || 'MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR'}`;
             sloganEl.innerText = config.slogan || "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡";
 
+            // Basic Element Toggles
             titleEl.style.display = (config.showName !== false) ? 'block' : 'none';
             addressEl.style.display = (config.showAddress !== false) ? 'flex' : 'none';
             sloganEl.style.display = (config.showSlogan !== false) ? 'block' : 'none';
+
+            // 🌟 LEFT LOGO RENDER LOGIC
+            if(config.showLogoLeft !== false && config.logoLeft) {
+                leftLogoImg.src = config.logoLeft;
+                leftLogoImg.classList.remove('hidden');
+            } else {
+                leftLogoImg.classList.add('hidden');
+            }
+
+            // 🌟 RIGHT LOGO RENDER LOGIC
+            if(config.showLogoRight !== false && config.logoRight) {
+                rightLogoImg.src = config.logoRight;
+                rightLogoImg.classList.remove('hidden');
+            } else {
+                rightLogoImg.classList.add('hidden');
+            }
 
             if (config.showPhone !== false && config.phone) {
                 whatsappBtn.href = `https://api.whatsapp.com/send?phone=91${config.phone}&text=Hello! I need some assistance regarding your online services.`;
@@ -106,7 +140,7 @@
             }
         });
 
-        // 2. LIVE POSTS, SPLIT LAYOUT (LEFT IMAGE - RIGHT DETAILS)
+        // 2. LIVE POSTS SYNC
         database.ref('notices').on('value', (snapshot) => {
             const container = document.getElementById('public-notices-container');
             container.innerHTML = ""; 
@@ -130,15 +164,13 @@
 
             noticesList.forEach((item) => {
                 const noticeCard = document.createElement('article');
-                
-                // 💻 md:grid-cols-5 use kiya hai jisse Left me 2 part image ko aur Right me 3 part details ko milega (60-40 Split ratio)
                 noticeCard.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-md transition duration-200 grid grid-cols-1 md:grid-cols-5";
 
                 let imgHTML = "";
-                let detailsColSpan = "md:col-span-5"; // Agar image na ho toh poora space text ko mile
+                let detailsColSpan = "md:col-span-5";
 
                 if (item.image) {
-                    detailsColSpan = "md:col-span-3"; // Image hone par details 3 columns legi
+                    detailsColSpan = "md:col-span-3"; 
                     imgHTML = `
                         <div class="md:col-span-2 bg-slate-50 border-b md:border-b-0 md:border-r border-slate-100 flex justify-center items-center p-2 min-h-[220px]">
                             <img src="${item.image}" alt="Notice Visual" class="w-full h-full max-h-[320px] object-contain rounded-lg hover:scale-[1.02] transition duration-300" loading="lazy">
@@ -153,13 +185,12 @@
                     ${imgHTML}
                     <div class="${detailsColSpan} p-5 md:p-6 flex flex-col justify-between space-y-4">
                         <div class="space-y-2.5">
-                            <h2 class="text-base md:text-xl font-bold text-slate-900 tracking-tight leading-snug select-text">${item.title}</h2>
+                            <h2 class="text-base md:text-xl font-bold text-slate-900 tracking-tight leading-snug">${item.title}</h2>
                             <p class="text-[11px] font-bold text-slate-400 flex items-center gap-1"><i class="fa-regular fa-clock"></i> ${item.date}</p>
                             <hr class="border-slate-100">
-                            <p class="text-xs md:text-sm text-slate-600 whitespace-pre-wrap font-medium leading-relaxed font-sans select-text">${item.desc}</p>
+                            <p class="text-xs md:text-sm text-slate-600 whitespace-pre-wrap font-medium leading-relaxed font-sans">${item.desc}</p>
                         </div>
                         
-                        <!-- 🛠️ ACTION BUTTONS -->
                         <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
                             <a href="${whatsappUrl}" target="_blank" class="flex items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl shadow-xs transition duration-150">
                                 <i class="fa-brands fa-whatsapp text-sm md:text-base"></i> Order on WhatsApp
@@ -174,7 +205,7 @@
             });
         });
 
-        // 🔗 SHARE POST FUNCTION
+        // SHARE FUNCTION
         function sharePost(escapedTitle) {
             const title = unescape(escapedTitle);
             const currentUrl = window.location.href;
@@ -188,12 +219,8 @@
                 }).catch(err => console.log(err));
             } else {
                 navigator.clipboard.writeText(fullShareText)
-                .then(() => {
-                    alert("🚀 Post link and text copied to clipboard! Paste it anywhere to share.");
-                })
-                .catch(() => {
-                    alert("Failed to copy link.");
-                });
+                .then(() => alert("🚀 Post link and text copied to clipboard!"))
+                .catch(() => alert("Failed to copy link."));
             }
         }
     </script>
