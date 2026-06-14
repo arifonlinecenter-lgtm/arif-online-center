@@ -12,133 +12,152 @@
 
     <style>
         .admin-bg {
-            background-color: #0f172a;
-            background-image: radial-gradient(#1e293b 1px, transparent 1px);
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
             background-size: 20px 20px;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="admin-bg text-slate-100 font-sans min-h-screen py-6 md:py-12 px-4 selection:bg-amber-500 selection:text-slate-950">
+<body class="admin-bg text-slate-800 font-sans min-h-screen py-6 md:py-12 px-4 selection:bg-amber-500 selection:text-slate-950">
 
-    <div class="max-w-3xl mx-auto bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-3xl shadow-2xl p-6 md:p-10">
+    <div class="max-w-3xl mx-auto bg-white/90 backdrop-blur-md border border-slate-200 rounded-3xl shadow-xl p-6 md:p-10">
         
-        <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-800 pb-6 mb-8 gap-4">
+        <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-200 pb-6 mb-6 gap-4">
             <div class="text-center md:text-left">
-                <h1 class="text-2xl md:text-3xl font-black tracking-wider uppercase">
-                    <span class="text-amber-500"><i class="fa-solid fa-sliders-h mr-2"></i>Control</span> Portal
+                <h1 class="text-2xl md:text-3xl font-black tracking-wider uppercase text-slate-900">
+                    <span class="text-amber-600"><i class="fa-solid fa-sliders-h mr-2"></i>Control</span> Portal
                 </h1>
-                <p class="text-xs text-slate-400 font-medium tracking-wide mt-1">Live configuration setup for ARIF ONLINE CENTER</p>
+                <p class="text-xs text-slate-500 font-medium tracking-wide mt-1">Live configuration setup for ARIF ONLINE CENTER</p>
             </div>
             <div class="shrink-0">
-                <span id="sync-status" class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1.5 animate-pulse">
-                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span> Server Connected
+                <span id="sync-status" class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1.5 animate-pulse">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Server Connected
                 </span>
             </div>
         </div>
 
-        <form id="config-form" class="space-y-8">
+        <div class="flex flex-row gap-2 border-b border-slate-200 pb-4 mb-6 overflow-x-auto no-scrollbar">
+            <button type="button" onclick="switchTab('tab-identity')" id="btn-tab-identity" class="px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20">
+                <i class="fa-solid fa-shop mr-1"></i> Identity & Header
+            </button>
+            <button type="button" onclick="switchTab('tab-logos')" id="btn-tab-logos" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900">
+                <i class="fa-solid fa-image mr-1"></i> Logo Setup
+            </button>
+            <button type="button" onclick="switchTab('tab-socials')" id="btn-tab-socials" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900">
+                <i class="fa-solid fa-share-nodes mr-1"></i> Social Channels
+            </button>
+        </div>
+
+        <form id="config-form" class="space-y-6">
             
-            <div class="bg-slate-950/40 border border-slate-800/60 p-5 md:p-6 rounded-2xl space-y-4">
-                <h2 class="text-sm font-black uppercase tracking-widest text-amber-500 flex items-center gap-2 border-b border-slate-800 pb-2">
+            <div id="tab-identity" class="tab-content bg-slate-50 border border-slate-200 p-5 md:p-6 rounded-2xl space-y-4">
+                <h2 class="text-sm font-black uppercase tracking-widest text-amber-600 flex items-center gap-2 border-b border-slate-200 pb-2">
                     <i class="fa-solid fa-shop"></i> 1. Shop Identity & Header Config
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Shop Name</label>
-                        <input type="text" id="shopName" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="e.g., Arif Online Center">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Shop Name</label>
+                        <input type="text" id="shopName" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition shadow-xs" placeholder="e.g., Arif Online Center">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">WhatsApp / Phone Number</label>
-                        <input type="text" id="phone" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="10 digit number">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">WhatsApp / Phone Number</label>
+                        <input type="text" id="phone" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition shadow-xs" placeholder="10 digit number">
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Shop Address</label>
-                        <input type="text" id="address" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="Full shop address">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Shop Address</label>
+                        <input type="text" id="address" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition shadow-xs" placeholder="Full shop address">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                    <label class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl cursor-pointer select-none hover:border-slate-700">
+                    <label class="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-xl cursor-pointer select-none hover:border-slate-300 shadow-xs">
                         <input type="checkbox" id="showName" class="accent-amber-500 h-4 w-4">
-                        <span class="text-xs font-bold uppercase text-slate-300">Show Shop Name</span>
+                        <span class="text-xs font-bold uppercase text-slate-700">Show Shop Name</span>
                     </label>
-                    <label class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl cursor-pointer select-none hover:border-slate-700">
+                    <label class="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-xl cursor-pointer select-none hover:border-slate-300 shadow-xs">
                         <input type="checkbox" id="showAddress" class="accent-amber-500 h-4 w-4">
-                        <span class="text-xs font-bold uppercase text-slate-300">Show Address</span>
+                        <span class="text-xs font-bold uppercase text-slate-700">Show Address</span>
                     </label>
-                    <label class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl cursor-pointer select-none hover:border-slate-700">
+                    <label class="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-xl cursor-pointer select-none hover:border-slate-300 shadow-xs">
                         <input type="checkbox" id="showPhone" class="accent-amber-500 h-4 w-4">
-                        <span class="text-xs font-bold uppercase text-slate-300">Show Contact Floating Button</span>
+                        <span class="text-xs font-bold uppercase text-slate-700">Show Contact Button</span>
                     </label>
                 </div>
             </div>
 
-            <div class="bg-slate-950/40 border border-slate-800/60 p-5 md:p-6 rounded-2xl space-y-4">
-                <h2 class="text-sm font-black uppercase tracking-widest text-amber-500 flex items-center gap-2 border-b border-slate-800 pb-2">
+            <div id="tab-logos" class="tab-content hidden bg-slate-50 border border-slate-200 p-5 md:p-6 rounded-2xl space-y-4">
+                <h2 class="text-sm font-black uppercase tracking-widest text-amber-600 flex items-center gap-2 border-b border-slate-200 pb-2">
                     <i class="fa-solid fa-image"></i> 2. Logo Configuration (Image Links)
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Left Logo URL</label>
-                        <input type="url" id="logoLeft" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="https://example.com/logo-left.png">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Left Logo URL</label>
+                        <input type="url" id="logoLeft" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition shadow-xs" placeholder="https://example.com/logo-left.png">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Right Logo URL</label>
-                        <input type="url" id="logoRight" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="https://example.com/logo-right.png">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Right Logo URL</label>
+                        <input type="url" id="logoRight" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition shadow-xs" placeholder="https://example.com/logo-right.png">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                    <label class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl cursor-pointer select-none hover:border-slate-700">
+                    <label class="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-xl cursor-pointer select-none hover:border-slate-300 shadow-xs">
                         <input type="checkbox" id="showLogoLeft" class="accent-amber-500 h-4 w-4">
-                        <span class="text-xs font-bold uppercase text-slate-300">Enable Left Logo</span>
+                        <span class="text-xs font-bold uppercase text-slate-700">Enable Left Logo</span>
                     </label>
-                    <label class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl cursor-pointer select-none hover:border-slate-700">
+                    <label class="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-xl cursor-pointer select-none hover:border-slate-300 shadow-xs">
                         <input type="checkbox" id="showLogoRight" class="accent-amber-500 h-4 w-4">
-                        <span class="text-xs font-bold uppercase text-slate-300">Enable Right Logo</span>
+                        <span class="text-xs font-bold uppercase text-slate-700">Enable Right Logo</span>
                     </label>
                 </div>
             </div>
 
-            <div class="bg-slate-950/40 border border-slate-800/60 p-5 md:p-6 rounded-2xl space-y-4">
-                <h2 class="text-sm font-black uppercase tracking-widest text-amber-500 flex items-center gap-2 border-b border-slate-800 pb-2">
+            <div id="tab-socials" class="tab-content hidden bg-slate-50 border border-slate-200 p-5 md:p-6 rounded-2xl space-y-4">
+                <h2 class="text-sm font-black uppercase tracking-widest text-amber-600 flex items-center gap-2 border-b border-slate-200 pb-2">
                     <i class="fa-solid fa-share-nodes"></i> 3. Slogan & Social Channels Bar
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Top Bar Alert Slogan</label>
-                        <input type="text" id="slogan" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="⚡ WELCOME TO OUR PORTAL ⚡">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Top Bar Alert Slogan</label>
+                        <input type="text" id="slogan" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition shadow-xs" placeholder="⚡ WELCOME TO OUR PORTAL ⚡">
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5"><i class="fa-brands fa-youtube text-red-500"></i> YouTube Channel Link</label>
-                            <input type="url" id="youtubeLink" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="https://youtube.com/c/yourchannel">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5"><i class="fa-brands fa-youtube text-red-500"></i> YouTube Channel Link</label>
+                            <input type="url" id="youtubeLink" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition shadow-xs" placeholder="https://youtube.com/c/yourchannel">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5"><i class="fa-brands fa-whatsapp text-emerald-500"></i> WhatsApp Group Link</label>
-                            <input type="url" id="whatsappGroupLink" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="https://chat.whatsapp.com/invitecode">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5"><i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp Group Link</label>
+                            <input type="url" id="whatsappGroupLink" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition shadow-xs" placeholder="https://chat.whatsapp.com/invitecode">
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                    <label class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl cursor-pointer select-none hover:border-slate-700">
+                    <label class="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-xl cursor-pointer select-none hover:border-slate-300 shadow-xs">
                         <input type="checkbox" id="showSlogan" class="accent-amber-500 h-4 w-4">
-                        <span class="text-xs font-bold uppercase text-slate-300">Show Slogan Text</span>
+                        <span class="text-xs font-bold uppercase text-slate-700">Show Slogan Text</span>
                     </label>
-                    <label class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl cursor-pointer select-none hover:border-slate-700">
+                    <label class="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-xl cursor-pointer select-none hover:border-slate-300 shadow-xs">
                         <input type="checkbox" id="showYoutube" class="accent-amber-500 h-4 w-4">
-                        <span class="text-xs font-bold uppercase text-slate-300">Show YouTube Link</span>
+                        <span class="text-xs font-bold uppercase text-slate-700">Show YouTube Link</span>
                     </label>
-                    <label class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl cursor-pointer select-none hover:border-slate-700">
+                    <label class="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-xl cursor-pointer select-none hover:border-slate-300 shadow-xs">
                         <input type="checkbox" id="showWaGroup" class="accent-amber-500 h-4 w-4">
-                        <span class="text-xs font-bold uppercase text-slate-300">Show WhatsApp Group</span>
+                        <span class="text-xs font-bold uppercase text-slate-700">Show WhatsApp Group</span>
                     </label>
                 </div>
             </div>
 
             <div class="pt-2">
-                <button type="button" onclick="saveConfiguration()" class="w-full bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 text-sm font-black uppercase tracking-widest py-4 px-6 rounded-2xl shadow-lg transition duration-200 transform active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2">
+                <button type="button" onclick="saveConfiguration()" class="w-full bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 text-sm font-black uppercase tracking-widest py-4 px-6 rounded-2xl shadow-md transition duration-200 transform active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2">
                     <i class="fa-solid fa-cloud-arrow-up text-lg"></i> Update Live Changes
                 </button>
             </div>
@@ -147,7 +166,26 @@
     </div>
 
     <script>
-        // Same Database Config as index.html
+        // Smooth Tab Switching Engine
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(tabId).classList.remove('hidden');
+
+            const btnIdentity = document.getElementById('btn-tab-identity');
+            const btnLogos = document.getElementById('btn-tab-logos');
+            const btnSocials = document.getElementById('btn-tab-socials');
+
+            [btnIdentity, btnLogos, btnSocials].forEach(btn => {
+                btn.className = "px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900";
+            });
+
+            const targetBtn = document.getElementById('btn-' + tabId);
+            targetBtn.className = "px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer shrink-0 bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20";
+        }
+
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
             authDomain: "arif-online-3f79e.firebaseapp.com",
@@ -161,11 +199,10 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 1. FETCH AND AUTO-FILL EXISTING DATABASE CONFIG ON PAGE LOAD
+        // Load Live Settings
         database.ref('config').once('value', (snapshot) => {
             const data = snapshot.val() || {};
             
-            // Text Inputs
             document.getElementById('shopName').value = data.shopName || "Arif Online Center";
             document.getElementById('phone').value = data.phone || "9504291254";
             document.getElementById('address').value = data.address || "MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR";
@@ -175,7 +212,6 @@
             document.getElementById('youtubeLink').value = data.youtubeLink || "";
             document.getElementById('whatsappGroupLink').value = data.whatsappGroupLink || "";
 
-            // Checkboxes (Default values set to true if not strictly false)
             document.getElementById('showName').checked = data.showName !== false;
             document.getElementById('showAddress').checked = data.showAddress !== false;
             document.getElementById('showPhone').checked = data.showPhone !== false;
@@ -186,41 +222,11 @@
             document.getElementById('showWaGroup').checked = data.showWaGroup !== false;
             
             const statusNode = document.getElementById('sync-status');
-            statusNode.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span> Live Synced`;
-            statusNode.className = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1.5";
+            statusNode.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Live Synced`;
+            statusNode.className = "bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1.5";
         });
 
-        // 2. SAVE CONFIG FUNCTION
+        // Save Function
         function saveConfiguration() {
             const payload = {
                 shopName: document.getElementById('shopName').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                logoLeft: document.getElementById('logoLeft').value,
-                logoRight: document.getElementById('logoRight').value,
-                slogan: document.getElementById('slogan').value,
-                youtubeLink: document.getElementById('youtubeLink').value,
-                whatsappGroupLink: document.getElementById('whatsappGroupLink').value,
-                
-                showName: document.getElementById('showName').checked,
-                showAddress: document.getElementById('showAddress').checked,
-                showPhone: document.getElementById('showPhone').checked,
-                showLogoLeft: document.getElementById('showLogoLeft').checked,
-                showLogoRight: document.getElementById('showLogoRight').checked,
-                showSlogan: document.getElementById('showSlogan').checked,
-                showYoutube: document.getElementById('showYoutube').checked,
-                showWaGroup: document.getElementById('showWaGroup').checked
-            };
-
-            // Overwrite configuration live on Firebase Node
-            database.ref('config').set(payload)
-            .then(() => {
-                alert("🚀 Booom! Configuration updated successfully. Main portal is now dynamically updated.");
-            })
-            .catch((err) => {
-                alert("❌ Error syncing database: " + err.message);
-            });
-        }
-    </script>
-</body>
-</html>
