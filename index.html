@@ -3,71 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome - Official Notice Board</title>
+    <title>Official Digital Portal - Notices</title>
+    <!-- Tailwind CSS (Latest Play CDN) & FontAwesome Icons -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase Libraries v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-</head>
-<body class="bg-slate-50 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
 
-    <header class="bg-slate-950 text-white shadow-2xl border-b-4 border-amber-500 sticky top-0 z-50 relative overflow-hidden">
-        <div class="absolute inset-0 bg-radial from-indigo-500/10 to-transparent pointer-events-none"></div>
-        
-        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col items-center justify-center gap-2 relative z-10">
+    <style>
+        /* Custom neon pulse & modern scrollbar config */
+        .cyber-glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15), 0 0 40px rgba(168, 85, 247, 0.1);
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="bg-[#090d16] text-slate-200 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950 antialiased">
+
+    <!-- 🌌 BACKGROUND EFFECTS -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-[40%] -left-[20%] w-[80vw] h-[80vw] bg-indigo-500/10 rounded-full blur-[120px]"></div>
+        <div class="absolute -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] bg-purple-500/10 rounded-full blur-[100px]"></div>
+    </div>
+
+    <!-- 🚀 ULTRA-MODERN HIGH-TECH HEADER -->
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#090d16]/80 border-b border-slate-800/80 cyber-glow">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
             
-            <div class="w-full flex items-center justify-between md:justify-center gap-4 md:gap-8">
+            <!-- Logo Left + Brand Info -->
+            <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
+                <img id="logo-left" src="" alt="Logo Left" class="hidden h-12 w-12 md:h-14 md:w-14 object-contain rounded-xl bg-slate-900 border border-slate-700/50 p-1.5 shadow-inner">
                 
-                <img id="logo-left" src="" alt="Logo Left" class="hidden h-12 w-12 md:h-20 md:w-20 object-contain rounded-full bg-white/10 p-1">
-                
-                <h1 id="site-title" class="text-xl md:text-4xl font-black uppercase tracking-widest text-center flex-grow md:flex-grow-0 flex items-center justify-center gap-2 md:gap-3 drop-shadow-[0_2px_10px_rgba(245,158,11,0.25)]">
-                    <i class="fa-solid fa-circle-nodes text-amber-500 animate-[spin_6s_linear_infinite] text-lg md:text-3xl"></i>
-                    <span class="text-white">Arif</span> 
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 font-extrabold">Online Center</span>
-                </h1>
-                
-                <img id="logo-right" src="" alt="Logo Right" class="hidden h-12 w-12 md:h-20 md:w-20 object-contain rounded-full bg-white/10 p-1">
+                <div class="flex flex-col">
+                    <h1 id="site-title" class="text-xl md:text-2xl font-black uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-cube text-amber-500 animate-[pulse_2s_infinite] text-lg md:text-xl"></i>
+                        <span class="text-white">Arif</span> 
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 font-extrabold">Online Center</span>
+                    </h1>
+                    <p id="site-address" class="text-[10px] md:text-xs font-medium text-slate-400 mt-0.5 tracking-wide flex items-center gap-1">
+                        <!-- Loaded dynamically via database -->
+                    </p>
+                </div>
             </div>
 
-            <p id="site-address" class="text-xs md:text-sm font-semibold text-slate-400 mt-1 tracking-wider flex items-center justify-center gap-1.5 text-center">
-            </p>
+            <!-- Right Segment: Live Status Badge + Right Logo -->
+            <div class="flex items-center gap-4 w-full md:w-auto justify-end border-t border-slate-800 md:border-t-0 pt-3 md:pt-0">
+                <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-full">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-emerald-400">Portal Operational</span>
+                </div>
+                <img id="logo-right" src="" alt="Logo Right" class="hidden h-12 w-12 md:h-14 md:w-14 object-contain rounded-xl bg-slate-900 border border-slate-700/50 p-1.5 shadow-inner">
+            </div>
+
         </div>
     </header>
 
-    <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-grow">
+    <!-- 📢 MAIN HUB: NOTICES CONTAINER -->
+    <main class="max-w-5xl w-full mx-auto px-4 py-10 flex-grow relative z-10">
         
-        <div class="flex items-center gap-2 mb-6 bg-blue-50 border border-blue-200 p-3 rounded-xl shadow-xs">
-            <span class="flex h-2.5 w-2.5 relative">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
-            </span>
-            <p class="text-xs font-bold text-slate-700 uppercase tracking-wider">Latest Updates & Public Bulletins</p>
+        <!-- Live Alert Dynamic Marquee -->
+        <div class="flex items-center gap-3 mb-8 bg-slate-900/60 border border-slate-800 p-2.5 rounded-xl backdrop-blur-xs">
+            <span class="bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-md shrink-0 shadow-md">Notice</span>
+            <span class="text-xs font-semibold text-slate-300 tracking-wide truncate">All server links and application protocols are running smoothly. Check listings below.</span>
         </div>
 
+        <!-- Cards Target Area -->
         <div id="public-notices-container" class="space-y-6">
-            <div class="text-center py-12 text-slate-400 font-medium text-sm">
-                <i class="fa-solid fa-circle-notch animate-spin text-2xl text-slate-800 mb-2"></i>
-                <p>Connecting to live servers...</p>
+            <!-- Loading Indicator -->
+            <div class="text-center py-24 text-slate-500">
+                <div class="inline-block relative w-10 h-10 mb-3">
+                    <div class="absolute inset-0 border-4 border-slate-800 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Initializing Core Feed...</p>
             </div>
         </div>
     </main>
 
-    <a id="floating-whatsapp" href="#" target="_blank" class="hidden fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 items-center justify-center z-50 group">
-        <i class="fa-brands fa-whatsapp text-3xl animate-pulse"></i>
-        <span class="absolute right-14 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-md">Chat with Us</span>
+    <!-- 📞 TELEPORT/WHATSAPP FLOATING HUB -->
+    <a id="floating-whatsapp" href="#" target="_blank" class="hidden fixed bottom-6 right-6 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white p-4 rounded-2xl shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 transform hover:scale-110 items-center justify-center z-50 group border border-emerald-400/20">
+        <i class="fa-brands fa-whatsapp text-2xl"></i>
+        <span class="absolute right-16 bg-slate-900 border border-slate-800 text-white text-[11px] font-bold px-3 py-2 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-2 group-hover:translate-x-0 shadow-2xl">Connect Directly</span>
     </a>
 
-    <footer class="bg-slate-900 text-slate-400 text-center py-6 border-t border-slate-800 mt-12">
-        <div class="max-w-5xl mx-auto px-4 space-y-2">
-            <p id="site-slogan" class="text-amber-400 font-bold text-sm tracking-wide">
+    <!-- 🏢 BOTTOM SYSTEM FOOTER -->
+    <footer class="bg-[#05070c] border-t border-slate-900 text-slate-500 text-center py-8 relative z-10">
+        <div class="max-w-5xl mx-auto px-4 space-y-3">
+            <p id="site-slogan" class="text-amber-500/80 font-bold text-xs uppercase tracking-widest">
+                <!-- Loaded dynamically -->
             </p>
-            <p class="text-xs font-medium text-slate-500">&copy; 2026 All Rights Reserved.</p>
+            <div class="h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent w-1/2 mx-auto"></div>
+            <p class="text-[10px] font-mono tracking-wider">&copy; 2026 ARIF ONLINE CENTER // AUTOMATION LAYER v2.1</p>
         </div>
     </footer>
 
+    <!-- 🌐 DATABASE CORE BRIDGE -->
     <script>
-        // Firebase Config
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
             authDomain: "arif-online-3f79e.firebaseapp.com",
@@ -83,10 +133,9 @@
 
         let globalPhone = "9504291254"; 
 
-        // 1. LIVE WEBSITE CONFIG & LOGO SYNC
+        // 1. CONFIG SUBSCRIPTION
         database.ref('config').on('value', (snapshot) => {
             const config = snapshot.val() || {};
-            
             if(config.phone) globalPhone = config.phone;
 
             const titleEl = document.getElementById('site-title');
@@ -96,22 +145,22 @@
             const leftLogoImg = document.getElementById('logo-left');
             const rightLogoImg = document.getElementById('logo-right');
 
-            // Text content setting (Keeping styling premium layout)
+            // Set Brand Title Grid layout
             titleEl.innerHTML = `
-                <i class="fa-solid fa-circle-nodes text-amber-500 animate-[spin_6s_linear_infinite] text-lg md:text-3xl"></i>
+                <i class="fa-solid fa-cube text-amber-500 animate-[pulse_2s_infinite] text-base md:text-xl"></i>
                 <span class="text-white">${config.shopName ? config.shopName.split(' ')[0] : 'Arif'}</span> 
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 font-extrabold">${config.shopName ? config.shopName.split(' ').slice(1).join(' ') : 'Online Center'}</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 font-black tracking-wide">${config.shopName ? config.shopName.split(' ').slice(1).join(' ') : 'Online Center'}</span>
             `;
             
-            addressEl.innerHTML = `<i class="fa-solid fa-location-dot text-amber-500"></i> ${config.address || 'MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR'}`;
-            sloganEl.innerText = config.slogan || "⚡ ARIF ONLINE CENTER - AAPKI SEVA ME SADA TATPAR ⚡";
+            addressEl.innerHTML = `<i class="fa-solid fa-location-dot text-amber-500 text-[10px]"></i> ${config.address || 'MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR'}`;
+            sloganEl.innerText = config.slogan || "⚡ ARIF ONLINE CENTER - SERVICE AUTOMATION PORTAL ⚡";
 
-            // Basic Element Toggles
-            titleEl.style.display = (config.showName !== false) ? 'flex' : 'none';
+            // State Visibility Controls
+            document.querySelector('header').style.display = (config.showName !== false || config.showAddress !== false) ? 'block' : 'none';
             addressEl.style.display = (config.showAddress !== false) ? 'flex' : 'none';
             sloganEl.style.display = (config.showSlogan !== false) ? 'block' : 'none';
 
-            // LEFT LOGO RENDER LOGIC
+            // Left Logo Setup
             if(config.showLogoLeft !== false && config.logoLeft) {
                 leftLogoImg.src = config.logoLeft;
                 leftLogoImg.classList.remove('hidden');
@@ -119,7 +168,7 @@
                 leftLogoImg.classList.add('hidden');
             }
 
-            // RIGHT LOGO RENDER LOGIC
+            // Right Logo Setup
             if(config.showLogoRight !== false && config.logoRight) {
                 rightLogoImg.src = config.logoRight;
                 rightLogoImg.classList.remove('hidden');
@@ -127,15 +176,16 @@
                 rightLogoImg.classList.add('hidden');
             }
 
+            // Floating Node Control
             if (config.showPhone !== false && config.phone) {
-                whatsappBtn.href = `https://api.whatsapp.com/send?phone=91${config.phone}&text=Hello! I need some assistance regarding your online services.`;
+                whatsappBtn.href = `https://api.whatsapp.com/send?phone=91${config.phone}&text=Hello! I visited your online portal and need assistance.`;
                 whatsappBtn.classList.replace('hidden', 'flex');
             } else {
                 whatsappBtn.classList.replace('flex', 'hidden');
             }
         });
 
-        // 2. LIVE POSTS SYNC
+        // 2. LIVE DATA STREAM LOGIC (NOTICES)
         database.ref('notices').on('value', (snapshot) => {
             const container = document.getElementById('public-notices-container');
             container.innerHTML = ""; 
@@ -144,9 +194,9 @@
             
             if (!data) {
                 container.innerHTML = `
-                    <div class="bg-white p-8 rounded-2xl border text-center text-slate-500 shadow-xs">
-                        <div class="text-slate-300 text-5xl mb-3"><i class="fa-solid fa-folder-open"></i></div>
-                        <p class="font-bold text-base">No Active Notices Right Now</p>
+                    <div class="bg-slate-900/40 border border-slate-800 p-12 rounded-2xl text-center text-slate-500 max-w-md mx-auto shadow-xl">
+                        <div class="text-slate-700 text-4xl mb-3"><i class="fa-solid fa-terminal"></i></div>
+                        <p class="font-mono text-xs tracking-wider uppercase">Console: No active entries broadcasted.</p>
                     </div>`;
                 return;
             }
@@ -159,7 +209,7 @@
 
             noticesList.forEach((item) => {
                 const noticeCard = document.createElement('article');
-                noticeCard.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-md transition duration-200 grid grid-cols-1 md:grid-cols-5";
+                noticeCard.className = "bg-slate-900/30 backdrop-blur-md rounded-2xl border border-slate-800/80 overflow-hidden card-glow transition-all duration-300 grid grid-cols-1 md:grid-cols-5 group";
 
                 let imgHTML = "";
                 let detailsColSpan = "md:col-span-5";
@@ -167,31 +217,35 @@
                 if (item.image) {
                     detailsColSpan = "md:col-span-3"; 
                     imgHTML = `
-                        <div class="md:col-span-2 bg-slate-50 border-b md:border-b-0 md:border-r border-slate-100 flex justify-center items-center p-2 min-h-[220px]">
-                            <img src="${item.image}" alt="Notice Visual" class="w-full h-full max-h-[320px] object-contain rounded-lg hover:scale-[1.02] transition duration-300" loading="lazy">
+                        <div class="md:col-span-2 bg-[#05070c]/50 border-b md:border-b-0 md:border-r border-slate-800/60 flex justify-center items-center p-3 min-h-[220px]">
+                            <img src="${item.image}" alt="Notice Asset" class="w-full h-full max-h-[300px] object-contain rounded-xl group-hover:scale-[1.01] transition duration-300" loading="lazy">
                         </div>`;
                 }
 
-                const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske liye online apply karwana hai ya iski details chahiye:\n📌 *${item.title}*`);
+                const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${item.title}*`);
                 const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${whatsappText}`;
                 const shareTitle = item.title;
 
                 noticeCard.innerHTML = `
                     ${imgHTML}
-                    <div class="${detailsColSpan} p-5 md:p-6 flex flex-col justify-between space-y-4">
-                        <div class="space-y-2.5">
-                            <h2 class="text-base md:text-xl font-bold text-slate-900 tracking-tight leading-snug">${item.title}</h2>
-                            <p class="text-[11px] font-bold text-slate-400 flex items-center gap-1"><i class="fa-regular fa-clock"></i> ${item.date}</p>
-                            <hr class="border-slate-100">
-                            <p class="text-xs md:text-sm text-slate-600 whitespace-pre-wrap font-medium leading-relaxed font-sans">${item.desc}</p>
+                    <div class="${detailsColSpan} p-6 flex flex-col justify-between space-y-5">
+                        <div class="space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <h2 class="text-base md:text-xl font-bold text-white tracking-wide group-hover:text-amber-400 transition duration-150 leading-snug">${item.title}</h2>
+                            </div>
+                            <p class="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fa-solid fa-calendar-day text-slate-600"></i> ${item.date}
+                            </p>
+                            <div class="h-px bg-slate-800/60 w-full"></div>
+                            <p class="text-xs md:text-sm text-slate-400 whitespace-pre-wrap font-medium leading-relaxed font-sans">${item.desc}</p>
                         </div>
                         
-                        <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
-                            <a href="${whatsappUrl}" target="_blank" class="flex items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl shadow-xs transition duration-150">
-                                <i class="fa-brands fa-whatsapp text-sm md:text-base"></i> Order on WhatsApp
+                        <div class="grid grid-cols-2 gap-4 pt-2">
+                            <a href="${whatsappUrl}" target="_blank" class="flex items-center justify-center gap-2 bg-slate-800/80 hover:bg-emerald-600 text-slate-300 hover:text-white text-xs md:text-sm font-bold py-3 px-4 rounded-xl border border-slate-700/60 hover:border-emerald-500 transition duration-200 shadow-lg">
+                                <i class="fa-brands fa-whatsapp text-sm md:text-base"></i> Process Order
                             </a>
-                            <button onclick="sharePost('${escape(shareTitle)}')" class="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl transition duration-150 cursor-pointer">
-                                <i class="fa-solid fa-share-nodes text-sm md:text-base text-blue-600"></i> Share Post
+                            <button onclick="sharePost('${escape(shareTitle)}')" class="flex items-center justify-center gap-2 bg-slate-900/50 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs md:text-sm font-bold py-3 px-4 rounded-xl border border-slate-800 transition duration-150 cursor-pointer">
+                                <i class="fa-solid fa-share-nodes text-blue-500"></i> Share Node
                             </button>
                         </div>
                     </div>
@@ -200,7 +254,7 @@
             });
         });
 
-        // SHARE FUNCTION
+        // TELEMETRY/SHARE DISPATCHER
         function sharePost(escapedTitle) {
             const title = unescape(escapedTitle);
             const currentUrl = window.location.href;
@@ -214,8 +268,8 @@
                 }).catch(err => console.log(err));
             } else {
                 navigator.clipboard.writeText(fullShareText)
-                .then(() => alert("🚀 Post link and text copied to clipboard!"))
-                .catch(() => alert("Failed to copy link."));
+                .then(() => alert("🚀 System: Share link synced and copied to clipboard!"))
+                .catch(() => alert("Clipboard transmission failed."));
             }
         }
     </script>
