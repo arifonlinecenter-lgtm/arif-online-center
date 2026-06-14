@@ -11,138 +11,201 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
-<body class="bg-slate-100 font-sans min-h-screen pb-12">
+<body class="bg-slate-100 font-sans min-h-screen pb-12 relative">
 
-    <!-- TOP HEADER (SHANDAAR & BOLD LOGO STYLE) -->
-    <header class="bg-slate-900 text-white shadow-xl py-5 px-6 mb-8 border-b-4 border-amber-500 relative overflow-hidden">
-        <div class="absolute inset-0 bg-radial from-amber-500/10 to-transparent pointer-events-none"></div>
-        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
-            <h1 class="text-2xl sm:text-3xl font-black uppercase tracking-widest flex items-center gap-3 drop-shadow-[0_2px_8px_rgba(245,158,11,0.3)]">
-                <i class="fa-solid fa-gauge text-amber-500 animate-[spin_4s_linear_infinite]"></i> 
-                <span class="text-white">Arif</span> 
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 font-extrabold drop-shadow-xs">Online Center</span>
-            </h1>
-            <span class="text-xs bg-green-500/20 text-green-400 font-bold px-4 py-1.5 rounded-full border border-green-500/30 flex items-center gap-2 shadow-inner">
-                <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span> Firebase Live Connected
-            </span>
+    <!-- 🔒 LOGIN OVERLAY MODAL -->
+    <div id="login-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-500">
+        <div class="bg-white w-full max-w-md p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xl text-center space-y-6">
+            <div class="h-16 w-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto text-2xl border border-amber-500/20 shadow-inner">
+                <i class="fa-solid fa-lock animate-bounce"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-black text-slate-800 uppercase tracking-wide">Admin Authentication</h3>
+                <p class="text-xs text-slate-400 mt-1 font-medium">Arif Online Center Secure Live Dashboard</p>
+            </div>
+            <form id="login-form" class="space-y-4 text-left">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Enter Secret Key / Password</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-key absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full text-sm pl-9 pr-4 py-2.5 border rounded-xl focus:outline-amber-500 font-mono tracking-widest">
+                    </div>
+                    <p id="login-error" class="text-[11px] text-red-500 font-bold mt-1.5 hidden flex items-center gap-1">
+                        <i class="fa-solid fa-circle-exclamation"></i> Galt Password! Dobara koshish kijiye.
+                    </p>
+                </div>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black p-3 rounded-xl shadow-md cursor-pointer transition uppercase tracking-wider flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-unlock"></i> Unlock Dashboard
+                </button>
+            </form>
         </div>
-    </header>
+    </div>
 
-    <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- MAIN APP CONTENT CONTAINER (BLURRED BY DEFAULT TILL LOGIN) -->
+    <div id="main-content" class="blur-md pointer-events-none transition-all duration-700">
         
-        <!-- ⚙️ LEFT SIDE: WEBSITE CONTROLS & LOGO OPTIONS -->
-        <div class="lg:col-span-1 space-y-6">
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-                <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
-                    <i class="fa-solid fa-sliders text-blue-600"></i> Header & Logo Settings
-                </h2>
-                
-                <form id="config-form" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Shop / Website Name</label>
-                        <input type="text" id="cfg-name" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
-                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-name" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show on site</span></label>
-                    </div>
-
-                    <!-- 📁 LEFT LOGO FILE UPLOAD -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Left Logo Picture</label>
-                        <input type="file" id="cfg-logo-left-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        <input type="hidden" id="cfg-logo-left-base64">
-                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-left" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Left Logo</span></label>
-                    </div>
-
-                    <!-- 📁 RIGHT LOGO FILE UPLOAD -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Right Logo Picture</label>
-                        <input type="file" id="cfg-logo-right-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        <input type="hidden" id="cfg-logo-right-base64">
-                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-right" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Right Logo</span></label>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Address Text</label>
-                        <input type="text" id="cfg-address" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
-                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-address" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Address</span></label>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">WhatsApp Phone Number</label>
-                        <input type="text" id="cfg-phone" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
-                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-phone" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Enable Chat Button</span></label>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Slogan / Footer Text</label>
-                        <input type="text" id="cfg-slogan" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
-                        <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-slogan" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Slogan</span></label>
-                    </div>
-                    <button type="button" onclick="saveConfig()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition">
-                        <i class="fa-solid fa-floppy-disk"></i> Save Header Settings
+        <!-- TOP HEADER -->
+        <header class="bg-slate-900 text-white shadow-xl py-5 px-6 mb-8 border-b-4 border-amber-500 relative overflow-hidden">
+            <div class="absolute inset-0 bg-radial from-amber-500/10 to-transparent pointer-events-none"></div>
+            <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
+                <h1 class="text-2xl sm:text-3xl font-black uppercase tracking-widest flex items-center gap-3 drop-shadow-[0_2px_8px_rgba(245,158,11,0.3)]">
+                    <i class="fa-solid fa-gauge text-amber-500 animate-[spin_4s_linear_infinite]"></i> 
+                    <span class="text-white">Arif</span> 
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 font-extrabold drop-shadow-xs">Online Center</span>
+                </h1>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs bg-green-500/20 text-green-400 font-bold px-4 py-1.5 rounded-full border border-green-500/30 flex items-center gap-2 shadow-inner">
+                        <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span> Live Connected
+                    </span>
+                    <!-- LOGOUT BUTTON -->
+                    <button onclick="logoutAdmin()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-power-off"></i> Lock
                     </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- 📝 RIGHT SIDE: ADD/EDIT NEW POSTS & LIST -->
-        <div class="lg:col-span-2 space-y-6">
-            <!-- Form to Create/Edit Post -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs relative">
-                
-                <!-- Mode Indicator Badge -->
-                <div id="form-mode-badge" class="absolute top-4 right-5 text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-800">
-                    New Post Mode
                 </div>
+            </div>
+        </header>
 
-                <h2 id="form-title-text" class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
-                    <i class="fa-solid fa-bullhorn text-emerald-600"></i> Create New Post / Notice
-                </h2>
-                
-                <form id="notice-form" class="space-y-4">
-                    <!-- Hidden input to track current edit notice ID -->
-                    <input type="hidden" id="edit-notice-id" value="">
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Notice / Post Title</label>
-                        <input type="text" id="post-title" required placeholder="e.g., Bihar Board 11th Admission 2026 Started" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
-                    </div>
+        <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- ⚙️ LEFT SIDE: WEBSITE CONTROLS & LOGO OPTIONS -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                    <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-sliders text-blue-600"></i> Header & Logo Settings
+                    </h2>
                     
-                    <!-- 📁 POSTER IMAGE FILE UPLOAD -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Poster Picture (Optional)</label>
-                        <input type="file" id="post-image-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                        <input type="hidden" id="post-image-base64">
-                        <p id="image-status-text" class="text-[10px] text-slate-400 mt-1 italic">No file selected (will keep existing image if editing without choosing a new file)</p>
-                    </div>
+                    <form id="config-form" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Shop / Website Name</label>
+                            <input type="text" id="cfg-name" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-name" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show on site</span></label>
+                        </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Full Description / Scheme Details</label>
-                        <textarea id="post-desc" rows="4" required placeholder="Write details, criteria, required documents here..." class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600"></textarea>
-                    </div>
+                        <!-- 📁 LEFT LOGO FILE UPLOAD -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Left Logo Picture</label>
+                            <input type="file" id="cfg-logo-left-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            <input type="hidden" id="cfg-logo-left-base64">
+                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-left" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Left Logo</span></label>
+                        </div>
 
-                    <div class="flex gap-3">
-                        <button type="submit" id="submit-btn" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition">
-                            <i class="fa-solid fa-paper-plane"></i> Publish Live Notice
+                        <!-- 📁 RIGHT LOGO FILE UPLOAD -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Right Logo Picture</label>
+                            <input type="file" id="cfg-logo-right-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            <input type="hidden" id="cfg-logo-right-base64">
+                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-logo-right" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Right Logo</span></label>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Address Text</label>
+                            <input type="text" id="cfg-address" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-address" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Address</span></label>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">WhatsApp Phone Number</label>
+                            <input type="text" id="cfg-phone" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-phone" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Enable Chat Button</span></label>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Slogan / Footer Text</label>
+                            <input type="text" id="cfg-slogan" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                            <label class="inline-flex items-center mt-1 cursor-pointer"><input type="checkbox" id="chk-slogan" class="rounded text-blue-600" checked> <span class="text-xs text-slate-500 ml-1">Show Slogan</span></label>
+                        </div>
+                        <button type="button" onclick="saveConfig()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Header Settings
                         </button>
-                        <button type="button" id="cancel-edit-btn" onclick="resetPostForm()" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold p-3 rounded-xl cursor-pointer transition">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Published Posts Manager -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-                <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
-                    <i class="fa-solid fa-list-check text-indigo-600"></i> Manage Published Notices
-                </h2>
-                <div id="admin-notices-list" class="space-y-3">
-                    <p class="text-xs text-slate-400 text-center py-6">Loading active notices...</p>
+                    </form>
                 </div>
             </div>
-        </div>
 
-    </main>
+            <!-- 📝 RIGHT SIDE: ADD/EDIT NEW POSTS & LIST -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Form to Create/Edit Post -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs relative">
+                    <div id="form-mode-badge" class="absolute top-4 right-5 text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-800">
+                        New Post Mode
+                    </div>
+                    <h2 id="form-title-text" class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-bullhorn text-emerald-600"></i> Create New Post / Notice
+                    </h2>
+                    
+                    <form id="notice-form" class="space-y-4">
+                        <input type="hidden" id="edit-notice-id" value="">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Notice / Post Title</label>
+                            <input type="text" id="post-title" required placeholder="e.g., Bihar Board 11th Admission 2026 Started" class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Poster Picture (Optional)</label>
+                            <input type="file" id="post-image-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                            <input type="hidden" id="post-image-base64">
+                            <p id="image-status-text" class="text-[10px] text-slate-400 mt-1 italic">No file selected (will keep existing image if editing without choosing a new file)</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Full Description / Scheme Details</label>
+                            <textarea id="post-desc" rows="4" required placeholder="Write details, criteria, required documents here..." class="w-full text-sm p-2.5 border rounded-xl focus:outline-blue-600"></textarea>
+                        </div>
+                        <div class="flex gap-3">
+                            <button type="submit" id="submit-btn" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold p-3 rounded-xl shadow-xs cursor-pointer transition">
+                                <i class="fa-solid fa-paper-plane"></i> Publish Live Notice
+                            </button>
+                            <button type="button" id="cancel-edit-btn" onclick="resetPostForm()" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold p-3 rounded-xl cursor-pointer transition">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Published Posts Manager -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                    <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-list-check text-indigo-600"></i> Manage Published Notices
+                    </h2>
+                    <div id="admin-notices-list" class="space-y-3">
+                        <p class="text-xs text-slate-400 text-center py-6">Loading active notices...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <script>
+        // 🔑 SECURITY LOGIN LOGIC
+        // Aap niche arif786 badalkar apna koi bhi manpasand password rakh sakte hain
+        const CORRECT_PASSWORD = "arif786"; 
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputPass = document.getElementById('login-password').value;
+            const errorText = document.getElementById('login-error');
+            
+            if(inputPass === CORRECT_PASSWORD) {
+                // Remove Blur and Hide Login Modal completely
+                document.getElementById('login-modal').classList.add('opacity-0', 'pointer-events-none');
+                document.getElementById('main-content').classList.remove('blur-md', 'pointer-events-none');
+                errorText.classList.add('hidden');
+                
+                // Session Storage me temporary save kar rahe hain taaki baar-baar refresh karne par password na mange (jab tak tab open h)
+                sessionStorage.setItem('admin_logged_in', 'true');
+            } else {
+                errorText.classList.remove('hidden');
+                document.getElementById('login-password').value = "";
+                document.getElementById('login-password').focus();
+            }
+        });
+
+        // Check if already authenticated in this session tab
+        if(sessionStorage.getItem('admin_logged_in') === 'true') {
+            document.getElementById('login-modal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('main-content').classList.remove('blur-md', 'pointer-events-none');
+        }
+
+        function logoutAdmin() {
+            sessionStorage.removeItem('admin_logged_in');
+            window.location.reload();
+        }
+
         // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
@@ -159,7 +222,7 @@
 
         let activeNoticesCache = {};
 
-        // 🖼️ HELPER FUNCTION: PHOTO COMPRESS & BASE64 CONVERTER
+        // PHOTO COMPRESS & BASE64 CONVERTER
         function handleFileSelection(fileInputId, hiddenInputId) {
             document.getElementById(fileInputId).addEventListener('change', function(e) {
                 const file = e.target.files[0];
@@ -194,7 +257,6 @@
         handleFileSelection('cfg-logo-left-file', 'cfg-logo-left-base64');
         handleFileSelection('cfg-logo-right-file', 'cfg-logo-right-base64');
         handleFileSelection('post-image-file', 'post-image-base64');
-
 
         // Load Configuration Form Details
         database.ref('config').once('value', (snapshot) => {
