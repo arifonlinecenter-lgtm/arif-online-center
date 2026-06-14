@@ -90,6 +90,28 @@
             window.open(`https://api.whatsapp.com/send?phone=91${config.phone}&text=${encodeURIComponent(customText)}`, '_blank');
         }
 
+        // POST SHARE FUNCTION
+        function shareNotice(title, desc) {
+            const shareText = `*${title}*\n\n${desc}\n\nShared via ${config.shopName}`;
+            const shareUrl = window.location.href;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: shareText,
+                    url: shareUrl
+                }).catch(err => console.log("Error sharing:", err));
+            } else {
+                // Fallback: Copy to Clipboard if Web Share is not supported
+                const fullCopyText = `${shareText}\nLink: ${shareUrl}`;
+                navigator.clipboard.writeText(fullCopyText).then(() => {
+                    alert("Notice details and link copied to clipboard!");
+                }).catch(err => {
+                    alert("Unable to copy link automatically.");
+                });
+            }
+        }
+
         function renderNotices() {
             const container = document.getElementById('notices-container');
             container.innerHTML = "";
@@ -99,26 +121,38 @@
                 return;
             }
 
-            notices.forEach((item) => {
+            notices.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = "notice-card bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-3 relative overflow-hidden";
                 let imgHtml = item.image ? `<img src="${item.image}" alt="Notice Photo" class="w-full rounded-lg max-h-96 object-contain border bg-gray-50 my-1">` : '';
                 
                 let actionBtnHtml = config.showPhone ? `
-                    <button onclick="contactWhatsApp('Mujhe is post ke bare me janna hai: ${encodeURIComponent(item.title)}')" class="mt-2 w-full bg-[#25D366] text-white text-xs font-bold py-2 rounded-lg hover:bg-[#20ba5a] transition flex items-center justify-center gap-1.5 cursor-pointer">
+                    <button onclick="contactWhatsApp('Mujhe is post ke bare me janna hai: ${encodeURIComponent(item.title)}')" class="w-full bg-[#25D366] text-white text-xs font-bold py-2 rounded-lg hover:bg-[#20ba5a] transition flex items-center justify-center gap-1.5 cursor-pointer">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Order Service / Contact Center
                     </button>
                 ` : '';
 
+                // Safe strings for inline onclick arguments
+                const safeTitle = item.title.replace(/'/g, "\\'");
+                const safeDesc = item.desc.replace(/'/g, "\\'").replace(/\n/g, " ");
+
                 card.innerHTML = `
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-900"></div>
-                    <div class="flex justify-between items-start">
-                        <h3 class="text-base font-extrabold text-gray-900 leading-snug">${item.title}</h3>
-                        <span class="text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded font-mono">${item.date}</span>
+                    <div class="flex justify-between items-start gap-4">
+                        <h3 class="text-base font-extrabold text-gray-900 leading-snug flex-grow">${item.title}</h3>
+                        <div class="flex flex-col items-end gap-1.5 shrink-0">
+                            <span class="text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded font-mono">${item.date}</span>
+                            <!-- Share Button -->
+                            <button onclick="shareNotice('${safeTitle}', '${safeDesc}')" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded text-xs font-bold flex items-center gap-1 cursor-pointer transition">
+                                <i class="fa-solid fa-share-nodes"></i> Share
+                            </button>
+                        </div>
                     </div>
                     <p class="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">${item.desc}</p>
                     ${imgHtml}
-                    ${actionBtnHtml}
+                    <div class="mt-2">
+                        ${actionBtnHtml}
+                    </div>
                 `;
                 container.appendChild(card);
             });
@@ -126,3 +160,4 @@
     </script>
 </body>
 </html>
+
