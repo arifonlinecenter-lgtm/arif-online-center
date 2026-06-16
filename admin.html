@@ -80,6 +80,9 @@
                 <button onclick="switchTab('tab-preview')" id="btn-tab-preview" class="flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-slate-50 text-slate-600 hover:bg-slate-100">
                     <i class="fa-solid fa-eye"></i> Post Preview
                 </button>
+                <button onclick="switchTab('tab-services')" id="btn-tab-services" class="flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer bg-slate-50 text-slate-600 hover:bg-slate-100">
+    <i class="fa-solid fa-gears"></i> Services
+</button>
             </div>
         </div>
 
@@ -253,6 +256,18 @@
                             </button>
                         </div>
                     </div>
+
+                    <div id="tab-services" class="tab-panel hidden">
+    <div class="bg-white p-6 rounded-2xl border shadow-sm">
+        <h2 class="font-bold mb-4">Add New Service</h2>
+        <form id="service-form" class="space-y-4">
+            <input type="text" id="service-title" placeholder="Service Name" class="w-full p-2 border rounded-xl" required>
+            <input type="file" id="service-img" class="w-full p-2 border rounded-xl" required>
+            <textarea id="service-desc" placeholder="Details" class="w-full p-2 border rounded-xl" required></textarea>
+            <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-xl">Post Service</button>
+        </form>
+    </div>
+</div>
                 </div>
             </div>
 
