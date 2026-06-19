@@ -86,7 +86,7 @@
                 <i class="fa-regular fa-bell"></i> Public Notices
             </button>
             <button id="btn-tab-services" onclick="switchTab('services')" class="flex-1 py-2.5 px-4 rounded-xl text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 bg-slate-100 text-slate-600 hover:bg-slate-200">
-                <i class="fa-solid fa-magnifying-glass"></i> Search
+                <i class="fa-solid fa-gears"></i> Our Services
             </button>
         </div>
     </div>
@@ -109,10 +109,6 @@
         </div>
         
 <div id="public-services-container" class="space-y-4 md:space-y-6 tab-content-view hidden">
-    <div style="background:white; padding:10px; border:1px solid #ddd; border-radius:10px; margin-bottom:10px;">
-    <input id="globalSearchInput" type="text" placeholder="Search notices & services..."
-    style="width:100%; padding:8px; border:none; outline:none;">
-</div>
             <div class="text-center py-24 text-slate-400">
                 <div class="inline-block relative w-10 h-10 mb-2">
                     <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
@@ -183,7 +179,6 @@
             const noticesCont = document.getElementById('public-notices-container');
             const servicesCont = document.getElementById('public-services-container');
             const bannerText = document.getElementById('live-banner-text');
-            document.getElementById("globalSearchInput").value = "";
 
             if(tabName === 'notices') {
                 noticesBtn.className = "flex-1 py-2.5 px-4 rounded-xl text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 bg-slate-900 text-white shadow-xs";
@@ -432,7 +427,7 @@ if(searchBox){
                 container.innerHTML = `
                     <div class="bg-white border border-slate-200 p-8 md:p-12 rounded-2xl text-center text-slate-400 max-w-md mx-auto shadow-xs">
                         <div class="text-slate-300 text-4xl md:text-5xl mb-3"><i class="fa-solid fa-gears"></i></div>
-                        <p class="font-medium text-xs md:text-sm tracking-wide">Search catalog is updating. Check back soon!</p>
+                        <p class="font-medium text-xs md:text-sm tracking-wide">Our services catalog is updating. Check back soon!</p>
                     </div>`;
                 return;
             }
@@ -528,47 +523,6 @@ if(searchBox){
                 .catch(() => alert("Clipboard block detected."));
             }
         }
-        document.addEventListener("DOMContentLoaded", function () {
-    const input = document.getElementById("globalSearchInput");
-
-    if (!input) return;
-
-    input.addEventListener("input", function () {
-        let val = this.value.toLowerCase().trim();
-
-        // NOTICES + SERVICES dono search
-       
-        .forEach(card => {
-            let text = card.innerText.toLowerCase();
-            card.style.display = text.includes(val) ? "" : "none";
-        });
-    });
-});
-        document.addEventListener("DOMContentLoaded", function () {
-
-    const input = document.getElementById("globalSearchInput");
-
-    if (!input) return;
-
-    input.addEventListener("input", function () {
-
-        let value = this.value.toLowerCase().trim();
-
-        // NOTICES SEARCH
-        document.querySelectorAll("#public-notices-container article").forEach(card => {
-            let text = card.innerText.toLowerCase();
-            card.style.display = text.includes(value) ? "" : "none";
-        });
-
-        // SERVICES SEARCH
-        document.querySelectorAll("#public-services-container article").forEach(card => {
-            let text = card.innerText.toLowerCase();
-            card.style.display = text.includes(value) ? "" : "none";
-        });
-
-    });
-
-});
     </script>
 </body>
 </html>
