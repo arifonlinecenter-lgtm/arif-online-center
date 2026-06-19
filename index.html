@@ -109,6 +109,10 @@
         </div>
         
 <div id="public-services-container" class="space-y-4 md:space-y-6 tab-content-view hidden">
+    <div style="background:white; padding:10px; border:1px solid #ddd; border-radius:10px; margin-bottom:10px;">
+    <input id="globalSearchInput" type="text" placeholder="Search notices & services..."
+    style="width:100%; padding:8px; border:none; outline:none;">
+</div>
             <div class="text-center py-24 text-slate-400">
                 <div class="inline-block relative w-10 h-10 mb-2">
                     <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
@@ -523,6 +527,22 @@ if(searchBox){
                 .catch(() => alert("Clipboard block detected."));
             }
         }
+        document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("globalSearchInput");
+
+    if (!input) return;
+
+    input.addEventListener("input", function () {
+        let val = this.value.toLowerCase().trim();
+
+        // NOTICES + SERVICES dono search
+        document.querySelectorAll("#public-notices-container article, #public-services-container article")
+        .forEach(card => {
+            let text = card.innerText.toLowerCase();
+            card.style.display = text.includes(val) ? "" : "none";
+        });
+    });
+});
     </script>
 </body>
 </html>
