@@ -362,6 +362,22 @@
                 noticesList.push(data[key]);
             });
             noticesList.reverse();
+            
+            const searchBox = document.getElementById('noticeSearch');
+
+if(searchBox){
+    searchBox.addEventListener('input', function() {
+        const searchText = this.value.toLowerCase();
+
+        document.querySelectorAll('#public-notices-container article').forEach(card => {
+            if(card.innerText.toLowerCase().includes(searchText)){
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+}
 
             noticesList.forEach((item) => {
                 const noticeCard = document.createElement('article');
