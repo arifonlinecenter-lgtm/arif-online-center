@@ -6,71 +6,51 @@
     <title>Official Digital Portal - Notices</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        .premium-bg {
-            background-color: #f8fafc;
-            background-image: radial-gradient(#e2e8f0 1.1px, transparent 1.1px), radial-gradient(#e2e8f0 1.1px, #f8fafc 1.1px);
-            background-size: 24px 24px;
-            background-position: 0 0, 12px 12px;
-        }
-        .card-shadow-smooth {
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
-        }
+        .premium-bg { background-color: #f8fafc; background-image: radial-gradient(#e2e8f0 1.1px, transparent 1.1px), radial-gradient(#e2e8f0 1.1px, #f8fafc 1.1px); background-size: 24px 24px; background-position: 0 0, 12px 12px; }
+        .card-shadow-smooth { box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="premium-bg text-slate-800 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900 antialiased">
+<body class="premium-bg text-slate-800 font-sans min-h-screen">
 
+    <!-- Header Section -->
     <header class="sticky top-0 z-50 backdrop-blur-md bg-white/90 border-b border-slate-200 shadow-xs w-full">
         <div class="w-full py-4 px-3 md:px-6">
-            <div class="flex flex-row items-center justify-between gap-2 md:gap-6 max-w-7xl mx-auto w-full">
-                <!-- Left Logo -->
-                <div class="flex items-center justify-start shrink-0">
-                    <img id="logo-left" src="" alt="Logo Left" class="hidden h-11 w-11 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200 p-0.5 sm:p-1 shadow-xs">
+            <div class="flex flex-row items-center justify-between gap-2 max-w-7xl mx-auto w-full">
+                <img id="logo-left" src="" class="hidden h-14 w-14 object-contain rounded-2xl bg-slate-50 border border-slate-200 p-1">
+                <div class="flex flex-col items-center text-center flex-grow">
+                    <h1 id="site-title" class="text-xl md:text-3xl font-black uppercase tracking-wider">Arif Online Center</h1>
+                    <p id="site-address" class="text-xs font-semibold text-slate-500 mt-1"></p>
                 </div>
-                
-                <!-- Title & Address -->
-                <div class="flex flex-col items-center text-center flex-grow px-1">
-                    <h1 id="site-title" class="text-sm sm:text-2xl md:text-3xl font-black uppercase tracking-wider flex items-center justify-center gap-1 sm:gap-2">
-                        <i class="fa-solid fa-shapes text-amber-500 text-xs sm:text-lg md:text-2xl"></i>
-                        <span class="text-slate-900">Arif</span> 
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 font-black tracking-wide">Online Center</span>
-                    </h1>
-                    <p id="site-address" class="text-[8px] sm:text-[10px] md:text-xs font-semibold text-slate-500 mt-0.5 sm:mt-1 tracking-wide flex items-center justify-center gap-1">
-                    </p>
-                </div>
-
-                <!-- Right Logo -->
-                <div class="flex items-center justify-end shrink-0">
-                    <img id="logo-right" src="" alt="Logo Right" class="hidden h-11 w-11 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200 p-0.5 sm:p-1 shadow-xs">
-                </div>
+                <img id="logo-right" src="" class="hidden h-14 w-14 object-contain rounded-2xl bg-slate-50 border border-slate-200 p-1">
             </div>
         </div>
     </header>
 
-    <section id="social-channels-bar" class="bg-slate-900 text-white border-b-4 border-amber-500 py-2.5 px-4 shadow-md sticky top-[69px] md:top-[85px] z-40 hidden">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-            <div class="flex items-center gap-2">
-                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <p id="top-bar-slogan" class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-300">
-                    ⚡ WELCOME TO OUR OFFICIAL PORTAL ⚡
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <main class="max-w-4xl w-full mx-auto px-4 py-6 md:py-10 flex-grow relative z-10">
-        <div id="public-notices-container" class="space-y-4 md:space-y-6">
-            <div class="text-center py-24 text-slate-400">
-                <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Syncing live server feed...</p>
-            </div>
-        </div>
+    <!-- Notices Main Content -->
+    <main class="max-w-4xl w-full mx-auto px-4 py-10">
+        <div id="public-notices-container" class="space-y-6"></div>
     </main>
+
+    <!-- Details Modal -->
+    <div id="details-modal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-md items-center justify-center p-4">
+        <div id="modal-card" class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden transition-all scale-95 opacity-0">
+            <div class="p-4 border-b flex justify-between items-center bg-slate-50">
+                <span class="bg-amber-500 text-xs font-black px-3 py-1 rounded-md uppercase">Notice Info</span>
+                <button onclick="closeModal()" class="h-8 w-8 rounded-full bg-slate-200 hover:bg-red-500 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-6 max-h-[60vh] overflow-y-auto">
+                <img id="modal-image" src="" class="w-full h-64 object-contain rounded-xl mb-4 hidden">
+                <h2 id="modal-title" class="text-2xl font-extrabold mb-2"></h2>
+                <p id="modal-desc" class="text-slate-600 whitespace-pre-wrap"></p>
+            </div>
+            <div id="modal-actions" class="p-4 border-t bg-slate-50 flex gap-3"></div>
+        </div>
+    </div>
 
     <script>
         const firebaseConfig = {
@@ -82,40 +62,70 @@
             messagingSenderId: "535907035651",
             appId: "1:535907035651:web:630f5780842de82d2e7c36"
         };
-        
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        let globalPhone = "9504291254";
 
-        // Logo aur Config logic
-        database.ref('config').on('value', (snapshot) => {
-            const config = snapshot.val() || {};
-            const leftLogoImg = document.getElementById('logo-left');
-            const rightLogoImg = document.getElementById('logo-right');
+        function openModal(title, desc, imageUrl) {
+            const modal = document.getElementById('details-modal');
+            const modalCard = document.getElementById('modal-card');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            const modalImg = document.getElementById('modal-image');
+            
+            if(imageUrl) { modalImg.src = imageUrl; modalImg.classList.remove('hidden'); }
+            else { modalImg.classList.add('hidden'); }
 
-            if(config.logoLeft) {
-                leftLogoImg.src = config.logoLeft;
-                leftLogoImg.classList.remove('hidden');
-            }
-            if(config.logoRight) {
-                rightLogoImg.src = config.logoRight;
-                rightLogoImg.classList.remove('hidden');
-            }
-            // Update Title and Address
-            if(config.shopName) document.getElementById('site-title').innerHTML = config.shopName;
-            if(config.address) document.getElementById('site-address').innerHTML = `<i class="fa-solid fa-location-dot"></i> ${config.address}`;
-        });
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${title}*`)}`;
+            
+            document.getElementById('modal-actions').innerHTML = `
+                <a href="${whatsappUrl}" target="_blank" class="flex-1 flex items-center justify-center gap-2 bg-emerald-600 text-white font-bold py-3 rounded-xl"><i class="fa-brands fa-whatsapp"></i> Process Order</a>
+                <button onclick="sharePost('${title.replace(/'/g, "\\'")}', '${(imageUrl||"").replace(/'/g, "\\'")}')" class="flex-1 flex items-center justify-center gap-2 bg-slate-100 font-bold py-3 rounded-xl"><i class="fa-solid fa-share-nodes text-blue-500"></i> Share Post</button>
+            `;
+            modal.classList.replace('hidden', 'flex');
+            setTimeout(() => { modalCard.classList.replace('scale-95', 'scale-100'); modalCard.classList.replace('opacity-0', 'opacity-100'); }, 50);
+        }
 
-        // Notices Load
+        function closeModal() {
+            const modal = document.getElementById('details-modal');
+            const modalCard = document.getElementById('modal-card');
+            modalCard.classList.replace('scale-100', 'scale-95');
+            modalCard.classList.replace('opacity-100', 'opacity-0');
+            setTimeout(() => { modal.classList.replace('flex', 'hidden'); }, 200);
+        }
+
+        async function sharePost(title, imageUrl) {
+            const fullShareText = `📢 *${title}*\n\nNeeche diye gaye link par click karke poori jankari dekhein:\n🔗 ${window.location.href}`;
+            if (navigator.share && imageUrl) {
+                try {
+                    const response = await fetch(imageUrl);
+                    const blob = await response.blob();
+                    const file = new File([blob], "notice.jpg", { type: blob.type });
+                    await navigator.share({ title: title, text: fullShareText, files: [file] });
+                } catch { navigator.share({ title: title, text: fullShareText }); }
+            } else { alert("Link copied!"); navigator.clipboard.writeText(fullShareText); }
+        }
+
         database.ref('notices').on('value', (snapshot) => {
             const container = document.getElementById('public-notices-container');
             container.innerHTML = "";
             const data = snapshot.val();
-            if (data) {
+            if(data) {
                 Object.values(data).reverse().forEach((item) => {
-                    const noticeCard = document.createElement('article');
-                    noticeCard.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden card-shadow-smooth p-5";
-                    noticeCard.innerHTML = `<h2 class="text-xl font-bold">${item.title}</h2><p class="mt-2 text-slate-600">${item.desc}</p>`;
-                    container.appendChild(noticeCard);
+                    const card = document.createElement('article');
+                    card.className = "bg-white rounded-2xl border p-5 card-shadow-smooth flex flex-col md:flex-row gap-4";
+                    card.innerHTML = `
+                        ${item.image ? `<img src="${item.image}" class="w-full md:w-1/3 h-48 object-cover rounded-xl cursor-pointer" onclick="openModal('${item.title.replace(/'/g, "\\'")}', '${item.desc.replace(/'/g, "\\'")}', '${item.image}')">` : ""}
+                        <div class="flex-1">
+                            <h2 class="text-xl font-bold mb-2">${item.title}</h2>
+                            <p class="text-slate-600 text-sm mb-4 line-clamp-3">${item.desc}</p>
+                            <div class="flex gap-2">
+                                <a href="https://api.whatsapp.com/send?phone=91${globalPhone}&text=Hello, I am interested in: ${item.title}" target="_blank" class="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold text-xs"><i class="fa-brands fa-whatsapp"></i> Order</a>
+                                <button onclick="sharePost('${item.title.replace(/'/g, "\\'")}', '${(item.image||"").replace(/'/g, "\\'")}')" class="bg-slate-100 px-4 py-2 rounded-lg font-bold text-xs"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
                 });
             }
         });
