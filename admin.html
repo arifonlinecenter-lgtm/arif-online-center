@@ -9,6 +9,7 @@
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 <body class="bg-slate-100 font-sans min-h-screen pb-12 relative">
 
@@ -261,7 +262,7 @@
 
     <script>
         // 🔑 SECURITY LOGIN & VERIFICATION CONFIG (FALLBACK PASSWORD)
-        let CORRECT_PASSWORD = "arif786"; 
+       let CORRECT_PASSWORD = "";
         const ADMIN_RECOVERY_EMAIL = "arifonlinecenter@gmail.com"; 
 
         // Firebase Config
@@ -281,11 +282,7 @@
         let activeNoticesCache = {};
 
         // Fetch Live Saved Password from DB
-        database.ref('config/adminPassword').on('value', (snapshot) => {
-            if(snapshot.exists() && snapshot.val().trim() !== "") {
-                CORRECT_PASSWORD = snapshot.val();
-            }
-        });
+        
 
         // 🔄 TAB SWITCHER LOGIC
         function switchTab(tabId) {
@@ -332,19 +329,25 @@
         }
 
         // Login Submit Handler
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const inputPass = document.getElementById('login-password').value;
-            const errorText = document.getElementById('login-error');
-            
-            if(inputPass === CORRECT_PASSWORD) {
-                loginSuccess();
-            } else {
-                errorText.classList.remove('hidden');
-                document.getElementById('login-password').value = "";
-                document.getElementById('login-password').focus();
-            }
-        });
+       document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const password = document.getElementById('login-password').value;
+    const errorText = document.getElementById('login-error');
+
+    firebase.auth().signInWithEmailAndPassword(
+        "arifonlinecenter@gmail.com",
+        password
+    )
+    .then(() => {
+        loginSuccess();
+    })
+    .catch(() => {
+        errorText.classList.remove('hidden');
+        document.getElementById('login-password').value = "";
+        document.getElementById('login-password').focus();
+    });
+});
 
         function loginSuccess() {
             document.getElementById('login-modal').classList.add('opacity-0', 'pointer-events-none');
