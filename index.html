@@ -183,6 +183,7 @@
             const noticesCont = document.getElementById('public-notices-container');
             const servicesCont = document.getElementById('public-services-container');
             const bannerText = document.getElementById('live-banner-text');
+            document.getElementById("globalSearchInput").value = "";
 
             if(tabName === 'notices') {
                 noticesBtn.className = "flex-1 py-2.5 px-4 rounded-xl text-xs md:text-sm font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 bg-slate-900 text-white shadow-xs";
@@ -536,12 +537,37 @@ if(searchBox){
         let val = this.value.toLowerCase().trim();
 
         // NOTICES + SERVICES dono search
-        document.querySelectorAll("#public-notices-container article, #public-services-container article")
+       
         .forEach(card => {
             let text = card.innerText.toLowerCase();
             card.style.display = text.includes(val) ? "" : "none";
         });
     });
+});
+        document.addEventListener("DOMContentLoaded", function () {
+
+    const input = document.getElementById("globalSearchInput");
+
+    if (!input) return;
+
+    input.addEventListener("input", function () {
+
+        let value = this.value.toLowerCase().trim();
+
+        // NOTICES SEARCH
+        document.querySelectorAll("#public-notices-container article").forEach(card => {
+            let text = card.innerText.toLowerCase();
+            card.style.display = text.includes(value) ? "" : "none";
+        });
+
+        // SERVICES SEARCH
+        document.querySelectorAll("#public-services-container article").forEach(card => {
+            let text = card.innerText.toLowerCase();
+            card.style.display = text.includes(value) ? "" : "none";
+        });
+
+    });
+
 });
     </script>
 </body>
