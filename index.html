@@ -107,8 +107,8 @@
                 <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Syncing live server feed...</p>
             </div>
         </div>
-        
-<div id="public-services-container" class="space-y-4 md:space-y-6 tab-content-view hidden">
+
+        <div id="public-services-container" class="space-y-4 md:space-y-6 tab-content-view hidden">
             <div class="text-center py-24 text-slate-400">
                 <div class="inline-block relative w-10 h-10 mb-2">
                     <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
@@ -353,22 +353,6 @@
                 noticesList.push(data[key]);
             });
             noticesList.reverse();
-            
-            const searchBox = document.getElementById('noticeSearch');
-
-if(searchBox){
-    searchBox.addEventListener('input', function() {
-        const searchText = this.value.toLowerCase();
-
-        document.querySelectorAll('#public-notices-container article').forEach(card => {
-            if(card.innerText.toLowerCase().includes(searchText)){
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    });
-}
 
             noticesList.forEach((item) => {
                 const noticeCard = document.createElement('article');
