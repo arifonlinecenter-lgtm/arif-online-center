@@ -359,24 +359,14 @@
 
         // Forgot Password Utility
         function handleForgotPassword() {
-            const generatedCode = Math.floor(100000 + Math.random() * 900000);
-            alert(`🔒 Security Alert! Verification link generating for your registered email: ${ADMIN_RECOVERY_EMAIL}`);
-            
-            const subject = encodeURIComponent("Arif Online Center - Panel Reset Verification OTP");
-            const body = encodeURIComponent(`Hello Arif Bhai,\n\nAapke Control Panel ko unlock karne ka Secure OTP Verification Code ye hai:\n\n👉 OTP CODE: ${generatedCode}\n\nIs code ko panel me daalkar lock kholein.\n\nThank you.`);
-            
-            window.open(`mailto:${ADMIN_RECOVERY_EMAIL}?subject=${subject}&body=${body}`, '_blank');
-
-            setTimeout(() => {
-                const userEnteredOtp = prompt("📧 Verification OTP enter karein:");
-                if(userEnteredOtp && userEnteredOtp == generatedCode) {
-                    alert(`✅ Verification Successful! Current Password is: "${CORRECT_PASSWORD}"`);
-                    loginSuccess();
-                } else if(userEnteredOtp) {
-                    alert("❌ Wrong Verification Code! Access Denied.");
-                }
-            }, 1000);
-        }
+    firebase.auth().sendPasswordResetEmail("arifonlinecenter@gmail.com")
+    .then(() => {
+        alert("✅ Password reset email bhej diya gaya hai. Apna Gmail check karo.");
+    })
+    .catch((error) => {
+        alert("❌ Error: " + error.message);
+    });
+}
 
         if(sessionStorage.getItem('admin_logged_in') === 'true') {
             document.getElementById('login-modal').classList.add('opacity-0', 'pointer-events-none');
