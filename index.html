@@ -204,7 +204,7 @@
                             <p id="modal-desc" class="text-sm md:text-base text-slate-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed tracking-wide font-sans"></p>
                         </div>
                         
-                        <!-- Actions Buttons -->
+                        <!-- Actions Buttons container is kept empty so no buttons appear -->
                         <div id="modal-actions" class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3"></div>
                     </div>
                 </div>
@@ -357,19 +357,8 @@
                 detailsWrapper.classList.replace('md:w-1/2', 'md:w-full'); // Full width Text
             }
 
-            const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${title}*`);
-            const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${whatsappText}`;
-            const safeTitle = title.replace(/'/g, "\\'");
-            const safeImage = imageUrl.replace(/'/g, "\\'");
-
-            modalActions.innerHTML = `
-                <a href="${whatsappUrl}" target="_blank" class="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm md:text-base font-bold py-3 px-4 rounded-xl shadow-md transition duration-200">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Process Order
-                </a>
-                <button onclick="sharePost('${safeTitle}', '${safeImage}')" class="flex-1 flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-white text-sm md:text-base font-bold py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-600 transition duration-150 cursor-pointer">
-                    <i class="fa-solid fa-share-nodes text-blue-500 dark:text-amber-400 text-lg"></i> Share Post
-                </button>
-            `;
+            // Buttons have been removed from the modal view to keep the layout simple.
+            modalActions.innerHTML = ``;
 
             modal.classList.replace('hidden', 'flex');
             setTimeout(() => {
@@ -483,8 +472,6 @@
             }
 
             const isNew = (Date.now() - new Date(item.date).getTime() < 86400000) ? `<span class="bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded ml-2 animate-pulse">NEW</span>` : "";
-            const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${item.title}*`);
-            const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${whatsappText}`;
             
             return `
                 <article class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden card-shadow-smooth transition-all duration-300 flex flex-col md:flex-row group">
@@ -496,14 +483,6 @@
                             </div>
                             <p class="text-[10px] text-amber-600 dark:text-amber-400 font-bold"><i class="fa-regular fa-clock"></i> ${item.date}</p>
                             <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300 line-clamp-3 whitespace-pre-wrap font-normal leading-relaxed tracking-wide font-sans">${item.desc}</p>
-                        </div>
-                        <div class="flex flex-row gap-3 pt-2 w-full">
-                            <a href="${whatsappUrl}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-bold py-3 px-3 rounded-xl shadow-xs transition duration-200">
-                                <i class="fa-brands fa-whatsapp"></i> Apply
-                            </a>
-                            <button onclick="sharePost('${item.title.replace(/'/g, "\\'")}', '${item.image || ""}')" class="flex-1 flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-600 dark:text-white text-xs md:text-sm font-bold py-3 px-3 rounded-xl border border-slate-200 dark:border-slate-600 transition duration-150 cursor-pointer">
-                                <i class="fa-solid fa-share-nodes text-blue-500 dark:text-amber-400"></i> Share
-                            </button>
                         </div>
                     </div>
                 </article>
