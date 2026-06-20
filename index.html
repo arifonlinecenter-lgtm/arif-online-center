@@ -171,7 +171,7 @@
             <div id="dynamic-services-list" class="space-y-4 md:space-y-6"></div>
         </div>
 
-        <div class="mt-12 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm">
+        <div id="contact-location-section" class="mt-12 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm transition-all duration-300">
             <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-slate-800 dark:text-white border-b border-slate-100 dark:border-slate-700 pb-3"><i class="fa-solid fa-envelope-open-text text-amber-500"></i> Contact & Location</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <form class="space-y-4" onsubmit="event.preventDefault(); alert('Message sent successfully!'); this.reset();">
@@ -180,7 +180,7 @@
                     <textarea placeholder="Your Message or Enquiry" required rows="3" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:outline-amber-500 text-sm"></textarea>
                     <button type="submit" class="w-full bg-slate-900 dark:bg-amber-500 text-white font-bold py-3 rounded-xl hover:opacity-90 transition">Send Message</button>
                 </form>
-                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 h-48 md:h-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+                <div id="map-container" class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 h-48 md:h-[260px] bg-slate-100 dark:bg-slate-900 flex items-center justify-center p-1">
                     <p class="text-slate-400 text-xs font-bold"><i class="fa-solid fa-map-location-dot text-2xl mb-2 block text-center"></i> Google Map Integration Here</p>
                 </div>
             </div>
@@ -411,6 +411,30 @@
             if (config.showPhone !== false && config.phone) {
                 whatsappBtn.href = `https://api.whatsapp.com/send?phone=91${config.phone}&text=Hello! I am visiting your web portal and need assistance.`;
                 whatsappBtn.classList.replace('hidden', 'flex');
+            }
+
+            // Contact & Location Integration
+            const contactSection = document.getElementById('contact-location-section');
+            const mapContainer = document.getElementById('map-container');
+
+            if (config.showContact === false) {
+                contactSection.classList.add('hidden');
+            } else {
+                contactSection.classList.remove('hidden');
+            }
+
+            if (config.googleMapsLink) {
+                if (config.googleMapsLink.includes('<iframe')) {
+                    mapContainer.innerHTML = config.googleMapsLink;
+                    const iframe = mapContainer.querySelector('iframe');
+                    if (iframe) {
+                        iframe.classList.add('w-full', 'h-full', 'rounded-lg');
+                    }
+                } else {
+                    mapContainer.innerHTML = `<iframe src="${config.googleMapsLink}" class="w-full h-full rounded-lg" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+                }
+            } else {
+                mapContainer.innerHTML = `<p class="text-slate-400 text-xs font-bold"><i class="fa-solid fa-map-location-dot text-2xl mb-2 block text-center"></i> Google Map Integration Here</p>`;
             }
         });
 
