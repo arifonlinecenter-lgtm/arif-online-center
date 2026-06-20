@@ -216,8 +216,12 @@
                                 <input type="email" id="cfg-email" placeholder="email@example.com" class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white">
                             </div>
                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1"><i class="fa-solid fa-map-location-dot text-blue-500"></i> Google Maps Link</label>
-                                <input type="url" id="cfg-maps" placeholder="https://maps.app.goo.gl/..." class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1"><i class="fa-solid fa-map-location-dot text-blue-500"></i> Google Map (Link or Iframe Code)</label>
+                                <input type="text" id="cfg-maps" placeholder='<iframe src="..."></iframe>' class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white">
+                                <label class="flex items-center gap-2 mt-3 cursor-pointer select-none">
+                                    <input type="checkbox" id="chk-contact" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
+                                    <span class="text-xs font-bold text-slate-700">Show Contact & Location Section</span>
+                                </label>
                             </div>
                         </div>
 
@@ -542,6 +546,7 @@
             document.getElementById('chk-slogan').checked = config.showSlogan !== false;
             document.getElementById('chk-logo-left').checked = config.showLogoLeft !== false;
             document.getElementById('chk-logo-right').checked = config.showLogoRight !== false;
+            document.getElementById('chk-contact').checked = config.showContact !== false;
         });
 
         document.getElementById('settings-form').addEventListener('submit', (e) => {
@@ -564,7 +569,8 @@
                 showAddress: document.getElementById('chk-address').checked,
                 showSlogan: document.getElementById('chk-slogan').checked,
                 showLogoLeft: document.getElementById('chk-logo-left').checked,
-                showLogoRight: document.getElementById('chk-logo-right').checked
+                showLogoRight: document.getElementById('chk-logo-right').checked,
+                showContact: document.getElementById('chk-contact').checked
             };
             database.ref('config').update(configData).then(() => {
                 alert("✅ Website Settings Updated Live!");
