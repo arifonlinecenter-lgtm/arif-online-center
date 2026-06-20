@@ -41,7 +41,6 @@
 </head>
 <body class="premium-bg text-slate-800 dark:text-slate-200 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900 antialiased transition-colors duration-300">
 
-    <!-- TOP SCROLLING MARQUEE -->
     <div id="marquee-container" class="bg-amber-500 text-slate-900 text-[11px] md:text-xs font-bold py-1.5 overflow-hidden w-full flex items-center transition-all duration-300">
         <div class="animate-scroll whitespace-nowrap">
             <span id="marquee-text" class="mx-8 tracking-wide"><i class="fa-solid fa-bolt text-red-600 animate-pulse"></i> Loading Updates...</span>
@@ -106,7 +105,6 @@
             <span id="live-banner-text" class="text-xs font-medium text-slate-600 dark:text-slate-300 tracking-wide truncate">Welcome to our official public dashboard. Select any notice to proceed.</span>
         </div>
 
-        <!-- HOMEPAGE GOOGLE ADS SECTION -->
         <div class="my-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-center">
             <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-2">Advertisement</p>
             <div id="google-ads-container">
@@ -170,12 +168,9 @@
         </div>
     </main>
 
-    <!-- NEW FULL-PAGE STYLE MODAL (IMAGE LEFT, DETAILS RIGHT, ADS BOTTOM) -->
     <div id="details-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm items-center justify-center p-2 md:p-6 transition-all duration-300">
-        <!-- Max Width increased to 5xl for 'Page View' -->
         <div class="bg-white dark:bg-slate-800 w-full max-w-5xl rounded-2xl md:rounded-3xl border border-slate-200 dark:border-slate-700 shadow-2xl overflow-hidden max-h-[95vh] flex flex-col transform scale-95 opacity-0 transition-all duration-300" id="modal-card">
             
-            <!-- Modal Header -->
             <div class="p-3 md:p-5 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-900 shrink-0">
                 <span id="modal-tag" class="bg-amber-500 text-slate-950 text-[10px] md:text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-md">Details View</span>
                 <button onclick="closeModal()" class="h-8 w-8 md:h-10 md:w-10 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-red-500 hover:text-white transition-all text-slate-600 dark:text-slate-300 flex items-center justify-center cursor-pointer shadow-sm">
@@ -183,20 +178,16 @@
                 </button>
             </div>
 
-            <!-- Modal Body (Scrollable Wrapper) -->
             <div class="flex-grow overflow-y-auto no-scrollbar flex flex-col bg-white dark:bg-slate-800">
                 
-                <!-- Side-by-Side Layout for Image & Details -->
                 <div class="flex flex-col md:flex-row w-full flex-grow">
                     
-                    <!-- Left Side: Image (Only shows if image exists) -->
                     <div id="modal-img-wrapper" class="w-full md:w-1/2 bg-slate-50 dark:bg-slate-900/50 p-4 md:p-8 border-b md:border-b-0 md:border-r border-slate-100 dark:border-slate-700 flex items-center justify-center">
                         <div id="modal-img-container" class="w-full hidden">
                             <img id="modal-image" src="" alt="Preview" class="max-h-[40vh] md:max-h-[55vh] w-full object-contain rounded-xl drop-shadow-md">
                         </div>
                     </div>
 
-                    <!-- Right Side: Details & Actions -->
                     <div id="modal-details-wrapper" class="w-full md:w-1/2 p-5 md:p-8 flex flex-col justify-between">
                         <div class="space-y-4">
                             <h2 id="modal-title" class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug"></h2>
@@ -204,16 +195,13 @@
                             <p id="modal-desc" class="text-sm md:text-base text-slate-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed tracking-wide font-sans"></p>
                         </div>
                         
-                        <!-- Actions Buttons container is kept empty so no buttons appear -->
-                        <div id="modal-actions" class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3"></div>
+                        <div id="modal-actions" class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3 hidden"></div>
                     </div>
                 </div>
 
-                <!-- BOTTOM: GOOGLE ADS SECTION INSIDE MODAL -->
                 <div class="w-full bg-slate-50 dark:bg-slate-900 p-4 border-t border-slate-200 dark:border-slate-700 mt-auto shrink-0">
                     <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-2 text-center">Advertisement</p>
                     <div class="max-w-4xl mx-auto h-auto min-h-[90px] border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl flex items-center justify-center p-2 text-slate-500 text-xs italic bg-white dark:bg-slate-800">
-                        <!-- YAHAN APNA GOOGLE ADSENSE KA CODE PASTE KAREIN -->
                         [Post View Google Ad Space - Paste your AdSense code here]
                     </div>
                 </div>
@@ -324,7 +312,7 @@
             }
         }
 
-        // JS MODIFIED FOR NEW SPLIT VIEW
+        // JS MODIFIED FOR NEW SPLIT VIEW AND CONDITIONAL BUTTONS
         function openModal(title, desc, imageUrl, type) {
             const modal = document.getElementById('details-modal');
             const modalCard = document.getElementById('modal-card');
@@ -357,8 +345,27 @@
                 detailsWrapper.classList.replace('md:w-1/2', 'md:w-full'); // Full width Text
             }
 
-            // Buttons have been removed from the modal view to keep the layout simple.
-            modalActions.innerHTML = ``;
+            // Sirf Services me Buttons dikhayein
+            if (type === 'services') {
+                const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${title}*`);
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${whatsappText}`;
+                const safeTitle = title.replace(/'/g, "\\'");
+                const safeImage = (imageUrl && imageUrl.trim() !== "") ? imageUrl.replace(/'/g, "\\'") : "";
+                
+                modalActions.innerHTML = `
+                    <a href="${whatsappUrl}" target="_blank" class="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm md:text-base font-bold py-3 px-4 rounded-xl shadow-md transition duration-200">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Process Order
+                    </a>
+                    <button onclick="sharePost('${safeTitle}', '${safeImage}')" class="flex-1 flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-white text-sm md:text-base font-bold py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-600 transition duration-150 cursor-pointer">
+                        <i class="fa-solid fa-share-nodes text-blue-500 dark:text-amber-400 text-lg"></i> Share Post
+                    </button>
+                `;
+                modalActions.classList.remove('hidden');
+            } else {
+                // Notices ke liye hide kar dein
+                modalActions.innerHTML = "";
+                modalActions.classList.add('hidden');
+            }
 
             modal.classList.replace('hidden', 'flex');
             setTimeout(() => {
@@ -473,6 +480,24 @@
 
             const isNew = (Date.now() - new Date(item.date).getTime() < 86400000) ? `<span class="bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded ml-2 animate-pulse">NEW</span>` : "";
             
+            // Sirf Services section ke liye Apply aur Share buttons create karein
+            let actionButtonsHTML = "";
+            if (type === 'services') {
+                const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${item.title}*`);
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${whatsappText}`;
+                
+                actionButtonsHTML = `
+                    <div class="flex flex-row gap-3 pt-2 w-full">
+                        <a href="${whatsappUrl}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-bold py-3 px-3 rounded-xl shadow-xs transition duration-200">
+                            <i class="fa-brands fa-whatsapp"></i> Apply
+                        </a>
+                        <button onclick="sharePost('${item.title.replace(/'/g, "\\'")}', '${item.image || ""}')" class="flex-1 flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-600 dark:text-white text-xs md:text-sm font-bold py-3 px-3 rounded-xl border border-slate-200 dark:border-slate-600 transition duration-150 cursor-pointer">
+                            <i class="fa-solid fa-share-nodes text-blue-500 dark:text-amber-400"></i> Share
+                        </button>
+                    </div>
+                `;
+            }
+
             return `
                 <article class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden card-shadow-smooth transition-all duration-300 flex flex-col md:flex-row group">
                     ${imgHTML}
@@ -484,6 +509,7 @@
                             <p class="text-[10px] text-amber-600 dark:text-amber-400 font-bold"><i class="fa-regular fa-clock"></i> ${item.date}</p>
                             <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300 line-clamp-3 whitespace-pre-wrap font-normal leading-relaxed tracking-wide font-sans">${item.desc}</p>
                         </div>
+                        ${actionButtonsHTML}
                     </div>
                 </article>
             `;
