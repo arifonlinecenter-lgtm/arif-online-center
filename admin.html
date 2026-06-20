@@ -13,7 +13,6 @@
 </head>
 <body class="bg-slate-100 font-sans min-h-screen pb-12 relative">
 
-    <!-- Login Modal -->
     <div id="login-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-500">
         <div class="bg-white w-full max-w-md p-6 sm:p-8 rounded-2xl shadow-2xl text-center space-y-6">
             <div class="h-16 w-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto text-2xl">
@@ -41,7 +40,6 @@
         </div>
     </div>
 
-    <!-- Preview Modal (New Feature) -->
     <div id="preview-modal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-sm items-center justify-center p-4">
         <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col">
             <div class="p-4 border-b flex items-center justify-between bg-slate-50">
@@ -66,10 +64,8 @@
         </div>
     </div>
 
-    <!-- Main Dashboard View -->
     <div id="main-content" class="blur-md pointer-events-none transition-all duration-700">
         
-        <!-- Header -->
         <header class="bg-slate-900 text-white shadow-xl py-5 px-6 mb-6 border-b-4 border-amber-500 relative">
             <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
                 <h1 class="text-2xl sm:text-3xl font-black uppercase tracking-widest flex items-center gap-3">
@@ -88,7 +84,6 @@
             </div>
         </header>
 
-        <!-- Stats Section -->
         <div class="max-w-5xl mx-auto px-4 mb-6 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
                 <i class="fa-solid fa-bullhorn text-3xl text-blue-500 mb-2"></i>
@@ -112,7 +107,6 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs -->
         <div class="max-w-5xl mx-auto px-4 mb-6">
             <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-xs flex flex-wrap gap-2">
                 <button onclick="switchTab('tab-notices')" id="btn-tab-notices" class="flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl bg-blue-600 text-white shadow-sm transition">Notice Manager</button>
@@ -123,7 +117,6 @@
 
         <main class="max-w-5xl mx-auto px-4">
             
-            <!-- Tab: Notices -->
             <div id="tab-notices" class="tab-panel space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-1 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs h-fit relative">
@@ -158,7 +151,6 @@
                 </div>
             </div>
 
-            <!-- Tab: Services -->
             <div id="tab-services" class="tab-panel space-y-6 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-1 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs h-fit">
@@ -193,29 +185,93 @@
                 </div>
             </div>
 
-            <!-- Tab: Settings (New Feature) -->
             <div id="tab-settings" class="tab-panel space-y-6 hidden">
-                <div class="bg-white p-6 rounded-2xl border shadow-xs max-w-2xl mx-auto">
-                    <h2 class="text-lg font-black mb-4 border-b pb-2 flex items-center gap-2"><i class="fa-solid fa-sliders text-amber-500"></i> Frontend Website Settings</h2>
+                <div class="bg-white p-6 rounded-2xl border shadow-xs max-w-3xl mx-auto">
+                    <h2 class="text-lg font-black mb-4 border-b pb-2 flex items-center gap-2 text-slate-800"><i class="fa-solid fa-sliders text-amber-500"></i> Full Website Configuration</h2>
+                    <p class="text-xs text-slate-500 mb-6">Manage all text, links, logos, and visibility toggles on your live website from here.</p>
+                    
                     <form id="settings-form" class="space-y-5">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Shop / Portal Name</label>
-                            <input type="text" id="set-shop-name" placeholder="e.g. Arif Online Center" required class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-slate-50">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Shop / Portal Name</label>
+                                <input type="text" id="cfg-name" required class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white">
+                                <label class="flex items-center gap-2 mt-3 cursor-pointer select-none">
+                                    <input type="checkbox" id="chk-name" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
+                                    <span class="text-xs font-bold text-slate-700">Show Name on Website</span>
+                                </label>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">WhatsApp Mobile Number</label>
+                                <input type="text" id="cfg-phone" placeholder="e.g. 919504291254" required class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white font-mono">
+                                <label class="flex items-center gap-2 mt-3 cursor-pointer select-none">
+                                    <input type="checkbox" id="chk-phone" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
+                                    <span class="text-xs font-bold text-slate-700">Show Floating WhatsApp Button</span>
+                                </label>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Shop Full Address</label>
-                            <textarea id="set-address" rows="2" placeholder="e.g. Momin Tola Sahebganj, Bhagalpur" required class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-slate-50"></textarea>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-slate-100 pt-5">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1"><i class="fa-brands fa-youtube text-red-500"></i> YouTube Channel Link</label>
+                                <input type="url" id="cfg-youtube" placeholder="https://youtube.com/@channel" class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white">
+                                <label class="flex items-center gap-2 mt-3 cursor-pointer select-none">
+                                    <input type="checkbox" id="chk-youtube" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
+                                    <span class="text-xs font-bold text-slate-700">Show YouTube Button on Top</span>
+                                </label>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1"><i class="fa-brands fa-whatsapp text-emerald-500"></i> WhatsApp Group Link</label>
+                                <input type="url" id="cfg-wagroup" placeholder="https://chat.whatsapp.com/invite" class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white">
+                                <label class="flex items-center gap-2 mt-3 cursor-pointer select-none">
+                                    <input type="checkbox" id="chk-wagroup" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
+                                    <span class="text-xs font-bold text-slate-700">Show Join Group Button</span>
+                                </label>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Contact WhatsApp Number (With Country Code)</label>
-                            <input type="text" id="set-phone" placeholder="e.g. 919504291254" required class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-slate-50 font-mono">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-slate-100 pt-5">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Left Logo Picture</label>
+                                <input type="file" id="cfg-logo-left-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl bg-white file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-600">
+                                <input type="hidden" id="cfg-logo-left-base64">
+                                <label class="flex items-center gap-2 mt-3 cursor-pointer select-none">
+                                    <input type="checkbox" id="chk-logo-left" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
+                                    <span class="text-xs font-bold text-slate-700">Enable Left Header Logo</span>
+                                </label>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Right Logo Picture</label>
+                                <input type="file" id="cfg-logo-right-file" accept="image/*" class="w-full text-sm p-2 border rounded-xl bg-white file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-600">
+                                <input type="hidden" id="cfg-logo-right-base64">
+                                <label class="flex items-center gap-2 mt-3 cursor-pointer select-none">
+                                    <input type="checkbox" id="chk-logo-right" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
+                                    <span class="text-xs font-bold text-slate-700">Enable Right Header Logo</span>
+                                </label>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border">
-                            <input type="checkbox" id="set-show-phone" class="h-5 w-5 accent-amber-500 cursor-pointer">
-                            <label for="set-show-phone" class="text-sm font-bold text-slate-700 cursor-pointer">Show Floating WhatsApp Button on Website</label>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-slate-100 pt-5">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Address Text</label>
+                                <textarea id="cfg-address" rows="2" required class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white"></textarea>
+                                <label class="flex items-center gap-2 mt-3 cursor-pointer select-none">
+                                    <input type="checkbox" id="chk-address" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
+                                    <span class="text-xs font-bold text-slate-700">Show Address below Shop Name</span>
+                                </label>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Top Bar Marquee/Slogan Text</label>
+                                <textarea id="cfg-slogan" rows="2" required class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white"></textarea>
+                                <label class="flex items-center gap-2 mt-3 cursor-pointer select-none">
+                                    <input type="checkbox" id="chk-slogan" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
+                                    <span class="text-xs font-bold text-slate-700">Enable Top Announcement Bar</span>
+                                </label>
+                            </div>
                         </div>
-                        <button type="submit" class="w-full bg-slate-900 text-amber-400 text-sm font-bold p-3.5 rounded-xl hover:bg-slate-800 transition shadow-md uppercase tracking-wider">
-                            <i class="fa-solid fa-floppy-disk"></i> Save Configurations
+
+                        <button type="submit" class="w-full bg-slate-900 text-amber-400 text-sm font-bold p-4 rounded-xl hover:bg-slate-800 transition shadow-md uppercase tracking-wider mt-2 flex justify-center items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Update Live Settings
                         </button>
                     </form>
                 </div>
@@ -278,9 +334,11 @@
             else activeBtn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl bg-blue-600 text-white shadow-sm transition";
         }
 
-        // File Handler Base64 Compression
+        // Image Base64 Compress Logic
         function handleFile(inputId, hiddenId, noteId) {
-            document.getElementById(inputId).addEventListener('change', function(e) {
+            const el = document.getElementById(inputId);
+            if(!el) return;
+            el.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
                 const reader = new FileReader();
@@ -293,26 +351,25 @@
                         canvas.height = img.height * scaleSize;
                         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
                         document.getElementById(hiddenId).value = canvas.toDataURL('image/jpeg', 0.7);
-                        if(document.getElementById(noteId)) document.getElementById(noteId).classList.add('hidden');
+                        if(noteId && document.getElementById(noteId)) document.getElementById(noteId).classList.add('hidden');
                     }
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             });
         }
+        
         handleFile('post-image-file', 'post-image-base64', 'notice-img-note');
         handleFile('srv-image-file', 'srv-image-base64', 'srv-img-note');
+        handleFile('cfg-logo-left-file', 'cfg-logo-left-base64', null);
+        handleFile('cfg-logo-right-file', 'cfg-logo-right-base64', null);
 
-        // Form Submit for Notices
+        // Form Submit for Notices & Services
         document.getElementById('notice-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            submitData('notices', 'edit-notice-id', 'post-title', 'post-desc', 'post-image-base64', 'notice-form');
+            e.preventDefault(); submitData('notices', 'edit-notice-id', 'post-title', 'post-desc', 'post-image-base64', 'notice-form');
         });
-
-        // Form Submit for Services
         document.getElementById('service-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            submitData('services', 'edit-service-id', 'srv-title', 'srv-desc', 'srv-image-base64', 'service-form');
+            e.preventDefault(); submitData('services', 'edit-service-id', 'srv-title', 'srv-desc', 'srv-image-base64', 'service-form');
         });
 
         function submitData(node, idField, titleField, descField, imgField, formId) {
@@ -324,12 +381,11 @@
             };
 
             if (editId) {
-                // Preserve original date on edit
                 const originalDate = node === 'notices' ? activeNoticesCache[editId].date : activeServicesCache[editId].date;
                 dataObj.date = originalDate || new Date().toLocaleString('en-IN');
                 
                 database.ref(node + '/' + editId).update(dataObj).then(() => {
-                    alert("Updated Successfully!");
+                    alert("✅ Updated Successfully!");
                     cancelEdit(node);
                 });
             } else {
@@ -337,7 +393,7 @@
                 const ref = database.ref(node).push();
                 dataObj.id = ref.key;
                 ref.set(dataObj).then(() => {
-                    alert("Published Successfully!");
+                    alert("✅ Published Successfully!");
                     document.getElementById(formId).reset();
                     document.getElementById(imgField).value = "";
                 });
@@ -380,7 +436,7 @@
             });
         }
 
-        // Edit Functionality
+        // Edit Item Manager Logic
         function editItem(node, id) {
             const data = node === 'notices' ? activeNoticesCache[id] : activeServicesCache[id];
             if(!data) return;
@@ -392,7 +448,7 @@
                 document.getElementById('post-title').value = data.title;
                 document.getElementById('post-desc').value = data.desc;
                 document.getElementById('post-image-base64').value = data.image || "";
-                document.getElementById('post-image-file').value = ""; // Clear file input
+                document.getElementById('post-image-file').value = ""; 
                 
                 document.getElementById('btn-submit-notice').innerText = "Update Notice";
                 document.getElementById('btn-submit-notice').classList.replace('bg-emerald-600', 'bg-amber-500');
@@ -406,7 +462,7 @@
                 document.getElementById('srv-title').value = data.title;
                 document.getElementById('srv-desc').value = data.desc;
                 document.getElementById('srv-image-base64').value = data.image || "";
-                document.getElementById('srv-image-file').value = ""; // Clear file input
+                document.getElementById('srv-image-file').value = ""; 
                 
                 document.getElementById('btn-submit-service').innerText = "Update Service";
                 document.getElementById('btn-submit-service').classList.replace('bg-blue-600', 'bg-amber-500');
@@ -476,26 +532,66 @@
             modal.classList.remove('flex');
         }
 
-        // Settings (Configuration) Setup
-        database.ref('config').on('value', (snapshot) => {
+        // --- FULL WEBSITE SETTINGS SETUP (Load from DB) ---
+        database.ref('config').once('value', (snapshot) => {
             const config = snapshot.val() || {};
-            document.getElementById('set-shop-name').value = config.shopName || "Arif Online Center";
-            document.getElementById('set-address').value = config.address || "Momin Tola Sahebganj, Bhagalpur";
-            document.getElementById('set-phone').value = config.phone || "9504291254";
-            document.getElementById('set-show-phone').checked = config.showPhone !== false;
+            
+            // Text & URLs
+            document.getElementById('cfg-name').value = config.shopName || "Arif Online Center";
+            document.getElementById('cfg-phone').value = config.phone || "9504291254";
+            document.getElementById('cfg-youtube').value = config.youtubeLink || "";
+            document.getElementById('cfg-wagroup').value = config.whatsappGroupLink || "";
+            document.getElementById('cfg-address').value = config.address || "Momin Tola Sahebganj, Bhagalpur";
+            document.getElementById('cfg-slogan').value = config.slogan || "⚡ WELCOME TO OUR OFFICIAL PORTAL ⚡";
+            
+            // Hidden Base64 images
+            document.getElementById('cfg-logo-left-base64').value = config.logoLeft || "";
+            document.getElementById('cfg-logo-right-base64').value = config.logoRight || "";
+            
+            // Checkboxes (Toggles)
+            document.getElementById('chk-name').checked = config.showName !== false;
+            document.getElementById('chk-phone').checked = config.showPhone !== false;
+            document.getElementById('chk-youtube').checked = config.showYoutube !== false;
+            document.getElementById('chk-wagroup').checked = config.showWaGroup !== false;
+            document.getElementById('chk-address').checked = config.showAddress !== false;
+            document.getElementById('chk-slogan').checked = config.showSlogan !== false;
+            document.getElementById('chk-logo-left').checked = config.showLogoLeft !== false;
+            document.getElementById('chk-logo-right').checked = config.showLogoRight !== false;
         });
 
+        // Save Settings to Database
         document.getElementById('settings-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            
             const configData = {
-                shopName: document.getElementById('set-shop-name').value,
-                address: document.getElementById('set-address').value,
-                phone: document.getElementById('set-phone').value,
-                showPhone: document.getElementById('set-show-phone').checked
+                // Values
+                shopName: document.getElementById('cfg-name').value,
+                phone: document.getElementById('cfg-phone').value,
+                youtubeLink: document.getElementById('cfg-youtube').value,
+                whatsappGroupLink: document.getElementById('cfg-wagroup').value,
+                address: document.getElementById('cfg-address').value,
+                slogan: document.getElementById('cfg-slogan').value,
+                logoLeft: document.getElementById('cfg-logo-left-base64').value,
+                logoRight: document.getElementById('cfg-logo-right-base64').value,
+                
+                // Show/Hide Toggles
+                showName: document.getElementById('chk-name').checked,
+                showPhone: document.getElementById('chk-phone').checked,
+                showYoutube: document.getElementById('chk-youtube').checked,
+                showWaGroup: document.getElementById('chk-wagroup').checked,
+                showAddress: document.getElementById('chk-address').checked,
+                showSlogan: document.getElementById('chk-slogan').checked,
+                showLogoLeft: document.getElementById('chk-logo-left').checked,
+                showLogoRight: document.getElementById('chk-logo-right').checked
             };
             
-            database.ref('config').set(configData).then(() => {
-                alert("Settings Updated Successfully! Changes will reflect on the main website immediately.");
+            database.ref('config').update(configData).then(() => {
+                alert("✅ Website Settings Updated Live! Open index.html to see changes.");
+                // Reset file inputs so next time empty isn't an issue
+                document.getElementById('cfg-logo-left-file').value = "";
+                document.getElementById('cfg-logo-right-file').value = "";
+            }).catch(err => {
+                alert("Error Updating Settings: " + err.message);
             });
         });
 
