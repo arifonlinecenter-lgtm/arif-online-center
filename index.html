@@ -34,17 +34,16 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .animate-scroll { display: inline-block; white-space: nowrap; animation: scroll 20s linear infinite; }
+        /* Animation hata di gayi hai */
         html { scroll-behavior: smooth; }
     </style>
 </head>
 <body class="premium-bg text-slate-800 dark:text-slate-200 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900 antialiased transition-colors duration-300">
 
-    <div id="marquee-container" class="bg-amber-500 text-slate-900 text-[11px] md:text-xs font-bold py-1.5 overflow-hidden w-full flex items-center transition-all duration-300">
-        <div class="animate-scroll whitespace-nowrap">
-            <span id="marquee-text" class="mx-8 tracking-wide"><i class="fa-solid fa-bolt text-red-600 animate-pulse"></i> Loading Updates...</span>
-            <span id="marquee-text-2" class="mx-8 tracking-wide"><i class="fa-solid fa-bullhorn text-red-600 animate-pulse"></i> Loading Updates...</span>
+    <!-- STATIC TOP BAR -->
+    <div id="marquee-container" class="bg-amber-500 text-slate-900 text-[11px] md:text-xs font-bold py-2 w-full flex items-center justify-center transition-all duration-300">
+        <div class="px-4 text-center">
+            <span id="marquee-text" class="tracking-wide font-bold"><i class="fa-solid fa-bullhorn text-red-600"></i> Loading Updates...</span>
         </div>
     </div>
 
@@ -312,17 +311,14 @@
             }
         }
 
-        // JS MODIFIED FOR NEW SPLIT VIEW AND CONDITIONAL BUTTONS
         function openModal(title, desc, imageUrl, type) {
             const modal = document.getElementById('details-modal');
             const modalCard = document.getElementById('modal-card');
             
-            // Text Elements
             const modalTitle = document.getElementById('modal-title');
             const modalDesc = document.getElementById('modal-desc');
             const modalTag = document.getElementById('modal-tag');
             
-            // Wrappers for styling
             const imgWrapper = document.getElementById('modal-img-wrapper');
             const imgContainer = document.getElementById('modal-img-container');
             const modalImg = document.getElementById('modal-image');
@@ -333,19 +329,17 @@
             modalDesc.innerText = desc;
             modalTag.innerText = type === 'services' ? 'Service Plan' : 'Notice Info';
 
-            // Agar image hai toh left side dikhaye, nahi toh hidden kare
             if(imageUrl && imageUrl.trim() !== "") {
                 modalImg.src = imageUrl;
                 imgContainer.classList.remove('hidden');
                 imgWrapper.classList.remove('hidden');
-                detailsWrapper.classList.replace('md:w-full', 'md:w-1/2'); // Left Photo, Right Text
+                detailsWrapper.classList.replace('md:w-full', 'md:w-1/2');
             } else {
                 imgContainer.classList.add('hidden');
                 imgWrapper.classList.add('hidden');
-                detailsWrapper.classList.replace('md:w-1/2', 'md:w-full'); // Full width Text
+                detailsWrapper.classList.replace('md:w-1/2', 'md:w-full');
             }
 
-            // Sirf Services me Buttons dikhayein
             if (type === 'services') {
                 const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${title}*`);
                 const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${whatsappText}`;
@@ -362,7 +356,6 @@
                 `;
                 modalActions.classList.remove('hidden');
             } else {
-                // Notices ke liye hide kar dein
                 modalActions.innerHTML = "";
                 modalActions.classList.add('hidden');
             }
@@ -406,16 +399,14 @@
             addressEl.innerHTML = `<i class="fa-solid fa-location-dot text-amber-500 text-[9px] sm:text-[11px]"></i> ${config.address || 'MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR'}`;
             
             const marqueeContainer = document.getElementById('marquee-container');
-            const marqueeText1 = document.getElementById('marquee-text');
-            const marqueeText2 = document.getElementById('marquee-text-2');
+            const marqueeText = document.getElementById('marquee-text');
             
             if (config.showSlogan === false) {
                 marqueeContainer.classList.add('hidden');
             } else {
                 marqueeContainer.classList.remove('hidden');
                 const adminSlogan = config.slogan || "Welcome to Arif Online Center. New Updates & Services Available Now!";
-                marqueeText1.innerHTML = `<i class="fa-solid fa-bolt text-red-600 animate-pulse"></i> ${adminSlogan}`;
-                marqueeText2.innerHTML = `<i class="fa-solid fa-bullhorn text-red-600 animate-pulse"></i> ${adminSlogan}`;
+                marqueeText.innerHTML = `<i class="fa-solid fa-bullhorn text-red-600"></i> ${adminSlogan}`;
             }
 
             if (config.showYoutube && config.youtubeLink) {
@@ -480,7 +471,6 @@
 
             const isNew = (Date.now() - new Date(item.date).getTime() < 86400000) ? `<span class="bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded ml-2 animate-pulse">NEW</span>` : "";
             
-            // Sirf Services section ke liye Apply aur Share buttons create karein
             let actionButtonsHTML = "";
             if (type === 'services') {
                 const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${item.title}*`);
