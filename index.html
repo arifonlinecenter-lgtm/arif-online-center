@@ -459,51 +459,57 @@
         });
 
         function createCard(item, type) {
-            let imgHTML = "";
-            let contentWidthClass = "w-full";
-            if (item.image) {
-                contentWidthClass = "w-full md:w-3/5"; 
-                imgHTML = `
-                    <div onclick="openModal('${item.title.replace(/'/g, "\\'")}', '${item.desc.replace(/\n/g, '\\n').replace(/'/g, "\\'")}', '${item.image}', '${type}')" class="w-full md:w-2/5 bg-slate-50/60 dark:bg-slate-900 border-b md:border-b-0 md:border-r border-slate-200/60 dark:border-slate-700 flex justify-center items-center p-4 min-h-[200px] sm:min-h-[240px] cursor-pointer">
-                        <img src="${item.image}" alt="Asset" class="w-full h-full max-h-[260px] md:max-h-[280px] object-contain rounded-xl group-hover:scale-[1.01] transition duration-300" loading="lazy">
-                    </div>`;
-            }
+    let imgHTML = "";
+    let contentWidthClass = "w-full";
+    // Fix: Added safety for missing images and corrected escaping
+    const safeTitle = item.title ? item.title.replace(/'/g, "\\'") : "";
+    const safeDesc = item.desc ? item.desc.replace(/\n/g, '\\\\n').replace(/'/g, "\\'") : "";
+    const safeImage = item.image ? item.image.replace(/'/g, "\\'") : "";
 
-            const isNew = (Date.now() - new Date(item.date).getTime() < 86400000) ? `<span class="bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded ml-2 animate-pulse">NEW</span>` : "";
-            
-            let actionButtonsHTML = "";
-            if (type === 'services') {
-                const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${item.title}*`);
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${whatsappText}`;
-                
-                actionButtonsHTML = `
-                    <div class="flex flex-row gap-3 pt-2 w-full">
-                        <a href="${whatsappUrl}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-bold py-3 px-3 rounded-xl shadow-xs transition duration-200">
-                            <i class="fa-brands fa-whatsapp"></i> Apply
-                        </a>
-                        <button onclick="sharePost('${item.title.replace(/'/g, "\\'")}', '${item.image || ""}')" class="flex-1 flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-600 dark:text-white text-xs md:text-sm font-bold py-3 px-3 rounded-xl border border-slate-200 dark:border-slate-600 transition duration-150 cursor-pointer">
-                            <i class="fa-solid fa-share-nodes text-blue-500 dark:text-amber-400"></i> Share
-                        </button>
-                    </div>
-                `;
-            }
+    if (item.image) {
+        contentWidthClass = "w-full md:w-3/5";
+        imgHTML = `
+            <div onclick="openModal('${safeTitle}', '${safeDesc}', '${safeImage}', '${type}')" class="w-full md:w-2/5 bg-slate-50/60 dark:bg-slate-900 border-b md:border-b-0 md:border-r border-slate-200/60 dark:border-slate-700 flex justify-center items-center p-4 min-h-[200px] sm:min-h-[240px] cursor-pointer">
+                <img src="${item.image}" alt="Asset" class="w-full h-full max-h-[260px] md:max-h-[280px] object-contain rounded-xl group-hover:scale-[1.01] transition duration-300" loading="lazy">
+            </div>`;
+    }
 
-            return `
-                <article class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden card-shadow-smooth transition-all duration-300 flex flex-col md:flex-row group">
-                    ${imgHTML}
-                    <div class="${contentWidthClass} p-5 md:p-6 flex flex-col justify-between space-y-4">
-                        <div onclick="openModal('${item.title.replace(/'/g, "\\'")}', '${item.desc.replace(/\n/g, '\\n').replace(/'/g, "\\'")}', '${item.image || ""}', '${type}')" class="space-y-3 cursor-pointer">
-                            <div class="border-b-2 border-slate-100 dark:border-slate-700 pb-2 flex justify-between items-start">
-                                <h2 class="text-lg md:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-amber-500 transition duration-150">${item.title} ${isNew}</h2>
-                            </div>
-                            <p class="text-[10px] text-amber-600 dark:text-amber-400 font-bold"><i class="fa-regular fa-clock"></i> ${item.date}</p>
-                            <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300 line-clamp-3 whitespace-pre-wrap font-normal leading-relaxed tracking-wide font-sans">${item.desc}</p>
-                        </div>
-                        ${actionButtonsHTML}
+    const isNew = (Date.now() - new Date(item.date).getTime() < 86400000) ?
+        `<span class="bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded ml-2 animate-pulse">NEW</span>` : "";
+    
+    let actionButtonsHTML = "";
+    if (type === 'services') {
+        const whatsappText = encodeURIComponent(`Hello Arif Bhai, mujhe iske baare me janna hai:\n📌 *${item.title}*`);
+        const whatsappUrl = `https://api.whatsapp.com/send?phone=91${globalPhone}&text=${whatsappText}`;
+        
+        actionButtonsHTML = `
+            <div class="flex flex-row gap-3 pt-2 w-full">
+                <a href="${whatsappUrl}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-bold py-3 px-3 rounded-xl shadow-xs transition duration-200">
+                    <i class="fa-brands fa-whatsapp"></i> Apply
+                </a>
+                <button onclick="sharePost('${safeTitle}', '${safeImage}')" class="flex-1 flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-600 dark:text-white text-xs md:text-sm font-bold py-3 px-3 rounded-xl border border-slate-200 dark:border-slate-600 transition duration-150 cursor-pointer">
+                    <i class="fa-solid fa-share-nodes text-blue-500 dark:text-amber-400"></i> Share
+                </button>
+            </div>
+        `;
+    }
+
+    return `
+        <article class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden card-shadow-smooth transition-all duration-300 flex flex-col md:flex-row group">
+            ${imgHTML}
+            <div class="${contentWidthClass} p-5 md:p-6 flex flex-col justify-between space-y-4">
+                <div onclick="openModal('${safeTitle}', '${safeDesc}', '${safeImage}', '${type}')" class="space-y-3 cursor-pointer">
+                    <div class="border-b-2 border-slate-100 dark:border-slate-700 pb-2 flex justify-between items-start">
+                        <h2 class="text-lg md:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug group-hover:text-amber-500 transition duration-150">${item.title} ${isNew}</h2>
                     </div>
-                </article>
-            `;
-        }
+                    <p class="text-[10px] text-amber-600 dark:text-amber-400 font-bold"><i class="fa-regular fa-clock"></i> ${item.date}</p>
+                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300 line-clamp-3 whitespace-pre-wrap font-normal leading-relaxed tracking-wide font-sans">${item.desc}</p>
+                </div>
+                ${actionButtonsHTML}
+            </div>
+        </article>
+    `;
+}
 
         database.ref('notices').on('value', (snapshot) => {
             const container = document.getElementById('public-notices-container');
