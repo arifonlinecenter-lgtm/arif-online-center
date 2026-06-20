@@ -191,7 +191,6 @@
                     <p class="text-xs text-slate-500 mb-6">Manage all text, links, logos, and visibility toggles on your live website from here.</p>
                     
                     <form id="settings-form" class="space-y-5">
-                        
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
                                 <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Shop / Portal Name</label>
@@ -208,6 +207,17 @@
                                     <input type="checkbox" id="chk-phone" class="h-4 w-4 accent-amber-500 cursor-pointer"> 
                                     <span class="text-xs font-bold text-slate-700">Show Floating WhatsApp Button</span>
                                 </label>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-t border-slate-100 pt-5">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1"><i class="fa-solid fa-envelope text-red-500"></i> Email Address</label>
+                                <input type="email" id="cfg-email" placeholder="email@example.com" class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white">
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1"><i class="fa-solid fa-map-location-dot text-blue-500"></i> Google Maps Link</label>
+                                <input type="url" id="cfg-maps" placeholder="https://maps.app.goo.gl/..." class="w-full text-sm p-3 border rounded-xl focus:outline-amber-500 bg-white">
                             </div>
                         </div>
 
@@ -295,11 +305,8 @@
 
         let activeNoticesCache = {};
         let activeServicesCache = {};
-
-        // Load Visitors from LocalStorage (Simulated global via frontend)
         document.getElementById('stat-visitors').innerText = localStorage.getItem('site_visits') || 1245;
 
-        // Login Logic
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
             firebase.auth().signInWithEmailAndPassword("arifonlinecenter@gmail.com", document.getElementById('login-password').value)
@@ -310,7 +317,6 @@
             })
             .catch(() => document.getElementById('login-error').classList.remove('hidden'));
         });
-
         if(sessionStorage.getItem('admin_logged_in') === 'true') {
             document.getElementById('login-modal').classList.add('opacity-0', 'pointer-events-none');
             document.getElementById('main-content').classList.remove('blur-md', 'pointer-events-none');
@@ -321,20 +327,16 @@
             window.location.reload();
         }
 
-        // Tab Switching
         function switchTab(tabId) {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
             document.querySelectorAll('[id^="btn-tab-"]').forEach(btn => btn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl bg-slate-50 text-slate-600 hover:bg-slate-100 transition");
             document.getElementById(tabId).classList.remove('hidden');
-            
-            // Set active button styles
             const activeBtn = document.getElementById('btn-' + tabId);
             if(tabId === 'tab-notices') activeBtn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl bg-blue-600 text-white shadow-sm transition";
             else if(tabId === 'tab-settings') activeBtn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl bg-slate-900 text-amber-400 shadow-sm transition";
             else activeBtn.className = "flex-1 min-w-[120px] text-xs font-bold py-3 px-4 rounded-xl bg-blue-600 text-white shadow-sm transition";
         }
 
-        // Image Base64 Compress Logic
         function handleFile(inputId, hiddenId, noteId) {
             const el = document.getElementById(inputId);
             if(!el) return;
@@ -364,7 +366,6 @@
         handleFile('cfg-logo-left-file', 'cfg-logo-left-base64', null);
         handleFile('cfg-logo-right-file', 'cfg-logo-right-base64', null);
 
-        // Form Submit for Notices & Services
         document.getElementById('notice-form').addEventListener('submit', (e) => {
             e.preventDefault(); submitData('notices', 'edit-notice-id', 'post-title', 'post-desc', 'post-image-base64', 'notice-form');
         });
@@ -379,7 +380,6 @@
                 desc: document.getElementById(descField).value,
                 image: document.getElementById(imgField).value || ""
             };
-
             if (editId) {
                 const originalDate = node === 'notices' ? activeNoticesCache[editId].date : activeServicesCache[editId].date;
                 dataObj.date = originalDate || new Date().toLocaleString('en-IN');
@@ -400,15 +400,12 @@
             }
         }
 
-        // Fetch & Render Notices
         database.ref('notices').on('value', (snapshot) => {
             const data = snapshot.val() || {};
             activeNoticesCache = data;
             document.getElementById('stat-notices').innerText = Object.keys(data).length;
             renderList(data, 'admin-notices-list', 'notices');
         });
-
-        // Fetch & Render Services
         database.ref('services').on('value', (snapshot) => {
             const data = snapshot.val() || {};
             activeServicesCache = data;
@@ -436,11 +433,9 @@
             });
         }
 
-        // Edit Item Manager Logic
         function editItem(node, id) {
             const data = node === 'notices' ? activeNoticesCache[id] : activeServicesCache[id];
             if(!data) return;
-
             window.scrollTo({top: 0, behavior: 'smooth'});
 
             if(node === 'notices') {
@@ -449,12 +444,10 @@
                 document.getElementById('post-desc').value = data.desc;
                 document.getElementById('post-image-base64').value = data.image || "";
                 document.getElementById('post-image-file').value = ""; 
-                
                 document.getElementById('btn-submit-notice').innerText = "Update Notice";
                 document.getElementById('btn-submit-notice').classList.replace('bg-emerald-600', 'bg-amber-500');
                 document.getElementById('btn-submit-notice').classList.replace('hover:bg-emerald-700', 'hover:bg-amber-600');
                 document.getElementById('btn-cancel-notice').classList.remove('hidden');
-                
                 if(data.image) document.getElementById('notice-img-note').classList.remove('hidden');
                 else document.getElementById('notice-img-note').classList.add('hidden');
             } else {
@@ -463,12 +456,10 @@
                 document.getElementById('srv-desc').value = data.desc;
                 document.getElementById('srv-image-base64').value = data.image || "";
                 document.getElementById('srv-image-file').value = ""; 
-                
                 document.getElementById('btn-submit-service').innerText = "Update Service";
                 document.getElementById('btn-submit-service').classList.replace('bg-blue-600', 'bg-amber-500');
                 document.getElementById('btn-submit-service').classList.replace('hover:bg-blue-700', 'hover:bg-amber-600');
                 document.getElementById('btn-cancel-service').classList.remove('hidden');
-                
                 if(data.image) document.getElementById('srv-img-note').classList.remove('hidden');
                 else document.getElementById('srv-img-note').classList.add('hidden');
             }
@@ -502,7 +493,6 @@
             }
         }
 
-        // Preview Functionality
         function openPreview(type) {
             const title = type === 'notices' ? document.getElementById('post-title').value : document.getElementById('srv-title').value;
             const desc = type === 'notices' ? document.getElementById('post-desc').value : document.getElementById('srv-desc').value;
@@ -513,7 +503,6 @@
             
             const imgContainer = document.getElementById('prev-img-container');
             const imgEl = document.getElementById('prev-img');
-            
             if(img && img.trim() !== "") {
                 imgEl.src = img;
                 imgContainer.classList.remove('hidden');
@@ -532,23 +521,19 @@
             modal.classList.remove('flex');
         }
 
-        // --- FULL WEBSITE SETTINGS SETUP (Load from DB) ---
         database.ref('config').once('value', (snapshot) => {
             const config = snapshot.val() || {};
-            
-            // Text & URLs
             document.getElementById('cfg-name').value = config.shopName || "Arif Online Center";
             document.getElementById('cfg-phone').value = config.phone || "9504291254";
+            document.getElementById('cfg-email').value = config.email || "";
+            document.getElementById('cfg-maps').value = config.googleMapsLink || "";
             document.getElementById('cfg-youtube').value = config.youtubeLink || "";
             document.getElementById('cfg-wagroup').value = config.whatsappGroupLink || "";
             document.getElementById('cfg-address').value = config.address || "Momin Tola Sahebganj, Bhagalpur";
             document.getElementById('cfg-slogan').value = config.slogan || "⚡ WELCOME TO OUR OFFICIAL PORTAL ⚡";
-            
-            // Hidden Base64 images
             document.getElementById('cfg-logo-left-base64').value = config.logoLeft || "";
             document.getElementById('cfg-logo-right-base64').value = config.logoRight || "";
             
-            // Checkboxes (Toggles)
             document.getElementById('chk-name').checked = config.showName !== false;
             document.getElementById('chk-phone').checked = config.showPhone !== false;
             document.getElementById('chk-youtube').checked = config.showYoutube !== false;
@@ -559,22 +544,19 @@
             document.getElementById('chk-logo-right').checked = config.showLogoRight !== false;
         });
 
-        // Save Settings to Database
         document.getElementById('settings-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            
             const configData = {
-                // Values
                 shopName: document.getElementById('cfg-name').value,
                 phone: document.getElementById('cfg-phone').value,
+                email: document.getElementById('cfg-email').value,
+                googleMapsLink: document.getElementById('cfg-maps').value,
                 youtubeLink: document.getElementById('cfg-youtube').value,
                 whatsappGroupLink: document.getElementById('cfg-wagroup').value,
                 address: document.getElementById('cfg-address').value,
                 slogan: document.getElementById('cfg-slogan').value,
                 logoLeft: document.getElementById('cfg-logo-left-base64').value,
                 logoRight: document.getElementById('cfg-logo-right-base64').value,
-                
-                // Show/Hide Toggles
                 showName: document.getElementById('chk-name').checked,
                 showPhone: document.getElementById('chk-phone').checked,
                 showYoutube: document.getElementById('chk-youtube').checked,
@@ -584,10 +566,8 @@
                 showLogoLeft: document.getElementById('chk-logo-left').checked,
                 showLogoRight: document.getElementById('chk-logo-right').checked
             };
-            
             database.ref('config').update(configData).then(() => {
-                alert("✅ Website Settings Updated Live! Open index.html to see changes.");
-                // Reset file inputs so next time empty isn't an issue
+                alert("✅ Website Settings Updated Live!");
                 document.getElementById('cfg-logo-left-file').value = "";
                 document.getElementById('cfg-logo-right-file').value = "";
             }).catch(err => {
@@ -595,7 +575,6 @@
             });
         });
 
-        // Backup and Restore
         function backupData() {
             const fullData = { notices: activeNoticesCache, services: activeServicesCache };
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullData));
