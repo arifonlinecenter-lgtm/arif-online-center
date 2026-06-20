@@ -37,11 +37,8 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Marquee Animation */
         @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .animate-scroll { display: inline-block; white-space: nowrap; animation: scroll 20s linear infinite; }
-        
-        /* Smooth Scroll */
         html { scroll-behavior: smooth; }
     </style>
 </head>
@@ -58,10 +55,12 @@
         <div class="w-full py-4 px-3 md:px-6">
             <div class="flex flex-row items-center justify-between gap-2 md:gap-6 max-w-7xl mx-auto w-full">
                 
+                <!-- Left Side Logo -->
                 <div class="flex items-center justify-start shrink-0">
-                    <img id="logo-left" src="" alt="Logo Left" class="hidden h-11 w-11 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-0.5 sm:p-1 shadow-xs">
+                    <img id="logo-left" src="" alt="Logo" class="hidden h-11 w-11 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-0.5 sm:p-1 shadow-xs">
                 </div>
                 
+                <!-- Center Title -->
                 <div class="flex flex-col items-center text-center flex-grow px-1">
                     <h1 id="site-title" class="text-sm sm:text-2xl md:text-3xl font-black uppercase tracking-wider flex items-center justify-center gap-1 sm:gap-2">
                         <i class="fa-solid fa-shapes text-amber-500 text-xs sm:text-lg md:text-2xl"></i>
@@ -71,11 +70,18 @@
                     <p id="site-address" class="text-[8px] sm:text-[10px] md:text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5 sm:mt-1 tracking-wide flex items-center justify-center gap-1"></p>
                 </div>
 
-                <div class="flex items-center justify-end shrink-0 gap-3">
+                <!-- Right Side (YouTube, WhatsApp, Theme, Right Logo) -->
+                <div class="flex items-center justify-end shrink-0 gap-2 sm:gap-3">
+                    <a id="hdr-youtube" href="#" target="_blank" class="hidden text-red-600 dark:text-red-500 hover:scale-110 transition-transform p-1">
+                        <i class="fa-brands fa-youtube text-lg sm:text-xl"></i>
+                    </a>
+                    <a id="hdr-whatsapp" href="#" target="_blank" class="hidden text-emerald-600 dark:text-emerald-500 hover:scale-110 transition-transform p-1">
+                        <i class="fa-brands fa-whatsapp text-lg sm:text-xl"></i>
+                    </a>
                     <button onclick="toggleDarkMode()" class="h-8 w-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 flex items-center justify-center transition-colors">
                         <i id="theme-icon" class="fa-solid fa-moon"></i>
                     </button>
-                    <img id="logo-right" src="" alt="Logo Right" class="hidden h-11 w-11 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-0.5 sm:p-1 shadow-xs">
+                    <img id="logo-right" src="" alt="Logo" class="hidden h-11 w-11 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-0.5 sm:p-1 shadow-xs">
                 </div>
 
             </div>
@@ -219,7 +225,6 @@
     </footer>
 
     <script>
-        // Theme Toggle (Dark Mode via LocalStorage)
         function toggleDarkMode() {
             const html = document.documentElement;
             const icon = document.getElementById('theme-icon');
@@ -235,13 +240,11 @@
         }
         if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
 
-        // Visitor Counter (LocalStorage)
         let visits = localStorage.getItem('site_visits') || 1245;
         visits = parseInt(visits) + 1;
         localStorage.setItem('site_visits', visits);
         document.getElementById('visit-count').innerText = visits;
 
-        // Search Filter Logic
         function filterItems() {
             const query = document.getElementById('global-search').value.toLowerCase();
             const activeTabId = currentTab === 'notices' ? 'public-notices-container' : 'dynamic-services-list';
@@ -261,14 +264,12 @@
             document.getElementById('no-results-msg').style.display = (visible === 0 && items.length > 0) ? 'block' : 'none';
         }
 
-        // Back To Top Visibility
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('back-to-top');
             if (window.scrollY > 300) btn.classList.remove('hidden');
             else btn.classList.add('hidden');
         });
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB0w82POMs3HZ6Ay-3Z4g0nhLPGHNQCNlY",
             authDomain: "arif-online-3f79e.firebaseapp.com",
@@ -292,7 +293,7 @@
             const servicesCont = document.getElementById('public-services-container');
             const bannerText = document.getElementById('live-banner-text');
 
-            document.getElementById('global-search').value = ""; // clear search
+            document.getElementById('global-search').value = ""; 
             filterItems();
 
             if(tabName === 'notices') {
@@ -366,7 +367,6 @@
             if(e.target === this) closeModal();
         });
 
-        // Config Realtime Listener
         database.ref('config').on('value', (snapshot) => {
             const config = snapshot.val() || {};
             if(config.phone) globalPhone = config.phone;
@@ -375,8 +375,38 @@
             const addressEl = document.getElementById('site-address');
             const whatsappBtn = document.getElementById('floating-whatsapp');
             
+            // Header Links
+            const hdrYT = document.getElementById('hdr-youtube');
+            const hdrWA = document.getElementById('hdr-whatsapp');
+            
+            // Logos
+            const logoLeft = document.getElementById('logo-left');
+            const logoRight = document.getElementById('logo-right');
+
             titleEl.innerHTML = `<i class="fa-solid fa-shapes text-amber-500 text-xs sm:text-lg md:text-2xl"></i> <span class="text-slate-900 dark:text-white">${config.shopName ? config.shopName.split(' ')[0] : 'Arif'}</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 font-black tracking-wide">${config.shopName ? config.shopName.split(' ').slice(1).join(' ') : 'Online Center'}</span>`;
             addressEl.innerHTML = `<i class="fa-solid fa-location-dot text-amber-500 text-[9px] sm:text-[11px]"></i> ${config.address || 'MOMIN TOLA SAHEBGANJ MASJID ROAD, BHAGALPUR'}`;
+            
+            // Handle Header Buttons (Youtube & WA)
+            if (config.showYoutube && config.youtubeLink) {
+                hdrYT.href = config.youtubeLink;
+                hdrYT.classList.remove('hidden');
+            } else { hdrYT.classList.add('hidden'); }
+
+            if (config.showWaGroup && config.whatsappGroupLink) {
+                hdrWA.href = config.whatsappGroupLink;
+                hdrWA.classList.remove('hidden');
+            } else { hdrWA.classList.add('hidden'); }
+
+            // Handle Logos
+            if (config.showLogoLeft && config.logoLeft) {
+                logoLeft.src = config.logoLeft;
+                logoLeft.classList.remove('hidden');
+            } else { logoLeft.classList.add('hidden'); }
+
+            if (config.showLogoRight && config.logoRight) {
+                logoRight.src = config.logoRight;
+                logoRight.classList.remove('hidden');
+            } else { logoRight.classList.add('hidden'); }
             
             if (config.showPhone !== false && config.phone) {
                 whatsappBtn.href = `https://api.whatsapp.com/send?phone=91${config.phone}&text=Hello! I am visiting your web portal and need assistance.`;
@@ -384,7 +414,6 @@
             }
         });
 
-        // Helper to Create HTML Card String
         function createCard(item, type) {
             let imgHTML = "";
             let contentWidthClass = "w-full";
@@ -424,7 +453,6 @@
             `;
         }
 
-        // Realtime Notice Renderer
         database.ref('notices').on('value', (snapshot) => {
             const container = document.getElementById('public-notices-container');
             const data = snapshot.val();
@@ -435,7 +463,6 @@
             container.innerHTML = Object.values(data).reverse().map(item => createCard(item, 'notices')).join('');
         });
 
-        // Realtime Services Renderer
         database.ref('services').on('value', (snapshot) => {
             const container = document.getElementById('dynamic-services-list');
             const data = snapshot.val();
@@ -446,7 +473,6 @@
             container.innerHTML = Object.values(data).reverse().map(item => createCard(item, 'services')).join('');
         });
 
-        // Sharing Logic
         async function sharePost(title, imageUrl) {
             const fullShareText = `📢 *${title}*\n\nNeeche diye gaye link par click karke dekhein:\n🔗 ${window.location.href}`;
             if (navigator.share) {
